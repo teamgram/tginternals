@@ -32,6 +32,30 @@
 
 #### 码类型
 
+```
+codeSettings#ad253d78 flags:# allow_flashcall:flags.0?true current_number:flags.1?true allow_app_hash:flags.4?true allow_missed_call:flags.5?true allow_firebase:flags.7?true logout_tokens:flags.6?Vector<bytes> token:flags.8?string app_sandbox:flags.8?Bool = CodeSettings;
+
+auth.sentCodeTypeApp#3dbb5986 length:int = auth.SentCodeType;
+auth.sentCodeTypeSms#c000bba2 length:int = auth.SentCodeType;
+auth.sentCodeTypeCall#5353e5a7 length:int = auth.SentCodeType;
+auth.sentCodeTypeFlashCall#ab03c6d9 pattern:string = auth.SentCodeType;
+auth.sentCodeTypeMissedCall#82006484 prefix:string length:int = auth.SentCodeType;
+auth.sentCodeTypeEmailCode#f450f59b flags:# apple_signin_allowed:flags.0?true google_signin_allowed:flags.1?true email_pattern:string length:int reset_available_period:flags.3?int reset_pending_date:flags.4?int = auth.SentCodeType;
+auth.sentCodeTypeSetUpEmailRequired#a5491dea flags:# apple_signin_allowed:flags.0?true google_signin_allowed:flags.1?true = auth.SentCodeType;
+auth.sentCodeTypeFragmentSms#d9565c39 url:string length:int = auth.SentCodeType;
+auth.sentCodeTypeFirebaseSms#e57b1432 flags:# nonce:flags.0?bytes receipt:flags.1?string push_timeout:flags.1?int length:int = auth.SentCodeType;
+
+auth.sentCode#5e002502 flags:# type:auth.SentCodeType phone_code_hash:string next_type:flags.1?auth.CodeType timeout:flags.2?int = auth.SentCode;
+auth.sentCodeSuccess#2390fe44 authorization:auth.Authorization = auth.SentCode;
+
+---functions---
+
+auth.sendCode#a677244f phone_number:string api_id:int api_hash:string settings:CodeSettings = auth.SentCode;
+auth.resendCode#3ef1a9bf phone_number:string phone_code_hash:string = auth.SentCode;
+
+auth.requestFirebaseSms#89464b50 flags:# phone_number:string phone_code_hash:string safety_net_token:flags.0?string ios_push_secret:flags.1?string = Bool;
+```
+
 auth.sendCode 方法有参数用于启用/禁用闪电电话和未接来电的使用，并允许传递一个 SMS 令牌，该令牌将包含在发送的 SMS 中。
 例如，后者在较新版本的 Android 中是必需的，以使用 Android SMS 接收器 API。
 
@@ -90,6 +114,29 @@ auth.sendCode 方法有参数用于启用/禁用闪电电话和未接来电的�
 要取消验证代码，请使用 auth.cancelCode。
 
 ### 电子邮件验证
+
+```
+auth.sentCodeTypeSetUpEmailRequired#a5491dea flags:# apple_signin_allowed:flags.0?true google_signin_allowed:flags.1?true = auth.SentCodeType;
+
+emailVerifyPurposeLoginSetup#4345be73 phone_number:string phone_code_hash:string = EmailVerifyPurpose;
+
+emailVerificationCode#922e55a9 code:string = EmailVerification;
+emailVerificationGoogle#db909ec2 token:string = EmailVerification;
+emailVerificationApple#96d074fd token:string = EmailVerification;
+
+account.sentEmailCode#811f854f email_pattern:string length:int = account.SentEmailCode;
+
+account.emailVerifiedLogin#e1bb0d61 email:string sent_code:auth.SentCode = account.EmailVerified;
+
+emailVerifyPurposeLoginChange#527d22eb = EmailVerifyPurpose;
+account.emailVerified#2b96cd1b email:string = account.EmailVerified;
+
+---functions---
+
+account.sendVerifyEmailCode#98e037bb purpose:EmailVerifyPurpose email:string = account.SentEmailCode;
+account.verifyEmail#32da4cf purpose:EmailVerifyPurpose verification:EmailVerification = account.EmailVerified;
+auth.resetLoginEmail#7e960193 phone_number:string phone_code_hash:string = auth.SentCode;
+```
 
 Telegram 可能会在 auth.sendCode 返回的 auth.sentCode 构造函数中返回一个 auth.sentCodeTypeSetUpEmailRequired 码类型。
 在这种情况下，客户端应要求用户验证一个电子邮件地址，该地址将用于接收登录码，方法如下：
@@ -153,6 +200,22 @@ Telegram 可能会在 auth.sendCode 返回的 auth.sentCode 构造函数中返�
 
 ### 确认登录
 
+```
+authorization#ad01d61d flags:# current:flags.0?true official_app:flags.1?true password_pending:flags.2?true encrypted_requests_disabled:flags.3?true call_requests_disabled:flags.4?true unconfirmed:flags.5?true hash:long device_model:string platform:string system_version:string api_id:int app_name:string app_version:string date_created:int date_active:int ip:string country:string region:string = Authorization;
+
+account.authorizations#4bff8ea0 authorization_ttl_days:int authorizations:Vector<Authorization> = account.Authorizations;
+
+updateNewAuthorization#8951abef flags:# unconfirmed:flags.0?true hash:long date:flags.0?int device:flags.0?string location:flags.0?string = Update;
+
+---functions---
+
+account.getAuthorizations#e320c158 = account.Authorizations;
+
+account.changeAuthorizationSettings#40f48462 flags:# confirmed:flags.3?true hash:long encrypted_requests_disabled:flags.0?Bool call_requests_disabled:flags.1?Bool = Bool;
+
+account.resetAuthorization#df77f3bc hash:long = Bool;
+```
+
 登录时，其他已登录的会话将收到一个 updateNewAuthorization 更新。
 如果设置了 unconfirmed 标志，则客户端应显示一个通知，询问用户是否认可该会话。
 
@@ -177,6 +240,12 @@ Telegram 可能会在 auth.sendCode 返回的 auth.sentCode 构造函数中返�
 被用户截屏或转发到任何聊天中
 
 应调用 account.invalidateSignInCodes，传递提取的登录代码（不包括任何 - 字符）。
+
+```
+---functions---
+
+account.invalidateSignInCodes#ca8ae8ba codes:Vector<string> = Bool;
+```
 
 ### 测试帐户
 
