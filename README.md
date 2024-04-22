@@ -1,4 +1,4 @@
-# tginternals
+# Telegram Internals
 > tginternals
 
 ## [API](./api.md)
