@@ -2,13 +2,13 @@
 Represents a reply to a story
 
 ```
-messageReplyStoryHeader#9c98bfc1 user_id:long story_id:int = MessageReplyHeader;
+messageReplyStoryHeader#e5af939 peer:Peer story_id:int = MessageReplyHeader;
 ```
 
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| user_id | long | ID of the user that posted a story |
+| peer | Peer | Sender of the story. |
 | story_id | int | Story ID |
 
 

@@ -13,6 +13,7 @@ decryptedMessageService#73164160 random_id:long action:DecryptedMessageAction = 
 | Name | Type | Description |
 | ---- | :----: | ----------- |
 | random_id | long | Random message ID, assigned by the message author.Must be equal to the ID passed to the sending method. |
+| random_bytes | bytes | Random bytes, removed in Layer 17. |
 | action | DecryptedMessageAction | Action relevant to the service message |
 
 

@@ -5,12 +5,14 @@ Registers a validated phone number in the system.
 auth.authorization#2ea2c0d4 flags:# setup_password_required:flags.1?true otherwise_relogin_days:flags.1?int tmp_sessions:flags.0?int future_auth_token:flags.2?bytes user:User = auth.Authorization;
 auth.authorizationSignUpRequired#44747e9a flags:# terms_of_service:flags.0?help.TermsOfService = auth.Authorization;
 ---functions---
-auth.signUp#80eee427 phone_number:string phone_code_hash:string first_name:string last_name:string = auth.Authorization;
+auth.signUp#aac7b717 flags:# no_joined_notifications:flags.0?true phone_number:string phone_code_hash:string first_name:string last_name:string = auth.Authorization;
 ```
 
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
+| flags | # | Flags, see TL conditional fields |
+| no_joined_notifications | flags.0?true | If set, users on Telegram that have already added phone_number to their contacts will not receive signup notifications about this user. |
 | phone_number | string | Phone number in the international format |
 | phone_code_hash | string | SMS-message ID |
 | first_name | string | New user first name |

@@ -25,6 +25,7 @@ channels.ChannelParticipants
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 400 | CHANNEL_INVALID | The provided channel is invalid. |
+| 400 | CHANNEL_MONOFORUM_UNSUPPORTED | Monoforums do not support this feature. |
 | 406 | CHANNEL_PRIVATE | You haven't joined this channel/supergroup. |
 | 403 | CHAT_ADMIN_REQUIRED | You must be an admin in this chat to do this. |
 | 400 | MSG_ID_INVALID | Invalid message ID provided. |

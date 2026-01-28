@@ -21,4 +21,5 @@ SecureValue
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 400 | PASSWORD_REQUIRED | A 2FA password must be configured to use Telegram Passport. |
+| 400 | SECURE_SECRET_REQUIRED | A secure secret is required. |
 

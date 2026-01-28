@@ -8,7 +8,7 @@ messages.availableReactions#768e3aad hash:int reactions:Vector<AvailableReaction
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | int | Hash for pagination, for more info click here |
+| hash | int | Hash used for caching, for more info click here |
 | reactions | Vector<AvailableReaction> | Animations and metadata associated with message reactions » |
 
 

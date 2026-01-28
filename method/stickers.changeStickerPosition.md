@@ -1,5 +1,5 @@
 # stickers.changeStickerPosition
-Changes the absolute position of a sticker in the set to which it belongs; for bots only. The sticker set must have been created by the bot
+Changes the absolute position of a sticker in the set to which it belongs. The sticker set must have been created by the current user/bot.
 
 ```
 messages.stickerSet#6e153f16 set:StickerSet packs:Vector<StickerPack> keywords:Vector<StickerKeyword> documents:Vector<Document> = messages.StickerSet;

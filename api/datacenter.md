@@ -3,6 +3,13 @@
 The servers are divided into several data centers (hereinafter “DCs”) in different parts of the world.
 A complete list of proxy access points for these DCs may be obtained using help.getConfig:
 
+```
+dcOption#18b7a10d flags:# ipv6:flags.0?true media_only:flags.1?true tcpo_only:flags.2?true cdn:flags.3?true static:flags.4?true this_port_only:flags.5?true id:int ip_address:string port:int secret:flags.10?bytes = DcOption;
+config#cc1a241e flags:# default_p2p_contacts:flags.3?true preload_featured_stickers:flags.4?true revoke_pm_inbox:flags.6?true blocked_mode:flags.8?true force_try_ipv6:flags.14?true date:int expires:int test_mode:Bool this_dc:int dc_options:Vector<DcOption> dc_txt_domain_name:string chat_size_max:int megagroup_size_max:int forwarded_count_max:int online_update_period_ms:int offline_blur_timeout_ms:int offline_idle_timeout_ms:int online_cloud_timeout_ms:int notify_cloud_delay_ms:int notify_default_delay_ms:int push_chat_period_ms:int push_chat_limit:int edit_time_limit:int revoke_time_limit:int revoke_pm_time_limit:int rating_e_decay:int stickers_recent_limit:int channels_read_media_period:int tmp_sessions:flags.0?int call_receive_timeout_ms:int call_ring_timeout_ms:int call_connect_timeout_ms:int call_packet_timeout_ms:int me_url_prefix:string autoupdate_url_prefix:flags.7?string gif_search_username:flags.9?string venue_search_username:flags.10?string img_search_username:flags.11?string static_maps_provider:flags.12?string caption_length_max:int message_length_max:int webfile_dc_id:int suggested_lang_code:flags.2?string lang_pack_version:flags.2?int base_lang_pack_version:flags.2?int reactions_default:flags.15?Reaction autologin_token:flags.16?string = Config;
+---functions---
+help.getConfig#c4f9186b = Config;
+```
+
 In this context, this_dc is the number of the current DC, dc_options is a list of all DCs available at the moment, each of which has an id, ip, and port for establishing a connection. Please note that ip and port may change frequently, based on proxy server load and the user's current location.
 Typically, each DC has at least one IPv4 and one IPv6 endpoint available.
 
@@ -24,6 +31,16 @@ There are reserved phone number prefixes to test the correctness of the applicat
 
 A file saved by a user with upload.saveFilePart will be available for direct download only from the DC where the query was executed. That is why each file has a dc_id parameter:
 
+```
+document#8fd4c4d8 flags:# id:long access_hash:long file_reference:bytes date:int mime_type:string size:long thumbs:flags.0?Vector<PhotoSize> video_thumbs:flags.1?Vector<VideoSize> dc_id:int attributes:Vector<DocumentAttribute> = Document;
+photo#fb197a65 flags:# has_stickers:flags.0?true id:long access_hash:long file_reference:bytes date:int sizes:Vector<PhotoSize> video_sizes:flags.1?Vector<VideoSize> dc_id:int = Photo;
+
+encryptedFile#a8008cd8 id:long access_hash:long size:long dc_id:int key_fingerprint:int = EncryptedFile;
+
+userProfilePhoto#82d1f706 flags:# has_video:flags.0?true personal:flags.2?true photo_id:long stripped_thumb:flags.1?bytes dc_id:int = UserProfilePhoto;
+chatPhoto#1c6e1c11 flags:# has_video:flags.0?true photo_id:long stripped_thumb:flags.1?bytes dc_id:int = ChatPhoto;
+```
+
 To download the file, an encrypted connection to DC dc_id must be established and used to execute the upload.getFile query.
 If an attempt is made to download the file over a wrong connection, the FILE_MIGRATE_X error will be returned.
 
@@ -36,6 +53,14 @@ During the process of working with the API, user information is accumulated in t
 ### Authorization Transfer
 
 The following methods can be used to eliminate the need for users to enter the code from a text message every time:
+
+```
+auth.exportedAuthorization#b434e2b8 id:long bytes:bytes = auth.ExportedAuthorization;
+auth.authorization#2ea2c0d4 flags:# setup_password_required:flags.1?true otherwise_relogin_days:flags.1?int tmp_sessions:flags.0?int future_auth_token:flags.2?bytes user:User = auth.Authorization;
+---functions---
+auth.importAuthorization#a57a7dad id:long bytes:bytes = auth.Authorization;
+auth.exportAuthorization#e5bfffcd dc_id:int = auth.ExportedAuthorization;
+```
 
 auth.exportAuthorization must be executed in the current DC (the DC with which a connection has already been established), passing in dc_id as the value for the new DC. The method should return the user identifier and a long string of random data. An import operation can be performed at the new DC by sending it what was received. Queries requiring authorization can then be successfully executed in the new DC.
 

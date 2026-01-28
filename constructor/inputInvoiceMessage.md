@@ -1,5 +1,5 @@
 # inputInvoiceMessage
-An invoice contained in a messageMediaInvoice message.
+An invoice contained in a messageMediaInvoice message or paid media ».
 
 ```
 inputInvoiceMessage#c5b56859 peer:InputPeer msg_id:int = InputInvoice;
@@ -8,7 +8,7 @@ inputInvoiceMessage#c5b56859 peer:InputPeer msg_id:int = InputInvoice;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| peer | InputPeer | Chat where the invoice was sent |
+| peer | InputPeer | Chat where the invoice/paid media was sent |
 | msg_id | int | Message ID |
 
 

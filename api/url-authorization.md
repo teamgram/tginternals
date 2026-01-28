@@ -27,9 +27,9 @@ Telegram supports automatic authorization on certain websites upon opening an HT
 
 #### Automatic authorization
 
-Clients should automatically authenticate users when opening official Telegram websites, listed in the autologin_domains key of the client configuration object ».
+Clients should automatically authenticate users when opening official Telegram websites, listed in the autologin_domains key of the client configuration object ».
 
-Upon clicking a link, the URL must be modified by appending the autologin_token » from the MTProto configuration object » to the query string, like so:
+Upon clicking a link, the URL must be modified by appending the autologin_token » from the MTProto configuration object » to the query string, like so:
 
 Original URL: https://somedomain.telegram.org/path?query=string#fragment=value
 Modified URL: https://somedomain.telegram.org/path?query=string&autologin_token=$autologin_token#fragment=value
@@ -38,7 +38,7 @@ Make sure that the used autologin_token is no more than 10000 seconds old, if it
 
 #### Manual authorization
 
-Clients should show a confirmation prompt similar to the one used for bots, to authenticate users when opening certain Telegram websites, listed in the url_auth_domains key of the client configuration object ».
+Clients should show a confirmation prompt similar to the one used for bots, to authenticate users when opening certain Telegram websites, listed in the url_auth_domains key of the client configuration object ».
 
 messages.requestUrlAuth should be called, providing only the original url.
 The returned urlAuthResultRequest object will contain more details about the authorization request:

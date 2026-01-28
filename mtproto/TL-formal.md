@@ -73,6 +73,10 @@ In the future, bits 3 and 4 in the flags field may be used to transmit new field
 When directly used in a conditional field it may simply indicate the presence (absence) of a certain parameter with void type.
 If the conditional field exists, the associated parameter will not be populated; the conditional field simply exists and the existance value can be used to perform certain operations, example:
 
+```
+user {flags:#} id:flags.0?string first_name:flags.1?string last_name:flags.2?string bot:flags.3?true reserved4:flags.4?False = User flags;
+```
+
 If bit 3 of the flags parameter isn't set, the user is a normal user.
 If bit 3 of the flags parameter is set, this indicates that the specified user is a bot: however, during deserialization, the bot parameter must not be assigned any value, since true is actually a void type.
 
@@ -80,5 +84,5 @@ If bit 3 of the flags parameter is set, this indicates that the specified user i
 
 #### ANTLR definition
 
-An ANLTR definition of TL grammar can be found here ».
+An ANLTR definition of TL grammar can be found here ».
 

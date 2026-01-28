@@ -25,4 +25,5 @@ Updates
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | MSG_ID_INVALID | Invalid message ID provided. |
 

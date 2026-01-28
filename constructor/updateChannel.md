@@ -1,5 +1,5 @@
 # updateChannel
-A new channel or supergroup is available, or info about an existing channel has changed and must be refeteched.
+Channel/supergroup (channel and/or channelFull) information was updated.
 
 ```
 updateChannel#635b4c09 channel_id:long = Update;
@@ -12,6 +12,6 @@ updateChannel#635b4c09 channel_id:long = Update;
 
 
 ## Type
-Update
+
 
 ## Related pages

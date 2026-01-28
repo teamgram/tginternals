@@ -10,11 +10,27 @@ Values of the abstract type T may be represented in a different way. Typically, 
 
 For example, for the schema
 
+```
+pair x:int y:int = Pair;
+pnil = PairList;
+pcons hd:Pair tl:PairList = PairList;
+```
+
 the following are examples of the abstract type PairList, written as S-expressions:
+
+```
+(pnil)
+(pcons (pair 2 3) (pcons (pair 9 4) (pnil)))
+```
 
 We usually write E : T (read "E of type T”) when we want to say that E is a value of type T. We assume there is a built-in type Type whose values are types. Thus, writing T : Type means that T is a type.
 
 For example, we can write:
+
+```
+PairList : Type;
+(pcons (pair 2 3) (pcons (pair 9 4) (pnil))) : PairList;
+```
 
 Converting an abstract value to a serialized value, generally speaking, is straightforward (and, if desired, can be defined by induction):
 
@@ -70,15 +86,33 @@ In TL, the idempotent operator ! can modify any type, actually making surface va
 
 The ! operator is only allowed in a definition of the types of fields of functional combinators. It is usually used as a type prefix, for example:
 
+```
+set_timeout {X:Type} timeout:int f:!X = X;
+```
+
 In this case, the set_timeout “wrapper” is defined. It takes two explicit parameters: the integer timeout and a surface expression of type X. X : Type is itself an implicit parameter (it is not explicitly stated, rather it is inferred from the values of the other parameters and their types). A similar kind of wrapper may be helpful for modifying the action of RPC queries (which are surface expressions of various types). For example, suppose we have the function
+
+```
+factorial n:int = int;
+```
 
 then we can wrap the RPC query (factorial 100) as follows: (set_timeout 200 (factorial 100)). This expression is still a surface value of type int, which means it can be passed as an RPC query.
 
 A consecutive pair of two computations is another example:
 
+```
+pair {X Y : Type} x:X y:Y = Pair X Y;  // constructor
+seq_pair {X Y : Type} x:!X y:!Y = Pair X Y; // functional wrapper for sequential computation
+par_pair {X Y : Type} x:!X y:!Y = Pair X Y; // functional wrapper for parallel computation
+```
+
 Now the RPC query (seq_pair (factorial 2) (factorial 3)) : Pair int int first calculates factorial 2, then factorial 3, and returns the pair (pair 2 6). In this case, the sequence of operations isn't important, because they do not have side effects. It would have been just as well to use (par_pair (factorial 2) (factorial 3)). However, this is not always the case.
 
 We can also define an analogy to a “comma” operation:
+
+```
+comma {X Y : Type} x:!X y:!Y = Y;
+```
 
 For example, this operation could first calculate x, then forget the result, calculate y, and return y.
 
@@ -92,7 +126,15 @@ The idempotent modifier $ permits the use of arbitrary functional values of an a
 
 This may be useful to create an RPC query that performs a “deep computation” of the expression passed to it:
 
+```
+compute {X:Type} expr:$X = X;
+```
+
 For example, now we can transmit the following as an RPC query:
+
+```
+(compute ($factorial ($factorial (int 3)))) : int
+```
 
 (Note that the three has become clothed; the combinator $factorial has type $int -> $int).
 

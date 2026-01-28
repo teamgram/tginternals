@@ -15,15 +15,15 @@ initConnection#c1cd5ea9 {X:Type} flags:# api_id:int device_model:string system_v
 | system_version | string | Operation system version |
 | app_version | string | Application version |
 | system_lang_code | string | Code for the language used on the device's OS, ISO 639-1 standard |
-| lang_pack | string | Language pack to use |
-| lang_code | string | Code for the language used on the client, ISO 639-1 standard |
+| lang_pack | string | Platform identifier (i.e. android, tdesktop, etc). |
+| lang_code | string | Either an ISO 639-1 language code or a language pack name obtained from a language pack link. |
 | proxy | flags.0?InputClientProxy | Info about an MTProto proxy |
-| params | flags.1?JSONValue | Additional initConnection parameters. For now, only the tz_offset field is supported, for specifying timezone offset in seconds. |
+| params | flags.1?JSONValue | Additional initConnection parameters. For now, only the tz_offset field is supported, for specifying the timezone offset in seconds. |
 | query | !X | The query itself |
 
 
 ## Result
-The type returned by the invoked method.
+Returns the type returned by the invoked method.
 
 ## Possible errors
 | Code | Type | Description |

@@ -27,5 +27,6 @@ messages.ForumTopics
 | ---- | :----: | ----------- |
 | 400 | CHANNEL_FORUM_MISSING | This supergroup is not a forum. |
 | 400 | CHANNEL_INVALID | The provided channel is invalid. |
+| 400 | CHANNEL_MONOFORUM_UNSUPPORTED | Monoforums do not support this feature. |
 | 400 | CHANNEL_PRIVATE | You haven't joined this channel/supergroup. |
 

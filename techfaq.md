@@ -58,7 +58,7 @@ Does this give countries any influence over Telegram?
 
 #### Q: Why did you go for a custom protocol?
 
-In order to achieve reliability on weak mobile connections as well as speed when dealing with large files (such as photos, large videos and files up to 2 GB each), MTProto uses an original approach. This document is intended to clarify certain details of our setup, as well as address some important points that might be overlooked at first glance.
+In order to achieve reliability on weak mobile connections as well as speed when dealing with large files (such as photos, large videos and files up to 4 GB each), MTProto uses an original approach. This document is intended to clarify certain details of our setup, as well as address some important points that might be overlooked at first glance.
 
 #### Q: Where can I read more about the protocol?
 

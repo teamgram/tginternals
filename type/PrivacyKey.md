@@ -12,12 +12,15 @@ privacyKeyPhoneNumber#d19ae46d = PrivacyKey;
 privacyKeyAddedByPhone#42ffd42b = PrivacyKey;
 privacyKeyVoiceMessages#697f414 = PrivacyKey;
 privacyKeyAbout#a486b761 = PrivacyKey;
+privacyKeyBirthday#2000a518 = PrivacyKey;
+privacyKeyStarGiftsAutoSave#2ca4fdf8 = PrivacyKey;
+privacyKeyNoPaidMessages#17d348d2 = PrivacyKey;
 ```
 
 ## Constructors
 | Constructor | Description |
 | ---- | ----------- |
-| privacyKeyStatusTimestamp | Whether we can see the last online timestamp of this user |
+| privacyKeyStatusTimestamp | Whether we can see the last online timestamp of this user.Note that if we decide to hide our exact last online timestamp to someone (i.e., users A, B, C, or all users) and we do not have a Premium subscription, we won't be able to see the exact last online timestamp of those users (A, B, C, or all users), even if those users do share it with us.If those users do share their exact online status with us, but we can't see it due to the reason mentioned above, the by_me flag of userStatusRecently, userStatusLastWeek, userStatusLastMonth will be set. |
 | privacyKeyChatInvite | Whether the user can be invited to chats |
 | privacyKeyPhoneCall | Whether the user accepts phone calls |
 | privacyKeyPhoneP2P | Whether P2P connections in phone calls with this user are allowed |
@@ -27,6 +30,9 @@ privacyKeyAbout#a486b761 = PrivacyKey;
 | privacyKeyAddedByPhone | Whether this user can be added to our contact list by their phone number |
 | privacyKeyVoiceMessages | Whether the user accepts voice messages |
 | privacyKeyAbout | Whether people can see your bio |
+| privacyKeyBirthday | Whether the user can see our birthday. |
+| privacyKeyStarGiftsAutoSave | Whether received gifts will be automatically displayed on our profile |
+| privacyKeyNoPaidMessages | Who can send you messages without paying, if paid messages » are enabled. |
 
 
 ## Methods

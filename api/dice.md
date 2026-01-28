@@ -3,6 +3,23 @@
 Telegram supports sending animated dice emojis.
 This is implemented by using the dice constructors:
 
+```
+inputMediaDice#e66fbf7b emoticon:string = InputMedia;
+messageMediaDice#3f7ee58b value:int emoticon:string = MessageMedia;
+
+inputStickerSetDice#e67f520e emoticon:string = InputStickerSet;
+
+messages.stickerSet#6e153f16 set:StickerSet packs:Vector<StickerPack> keywords:Vector<StickerKeyword> documents:Vector<Document> = messages.StickerSet;
+
+---functions---
+
+messages.sendMedia#ac55d9c1 flags:# silent:flags.5?true background:flags.6?true clear_draft:flags.7?true noforwards:flags.14?true update_stickersets_order:flags.15?true invert_media:flags.16?true allow_paid_floodskip:flags.19?true peer:InputPeer reply_to:flags.0?InputReplyTo media:InputMedia message:string random_id:long reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> schedule_date:flags.10?int send_as:flags.13?InputPeer quick_reply_shortcut:flags.17?InputQuickReplyShortcut effect:flags.18?long allow_paid_stars:flags.21?long suggested_post:flags.22?SuggestedPost = Updates;
+
+messages.getStickerSet#c8a0ec74 stickerset:InputStickerSet hash:int = messages.StickerSet;
+
+help.getAppConfig#61e3f854 hash:int = help.AppConfig;
+```
+
 On startup, clients should fetch app configuration using help.getAppConfig.
 Then, for each dice emoji contained in the emojies_send_dice field, clients should fetch the dice emoji stickerset by calling the messages.getStickerSet method, providing the properly populated inputStickerSetDice to the stickerset field.
 The returned stickerset will contain a set of animated stickers, one for each of the dice outcomes, plus a first looping sticker that should be shown as preview to the user before actually sending the dice.
@@ -13,6 +30,19 @@ Incoming dice stickers will be received as a messageMediaDice constructor, along
 Clients should display the correct dice animated sticker for the specified value: since dice values start from 1, and the first animated sticker in dice stickerset is the preview, value can be used to directly index the documents sticker array from the animated stickerset.
 
 The emojies_send_dice_success configuration parameter contains more info about dice emojis other than the basic :
+
+```
+"emojies_send_dice_success": {
+        "\ud83c\udfaf": {
+            "value": 6,
+            "frame_start": 62
+        },
+        "\ud83c\udfc0": {
+            "value": 5,
+            "frame_start": 110
+        }
+    }
+```
 
 For each of the dice emojis, a maximum "winning" value is specified, along with the frame number at which to show the fireworks .
 Please note that dice animated stickers should loop only once, right after being sent/received for the first time; clicking on the dice sticker should bring up a popup, inviting the user to send a new dice of the same type.

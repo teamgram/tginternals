@@ -1,5 +1,5 @@
 # updateReadMessagesContents
-Contents of messages in the common message box were read
+Contents of messages in the common message box were read (emitted specifically for messages like voice messages or video, only once the media is watched and marked as read using messages.readMessageContents).
 
 ```
 updateReadMessagesContents#f8227181 flags:# messages:Vector<int> pts:int pts_count:int date:flags.0?int = Update;

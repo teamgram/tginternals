@@ -1,5 +1,5 @@
 # inputPrivacyKeyVoiceMessages
-Whether people can send you voice messages
+Whether people can send you voice messages or round videos (Premium users only).
 
 ```
 inputPrivacyKeyVoiceMessages#aee69d68 = InputPrivacyKey;

@@ -11,7 +11,7 @@ account.getDefaultProfilePhotoEmojis#e2750328 hash:long = EmojiList;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

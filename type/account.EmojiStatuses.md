@@ -10,6 +10,7 @@ account.emojiStatuses#90c467d1 hash:long statuses:Vector<EmojiStatus> = account.
 account.getDefaultEmojiStatuses#d6753386 hash:long = account.EmojiStatuses;
 account.getRecentEmojiStatuses#f578105 hash:long = account.EmojiStatuses;
 account.getChannelDefaultEmojiStatuses#7727a7d5 hash:long = account.EmojiStatuses;
+account.getCollectibleEmojiStatuses#2e7b4543 hash:long = account.EmojiStatuses;
 ```
 
 ## Constructors
@@ -25,5 +26,6 @@ account.getChannelDefaultEmojiStatuses#7727a7d5 hash:long = account.EmojiStatuse
 | account.getDefaultEmojiStatuses | Get a list of default suggested emoji statuses |
 | account.getRecentEmojiStatuses | Get recently used emoji statuses |
 | account.getChannelDefaultEmojiStatuses | Get a list of default suggested channel emoji statuses. |
+| account.getCollectibleEmojiStatuses | Obtain a list of emoji statuses » for owned collectible gifts. |
 
 

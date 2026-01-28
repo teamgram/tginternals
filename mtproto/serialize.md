@@ -77,6 +77,13 @@ If a boxed type is polymorphic of type arity r, this is also true of any derived
 
 Base types exist both as bare (int, long, double, string) and as boxed (Int, Long, Double, String) versions. Their constructor identifiers coincide with the names of the relevant bare types. Their pseudodescriptions have the following appearance:
 
+```
+int ? = Int;
+long ? = Long;
+double ? = Double;
+string ? = String;
+```
+
 Consequently, the int constructor index number, for example, is the CRC32 of the string "int ? = Int".
 
 The values of bare type int are exactly all the single-element sequences, i. e. numbers between -2^31 and 2^31-1 represent themselves in this case.  Values of type long are two-element sequences that are 64-bit signed numbers (little endian again). Values of type double, again, are two-element sequences containing 64-bit real numbers in a standard double format.  And finally, the values of type string look differently depending on the  length L of the string being serialized:
@@ -91,27 +98,61 @@ The Object pseudotype is a “type” which can take on values that belong to an
 
 It is recommended to use TypedObject instead whenever possible:
 
+```
+object X:Type value:X = TypedObject;
+```
+
 #### Built-In Composite Types: Vectors and Associative Arrays
 
 The Vector t polymorphic pseudotype is a “type” whose value is a sequence of values of any type t, either boxed or bare.
+
+```
+vector {t:Type} # [ t ] = Vector t;
+```
 
 Serialization always uses the same constructor “vector” (const 0x1cb5c415 = crc32("vector t:Type # [ t ] = Vector t”) that is not dependent on the specific value of the variable of type t. The value of the Vector t type is the index number of the relevant constructor number followed by N, the number of elements in the vector, and then by N values of type t. The value of the optional parameter t is not involved in the serialization since it is derived from the result type (always known prior to deserialization).
 
 Polymorphic pseudotypes IntHash t and StrHash t are associative arrays mapping integer and string keys to values of type t. They are, in fact, vectors containing bare 2-tuples (int, t) or (string, t):
 
+```
+coupleInt {t:Type} int t = CoupleInt t;
+intHash {t:Type} (vector %(CoupleInt t)) = IntHash t;
+coupleStr {t:Type} string t = CoupleStr t;
+strHash {t:Type} (vector %(CoupleStr t)) = StrHash t;
+```
+
 The percentage sign, in this case, means that a bare type that corresponds to the boxed type in parentheses is taken; the boxed type in question must have no more than a single constructor, whatever the values of the parameters.
 
 The keys may be sorted or be in some other order (as in PHP arrays). For associative arrays with sorted keys, the IntSortedHash or StrSortedHash alias is used:
+
+```
+intSortedHash {t:Type} (intHash t) = IntSortedHash t;
+strSortedHash {t:Type} (strHash t) = StrSortedHash t;
+```
 
 #### Polymorphic Type Constructors
 
 The constructor of a polymorphic type does not depend on the specific types to which the polymorphic type is applied. When it is computed, optional parameters (normally containing type variables and placed in curly braces) cease to be optional (the curly braces are removed), and, in addition to that, all parenthesis are also removed. Therefore,
 
+```
+vector {t:Type} # [ t ] = Vector t;
+```
+
 corresponds to the constructor number crc32("vector t:Type # [ t ] = Vector t") = 0x1cb5c415. During (de)serialization, the specific values of the optional variable t are derived from the result type (i. e. the object being serialized or deserialized) that is always known, and are never serialized explicitly.
 
 Previously, it had to be known which specific variable types each polymorphic type will apply to. To accomplish this, the type system used strings of the form
 
+```
+polymorphic_type_name type_1 ... type_N;
+```
+
 For example,
+
+```
+Vector int;
+Vector string;
+Vector Object;
+```
 
 Now they are ignored.
 
@@ -123,11 +164,28 @@ In this case, the Object pseudotype permits using Vector Object to store lists o
 
 Let us say that we need to represent users as triplets containing one integer (user ID) and two strings (first and last names). The requisite data structure is the triplet int, string, string which may be declared as follows:
 
+```
+user int string string = User;
+```
+
 On the other hand, a group may be described by a similar triplet consisting of a group ID, its name, and description:
+
+```
+group int string string = Group;
+```
 
 For the difference between User and Group to be clear, it is convenient to assign names to some or all of the fields:
 
+```
+user id:int first_name:string last_name:string = User;
+group id:int title:string description:string = Group;
+```
+
 If the User type needs to be extended at a later time by having records with some additional field added to it, it could be accomplished as follows:
+
+```
+userv2 id:int unread_messages:int first_name:string last_name:string in_groups:vector int = User;
+```
 
 Aside from other things, this approach helps define correct mappings between fields that belong to different constructors of the same type, convert between them as well as convert type values into an associative array with string keys (field names, if defined, are natural choices for such keys).
 

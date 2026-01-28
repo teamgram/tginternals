@@ -11,7 +11,7 @@ messages.getBotApp#34fdc5c3 app:InputBotApp hash:long = messages.BotApp;
 | Name | Type | Description |
 | ---- | :----: | ----------- |
 | app | InputBotApp | Bot app information obtained from a Direct Mini App deep link ». |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here |
 
 
 ## Result
@@ -20,5 +20,7 @@ messages.BotApp
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | BOT_APP_BOT_INVALID | The bot_id passed in the inputBotAppShortName constructor is invalid. |
 | 400 | BOT_APP_INVALID | The specified bot app is invalid. |
+| 400 | BOT_APP_SHORTNAME_INVALID | The specified bot app short name is invalid. |
 

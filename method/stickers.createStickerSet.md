@@ -1,11 +1,11 @@
 # stickers.createStickerSet
-Create a stickerset, bots only.
+Create a stickerset.
 
 ```
 messages.stickerSet#6e153f16 set:StickerSet packs:Vector<StickerPack> keywords:Vector<StickerKeyword> documents:Vector<Document> = messages.StickerSet;
 messages.stickerSetNotModified#d3f924eb = messages.StickerSet;
 ---functions---
-stickers.createStickerSet#9021ab67 flags:# masks:flags.0?true animated:flags.1?true videos:flags.4?true emojis:flags.5?true text_color:flags.6?true user_id:InputUser title:string short_name:string thumb:flags.2?InputDocument stickers:Vector<InputStickerSetItem> software:flags.3?string = messages.StickerSet;
+stickers.createStickerSet#9021ab67 flags:# masks:flags.0?true emojis:flags.5?true text_color:flags.6?true user_id:InputUser title:string short_name:string thumb:flags.2?InputDocument stickers:Vector<InputStickerSetItem> software:flags.3?string = messages.StickerSet;
 ```
 
 ## Parameters
@@ -13,8 +13,6 @@ stickers.createStickerSet#9021ab67 flags:# masks:flags.0?true animated:flags.1?t
 | ---- | :----: | ----------- |
 | flags | # | Flags, see TL conditional fields |
 | masks | flags.0?true | Whether this is a mask stickerset |
-| animated | flags.1?true | Whether this is an animated stickerset |
-| videos | flags.4?true | Whether this is a video stickerset |
 | emojis | flags.5?true | Whether this is a custom emoji stickerset. |
 | text_color | flags.6?true | Whether the color of TGS custom emojis contained in this set should be changed to the text color when used in messages, the accent color if used as emoji status, white on chat photos, or another appropriate color based on context. For custom emoji stickersets only. |
 | user_id | InputUser | Stickerset owner |
@@ -34,6 +32,7 @@ messages.StickerSet
 | 400 | PACK_SHORT_NAME_INVALID | Short pack name invalid. |
 | 400 | PACK_SHORT_NAME_OCCUPIED | A stickerpack with this name already exists. |
 | 400 | PACK_TITLE_INVALID | The stickerpack title is invalid. |
+| 400 | PACK_TYPE_INVALID | The masks and emojis flags are mutually exclusive. |
 | 400 | PEER_ID_INVALID | The provided peer id is invalid. |
 | 400 | STICKERS_EMPTY | No sticker provided. |
 | 400 | STICKER_EMOJI_INVALID | Sticker emoji invalid. |

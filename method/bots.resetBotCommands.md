@@ -22,4 +22,5 @@ Bool
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 400 | LANG_CODE_INVALID | The specified language code is invalid. |
+| 400 | USER_BOT_REQUIRED | This method can only be called by a bot. |
 

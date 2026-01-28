@@ -2,7 +2,7 @@
 Reply to a message.
 
 ```
-inputReplyToMessage#22c0f6d5 flags:# reply_to_msg_id:int top_msg_id:flags.0?int reply_to_peer_id:flags.1?InputPeer quote_text:flags.2?string quote_entities:flags.3?Vector<MessageEntity> quote_offset:flags.4?int = InputReplyTo;
+inputReplyToMessage#869fbe10 flags:# reply_to_msg_id:int top_msg_id:flags.0?int reply_to_peer_id:flags.1?InputPeer quote_text:flags.2?string quote_entities:flags.3?Vector<MessageEntity> quote_offset:flags.4?int monoforum_peer_id:flags.5?InputPeer todo_item_id:flags.6?int = InputReplyTo;
 ```
 
 ## Parameters
@@ -15,6 +15,8 @@ inputReplyToMessage#22c0f6d5 flags:# reply_to_msg_id:int top_msg_id:flags.0?int 
 | quote_text | flags.2?string | Used to quote-reply to only a certain section (specified here) of the original message. The maximum UTF-8 length for quotes is specified in the quote_length_max config key. |
 | quote_entities | flags.3?Vector<MessageEntity> | Message entities for styled text from the quote_text field. |
 | quote_offset | flags.4?int | Offset of the message quote_text within the original message (in UTF-16 code units). |
+| monoforum_peer_id | flags.5?InputPeer | Must be set to the ID of the topic when replying to a message within a monoforum topic. |
+| todo_item_id | flags.6?int | Can be set to reply to the specified item of a todo list ». |
 
 
 ## Type

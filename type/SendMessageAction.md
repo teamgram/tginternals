@@ -35,9 +35,9 @@ sendMessageEmojiInteractionSeen#b665902e emoticon:string = SendMessageAction;
 | sendMessageUploadDocumentAction | User is uploading a file. |
 | sendMessageGeoLocationAction | User is selecting a location to share. |
 | sendMessageChooseContactAction | User is selecting a contact to share. |
-| sendMessageGamePlayAction | User is playing a game |
 | sendMessageRecordRoundAction | User is recording a round video to share |
 | sendMessageUploadRoundAction | User is uploading a round video |
+| sendMessageGamePlayAction | User is playing a game |
 | speakingInGroupCallAction | User is currently speaking in the group call |
 | sendMessageHistoryImportAction | Chat history is being imported |
 | sendMessageChooseStickerAction | User is choosing a sticker |

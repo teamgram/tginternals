@@ -21,5 +21,6 @@ phone.ExportedGroupCallInvite
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | GROUPCALL_INVALID | The specified group call is invalid. |
 | 403 | PUBLIC_CHANNEL_MISSING | You can only export group call invite links for public chats or channels. |
 

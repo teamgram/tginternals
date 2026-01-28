@@ -22,7 +22,7 @@ messageEntityStrike#bf0693d4 offset:int length:int = MessageEntity;
 messageEntityBankCard#761e6af4 offset:int length:int = MessageEntity;
 messageEntitySpoiler#32ca960f offset:int length:int = MessageEntity;
 messageEntityCustomEmoji#c8cf05f8 offset:int length:int document_id:long = MessageEntity;
-messageEntityBlockquote#20df5d0 offset:int length:int = MessageEntity;
+messageEntityBlockquote#f1ccaaac flags:# collapsed:flags.0?true offset:int length:int = MessageEntity;
 ```
 
 ## Constructors
@@ -39,16 +39,16 @@ messageEntityBlockquote#20df5d0 offset:int length:int = MessageEntity;
 | messageEntityCode | Message entity representing a codeblock. |
 | messageEntityPre | Message entity representing a preformatted codeblock, allowing the user to specify a programming language for the codeblock. |
 | messageEntityTextUrl | Message entity representing a text url: for in-text urls like https://google.com use messageEntityUrl.Note that an additional confirmation popup with the full URL must be displayed to the user before opening this link, unless the domain satisfies the conditions specified in the domain whitelist documentation ». |
+| messageEntityUnderline | Message entity representing underlined text. |
+| messageEntityStrike | Message entity representing strikethrough text. |
+| messageEntityBlockquote | Message entity representing a block quote. |
+| messageEntitySpoiler | Message entity representing a spoiler |
+| messageEntityCustomEmoji | Represents a custom emoji.  Note that this entity must wrap exactly one regular emoji (the one contained in documentAttributeCustomEmoji.alt) in the related text, otherwise the server will ignore it. |
 | messageEntityMentionName | Message entity representing a user mention: for creating a mention use inputMessageEntityMentionName. |
 | inputMessageEntityMentionName | Message entity that can be used to create a user user mention: received mentions use the messageEntityMentionName constructor, instead. |
 | messageEntityPhone | Message entity representing a phone number. |
 | messageEntityCashtag | Message entity representing a $cashtag. |
-| messageEntityUnderline | Message entity representing underlined text. |
-| messageEntityStrike | Message entity representing strikethrough text. |
 | messageEntityBankCard | Indicates a credit card number |
-| messageEntitySpoiler | Message entity representing a spoiler |
-| messageEntityCustomEmoji | Represents a custom emoji.  Note that this entity must wrap exactly one regular emoji (the one contained in documentAttributeCustomEmoji.alt) in the related text, otherwise the server will ignore it. |
-| messageEntityBlockquote | Message entity representing a block quote. |
 
 
 ## Methods

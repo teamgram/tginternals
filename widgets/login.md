@@ -38,6 +38,14 @@ Data-check-string is a concatenation of all received fields, sorted in alphabeti
 
 The full check might look like:
 
+```
+data_check_string = ...
+secret_key = SHA256(<bot_token>)
+if (hex(HMAC_SHA256(data_check_string, secret_key)) == hash) {
+  // data is from Telegram
+}
+```
+
 To prevent the use of outdated data, you can additionally check the auth_date field, which contains a Unix timestamp when the authentication was received.
 
 ### Sample implementation

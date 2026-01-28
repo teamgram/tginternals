@@ -20,5 +20,6 @@ Bool
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | CODE_EMPTY | The provided code is empty. |
 | 400 | PASSWORD_RECOVERY_EXPIRED | The recovery code has expired. |
 

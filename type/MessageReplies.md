@@ -8,7 +8,7 @@ messageReplies#83d60fc2 flags:# comments:flags.0?true replies:int replies_pts:in
 ## Constructors
 | Constructor | Description |
 | ---- | ----------- |
-| messageReplies | Info about the comment section of a channel post, or a simple message thread |
+| messageReplies | Info about the comment section of a channel post, a simple message thread, a forum topic, or a direct messages topic (all features ultimately based on message threads). |
 
 
 ## Methods

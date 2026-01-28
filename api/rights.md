@@ -29,7 +29,7 @@ Permissions are defined by the chatBannedRights constructor: all flags can be us
 
 Bots can suggest a set of admin rights when being added to groups and channels.
 
-Bots can use bots.setBotBroadcastDefaultAdminRights to indicate a suggested set of admin rights » to use when adding the bot to a channel, and bots.setBotGroupDefaultAdminRights when adding the bot to a group.
+Bots can use bots.setBotBroadcastDefaultAdminRights to indicate a suggested set of admin rights » to use when adding the bot to a channel, and bots.setBotGroupDefaultAdminRights when adding the bot to a group.
 
 These suggested admin rights are contained in the bot_broadcast_admin_rights and bot_group_admin_rights paremeters of userFull, obtainable using users.getFullUser.
 

@@ -4,6 +4,16 @@ Graphical telegram clients should transform emojis into their respective animate
 
 ### Animated emojis
 
+```
+inputStickerSetAnimatedEmoji#28703c8 = InputStickerSet;
+
+messages.stickerSet#6e153f16 set:StickerSet packs:Vector<StickerPack> keywords:Vector<StickerKeyword> documents:Vector<Document> = messages.StickerSet;
+
+---functions---
+
+messages.getStickerSet#c8a0ec74 stickerset:InputStickerSet hash:int = messages.StickerSet;
+```
+
 On startup, clients should fetch the animated emoji stickerset by calling the messages.getStickerSet method, providing inputStickerSetAnimatedEmoji to the stickerset field.
 The returned stickerset will contain a set of animated stickers, one for each of the supported emojis.
 
@@ -11,9 +21,9 @@ Clients should substitute messages containing only one instance of one of the al
 Also, when receiving messages containing only one instance of a custom emoji, instead of displaying a message bubble with a single small custom emoji inside, the scaled-up custom emoji should be displayed directly, like with normal stickers.
 
 Animated emojis should loop only once when first sent or received, or when clicked.
-For supported emojis, clients on both sides of private chats with users are supposed to show a reaction animation when any of the two users clicks on the animated emoji: click here for more info ».
+For supported emojis, clients on both sides of private chats with users are supposed to show a reaction animation when any of the two users clicks on the animated emoji: click here for more info ».
 
-For special dice emojis like , , or , clients are supposed to behave differently both when sending and receiving such emojis: click here for more info ».
+For special dice emojis like , , or , clients are supposed to behave differently both when sending and receiving such emojis: click here for more info ».
 
 ### Emojis with sounds
 
@@ -21,11 +31,50 @@ Certain animated emojis should play sound when clicked, as specified by server-s
 
 The returned JSON object will contain the following map, with a list of file IDs to download:
 
+```
+"emojies_sounds": {
+        "\ud83c\udf83": {
+            "id": "4956223179606458539",
+            "access_hash": "-2107001400913062971",
+            "file_reference_base64": "AF-4ApC7ukC0UWEPZN0TeSJURe7T"
+        },
+        "\u26b0": {
+            "id": "4956223179606458540",
+            "access_hash": "-1498869544183595185",
+            "file_reference_base64": "AF-4ApCLKMGt96WCvLm58kbqZHd3"
+        },
+        "\ud83e\udddf\u200d\u2642": {
+            "id": "4960929110848176331",
+            "access_hash": "3986395821757915468",
+            "file_reference_base64": "AF-4ApAedNln3IMEHH-SUQuH8L9g"
+        },
+    }
+```
+
 The file reference field should be base64-decoded before downloading the file.
 
 ### Emoji reactions
 
-Not to be confused with message reactions ».
+```
+inputStickerSetAnimatedEmojiAnimations#cde3739 = InputStickerSet;
+
+messages.stickerSet#6e153f16 set:StickerSet packs:Vector<StickerPack> keywords:Vector<StickerKeyword> documents:Vector<Document> = messages.StickerSet;
+
+stickerPack#12b299d4 emoticon:string documents:Vector<long> = StickerPack;
+
+sendMessageEmojiInteraction#25972bcb emoticon:string msg_id:int interaction:DataJSON = SendMessageAction;
+sendMessageEmojiInteractionSeen#b665902e emoticon:string = SendMessageAction;
+
+updateUserTyping#c01e857f user_id:long action:SendMessageAction = Update;
+
+---functions---
+
+messages.getStickerSet#c8a0ec74 stickerset:InputStickerSet hash:int = messages.StickerSet;
+
+messages.setTyping#58943ee2 flags:# peer:InputPeer top_msg_id:flags.0?int action:SendMessageAction = Bool;
+```
+
+Not to be confused with message reactions ».
 
 On startup, clients should fetch the animated reaction emoji stickerset by calling the messages.getStickerSet method, providing inputStickerSetAnimatedEmojiAnimations to the stickerset field.
 The returned stickerset will contain a set of animated emoji reactions, one or more for each of the supported emojis.

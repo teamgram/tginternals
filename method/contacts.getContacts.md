@@ -11,7 +11,7 @@ contacts.getContacts#5dd69e12 hash:long = contacts.Contacts;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | If there already is a full contact list on the client, a hash of a the list of contact IDs in ascending order may be passed in this parameter. If the contact set was not changed, (contacts.contactsNotModified) will be returned. |
+| hash | long | Hash used for caching, for more info click here.Note that the hash is computed using the usual algorithm, passing to the algorithm first the previously returned contacts.contacts.saved_count field, then max 100000 sorted user IDs from the contact list, including the ID of the currently logged in user if it is saved as a contact. Example: tdlib implementation. |
 
 
 ## Result

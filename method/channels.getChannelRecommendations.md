@@ -5,13 +5,14 @@ Obtain a list of similarly themed public channels, selected based on similaritie
 messages.chats#64ff9fd5 chats:Vector<Chat> = messages.Chats;
 messages.chatsSlice#9cd81144 count:int chats:Vector<Chat> = messages.Chats;
 ---functions---
-channels.getChannelRecommendations#83b70d97 channel:InputChannel = messages.Chats;
+channels.getChannelRecommendations#25a71742 flags:# channel:flags.0?InputChannel = messages.Chats;
 ```
 
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| channel | InputChannel | The method will return channels related to the passed channel. |
+| flags | # | Flags, see TL conditional fields |
+| channel | flags.0?InputChannel | The method will return channels related to the passed channel. If not set, the method will returns channels related to channels the user has joined. |
 
 
 ## Result
@@ -21,4 +22,6 @@ messages.Chats
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 400 | CHANNEL_INVALID | The provided channel is invalid. |
+| 400 | CHANNEL_PRIVATE | You haven't joined this channel/supergroup. |
+| 400 | CHAT_NOT_MODIFIED | No changes were made to chat information because the new information you passed is identical to the current information. |
 

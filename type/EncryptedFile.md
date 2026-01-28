@@ -20,6 +20,6 @@ messages.uploadEncryptedFile#5057c497 peer:InputEncryptedChat file:InputEncrypte
 ## Methods
 | Method | Description |
 | ---- | ----------- |
-| messages.uploadEncryptedFile | Upload encrypted file and associate it to a secret chat |
+| messages.uploadEncryptedFile | Upload encrypted file and associate it to a secret chat (without actually sending it to the chat). |
 
 

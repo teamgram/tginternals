@@ -11,7 +11,7 @@ account.getChannelDefaultEmojiStatuses#7727a7d5 hash:long = account.EmojiStatuse
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

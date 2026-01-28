@@ -1,10 +1,18 @@
 # Telegram Stickers
 
-All users can create, send and share custom artwork using Telegram's open platform for stickers and emoji. Stickers take many forms – from basic images to stunning vector animations.
+All users can create, send and share custom artwork using Telegram's open platform for stickers and emoji. The built-in Sticker Editor lets everyday users seamlessly create stickers in the Telegram app with their own photos to share in chats.
+
+Artists and content creators can make vector animations, video files and static images in their preferred apps – then upload them with the @Stickers mini app to share their artwork with over 1 billion users.
 
 To start building your own custom sets, click below:
 
-- Creating Stickers
+- Creating Stickers in Telegram
+
+- In-App Sticker Maker
+
+- @Stickers Mini App
+
+- Creating Stickers with Software
 
 - Animated
 
@@ -12,25 +20,51 @@ To start building your own custom sets, click below:
 
 - Static
 
-- Uploading Stickers
+- Custom Emoji
 
-- How to Upload
+- Importing Stickers from Other Apps
 
-- Importing from other apps
+- For Developers
 
-### Animated Stickers and Emoji
+- For Users
+
+### Creating Stickers in Telegram
+
+Any Telegram user can create custom stickers in any Telegram chat – transforming photos into creative artwork that can be saved and shared everywhere.
+
+#### In-App Sticker Maker
+
+You can quickly turn any photo on your device into a custom sticker with added text, drawings, emoji and more using the built-in Sticker Editor. This allows anyone to easily make their own stickers without special software – right in the chat.
+
+The sticker editor also allows you to create packs of custom stickers to share with friends and family.
+
+> To access the Sticker Editor, open the sticker panel from your input field in any chat and tap the (+) button.
+
+#### @Stickers Mini App
+
+The @Stickers allows anyone to create and manage packs of both stickers and emoji, access detailed usage statistics and more – all from one intuitive interface.
+
+> The functions of the @Stickers bot can also be accessed via text commands.
+
+---
+
+### Creating Stickers with Software
+
+Artists and content creators can make stickers in multiple formats using their preferred editing apps – and upload the final animation, video or image files as both stickers and emoji.
+
+#### Animated Stickers and Emoji
 
 Telegram stickers and emoji can move with smooth 60 FPS animations to bring your characters to life in high resolution.
 
 > Animations require Telegram's unique .TGS format – click here for Video Stickers and Emoji made in .WEBM format.
 
-#### Creating Animations
+Creating Animations
 
 To create vector-animated stickers and emoji you will need the following:
 
 > The Lottie-based .TGS format allows for incredibly detailed animations that are less than 30 KB in size – six times smaller than the average photo.
 
-#### Animation Requirements
+Animation Requirements
 
 - The canvas size must be 512х512 pixels.
 
@@ -46,25 +80,17 @@ To create vector-animated stickers and emoji you will need the following:
 
 - You must not use the following Adobe After Effects functionality when animating your artwork: Auto-bezier keys, Expressions, Masks, Layer Effects, Images, Solids, Texts, 3D Layers, Merge Paths, Star Shapes, Gradient Strokes, Repeaters, Time Stretching, Time Remapping, Auto-Oriented Layers.
 
-#### Uploading Animations
-
-When your files are ready, send the /newanimated command to the @Stickers bot – then send it the .TGS files.
-
-To upload emoji, send /newemojipack to @Stickers. The requirements for .TGS stickers and emoji are exactly the same.
-
-Your set will need an icon. Icons for your sets must be 100x100 pixels, with a looped animation not exceeding 3 seconds.
-
 ---
 
-### Video Stickers and Emoji
+#### Video Stickers and Emoji
 
 Stickers and emoji can also be built with .WEBM – an open-source format that is compatible with many graphics editors to create high-detail images. Requires Telegram 8.5 or higher.
 
-#### Creating Videos
+Creating Videos
 
 To create stickers and emoji from video files, you only need editing software that lets you export your project as a .WEBM video file.
 
-#### Video Requirements
+Video Requirements
 
 > See this Encoding .WEBM with VP9 Guide for details
 
@@ -84,25 +110,15 @@ To create stickers and emoji from video files, you only need editing software th
 
 - Video must have no audio stream.
 
-#### Uploading Videos
-
-Once your stickers are ready, send the /newvideo command to the @Stickers bot – then send it the .WEBM files.
-
-To upload emoji, send /newemojipack to @Stickers. Note that video emoji need to be a smaller resolution than stickers.
-
-Your set will need a .WEBM icon. Icons for video sticker sets must be 100x100 pixels, with a looped animation not exceeding 3 seconds.
-
 ---
 
-### Static Stickers and Emoji
+#### Static Stickers and Emoji
 
 Turn your favorite drawings and memes into packs of images that are easily to share and access on any device.
 
-#### Creating Images
+Creating ImagesTo create static stickers and emoji for Telegram, you only need an image editor that lets you export in .PNG or .WEBP format.
 
-To create static stickers and emoji for Telegram, you only need an image editor that lets you export in .PNG or .WEBP format.
-
-#### Image Requirements
+Image Requirements
 
 - For stickers, one side must be exactly 512 pixels in size – the other side can be 512 pixels or less.
 
@@ -112,47 +128,35 @@ To create static stickers and emoji for Telegram, you only need an image editor 
 
 > Tip: a transparent background, white stroke and black shadow effect will make your sticker stand out.
 
-#### Uploading Images
+#### Custom Emoji
 
-Once your stickers are ready, start a chat with the @Stickers bot and send the command /newpack. Your sticker set can also have a custom icon – a 100x100 pixel image in .PNG or .WEBP format.
-
-To upload emoji, send /newemojipack to @Stickers. Note that static emoji need to be a smaller resolution than stickers.
-
-> For more info about using the @Stickers bot, click here.
-
-### Custom Emoji
-
-As of version 8.9 released in August 2022, Telegram apps support custom emoji.Emoji use the same technology as stickers, making it very easy to convert your art to both formats. Check out the video and image sections for details on the different size requirements.To upload them, use the /newemojipack command in @Stickers.
+As of version 8.9 released in August 2022, Telegram apps support custom emoji.Emoji use the same technology as stickers, making it very easy to convert your art to both formats. Check out the video and image sections for details on the different size requirements.
 
 > Everyone can create new custom emoji, however, adding and using custom sets is currently an exclusive feature of Telegram Premium users.
 
+#### Adaptive Emoji
+
+If you intend to create a set of simple icons with solid colors that change their color based on where they are used, you can send the command /adaptive when creating your emoji set.
+
+When used as emoji statuses and topic icons, such emoji will match the accent color of the user's theme. When in a message, they will match the text color in that message.
+
 ---
 
-### Using the @Stickers Bot
+### Importing Stickers From Other Apps
 
-Publishing and editing sticker packs is simple and automated, thanks to the @Stickers bot. It can also show you detailed stats for stickers and packs.
+Developers can build apps to automate importing stickers using Telegram’s API. With these tools, users can instantly bring their favorite stickers to Telegram.
 
-#### Publishing a Sticker Pack
+#### For Users
 
-Once you open the bot, press the Start button or send /start. The bot will reply, describing its different commands. It will walk you through step by step, but here's a quick guide:
+Users can find apps that allow them to import stickers or quickly generate their own. They can also easily publish custom stickers with the @Stickers bot using .PNG, .WEBP or .WEBM files for stickers from other apps.
 
-- Open the bot menu in the message bar and select the /newpack command to start uploading static stickers. For animated stickers use /newanimated, or /newvideo for video stickers.
+#### For Developers
 
-- Give your sticker pack a name – this name will appear as the title for your pack in the sticker panel.
+As of version 7.8, Telegram apps support a simple API for importing stickers. Developers can use this to build apps or add tools to apps that let users instantly transfer stickers to Telegram – or create custom stickers from photos or videos.
 
-- Send your first sticker file – an image file, .TGS file, or .WEBM file. Using one of the Desktop or Web apps is strongly recommended.
+> Click here for more information about developing apps for importing stickers.
 
-- Choose an emoji that corresponds to your sticker – this lets users quickly find it with sticker suggestions.
-
-- Continue uploading all your sticker files.
-
-- When you're done uploading, send the /publish command.
-
-- Set an icon for your pack – static sticker packs can /skip this step, but it is required for animated or video stickers.
-
-- Choose a short name for your sticker pack – it will be used to create a shareable link for the pack like t.me/addstickers/HotCherry. Congratulations! Your stickers are ready for the world.
-
-> After your pack is finished, you can send /start again to see the full list of commands, or use the bot menu to create another pack, edit an existing pack, or see statistics.
+ot menu to create another pack, edit an existing pack, or see statistics.
 
 #### Editing a Sticker Pack
 

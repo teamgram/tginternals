@@ -2,7 +2,7 @@
 Info about a group call or livestream
 
 ```
-groupCall#d597650c flags:# join_muted:flags.1?true can_change_join_muted:flags.2?true join_date_asc:flags.6?true schedule_start_subscribed:flags.8?true can_start_video:flags.9?true record_video_active:flags.11?true rtmp_stream:flags.12?true listeners_hidden:flags.13?true id:long access_hash:long participants_count:int title:flags.3?string stream_dc_id:flags.4?int record_start_date:flags.5?int schedule_date:flags.7?int unmuted_video_count:flags.10?int unmuted_video_limit:int version:int = GroupCall;
+groupCall#553b0ba1 flags:# join_muted:flags.1?true can_change_join_muted:flags.2?true join_date_asc:flags.6?true schedule_start_subscribed:flags.8?true can_start_video:flags.9?true record_video_active:flags.11?true rtmp_stream:flags.12?true listeners_hidden:flags.13?true conference:flags.14?true creator:flags.15?true id:long access_hash:long participants_count:int title:flags.3?string stream_dc_id:flags.4?int record_start_date:flags.5?int schedule_date:flags.7?int unmuted_video_count:flags.10?int unmuted_video_limit:int version:int invite_link:flags.16?string = GroupCall;
 ```
 
 ## Parameters
@@ -17,6 +17,8 @@ groupCall#d597650c flags:# join_muted:flags.1?true can_change_join_muted:flags.2
 | record_video_active | flags.11?true | Whether the group call is currently being recorded |
 | rtmp_stream | flags.12?true | Whether RTMP streams are allowed |
 | listeners_hidden | flags.13?true | Whether the listeners list is hidden and cannot be fetched using phone.getGroupParticipants. The phone.groupParticipants.count and groupCall.participants_count counters will still include listeners. |
+| conference | flags.14?true | Whether this is an E2E conference call. |
+| creator | flags.15?true | Whether we're created this group call. |
 | id | long | Group call ID |
 | access_hash | long | Group call access hash |
 | participants_count | int | Participant count |
@@ -27,6 +29,7 @@ groupCall#d597650c flags:# join_muted:flags.1?true can_change_join_muted:flags.2
 | unmuted_video_count | flags.10?int | Number of people currently streaming video into the call |
 | unmuted_video_limit | int | Maximum number of people allowed to stream video into the call |
 | version | int | Version |
+| invite_link | flags.16?string | Invitation link for the conference. |
 
 
 ## Type

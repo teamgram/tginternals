@@ -2,7 +2,7 @@
 Document (video, audio, voice, sticker, any media type except photo)
 
 ```
-messageMediaDocument#4cf4d72d flags:# nopremium:flags.3?true spoiler:flags.4?true video:flags.6?true round:flags.7?true voice:flags.8?true document:flags.0?Document alt_document:flags.5?Document ttl_seconds:flags.2?int = MessageMedia;
+messageMediaDocument#52d8ccd9 flags:# nopremium:flags.3?true spoiler:flags.4?true video:flags.6?true round:flags.7?true voice:flags.8?true document:flags.0?Document alt_documents:flags.5?Vector<Document> video_cover:flags.9?Photo video_timestamp:flags.10?int ttl_seconds:flags.2?int = MessageMedia;
 ```
 
 ## Parameters
@@ -15,7 +15,9 @@ messageMediaDocument#4cf4d72d flags:# nopremium:flags.3?true spoiler:flags.4?tru
 | round | flags.7?true | Whether this is a round video. |
 | voice | flags.8?true | Whether this is a voice message. |
 | document | flags.0?Document | Attached document |
-| alt_document | flags.5?Document | Currently only used for story videos, may contain an alternative version of the story video, explicitly encoded using H.264 (in MPEG4 transport) at a lower resolution than document. |
+| alt_documents | flags.5?Vector<Document> | Videos only, contains alternative qualities of the video. |
+| video_cover | flags.9?Photo | Custom video cover. |
+| video_timestamp | flags.10?int | Start playing the video at the specified timestamp (seconds). |
 | ttl_seconds | flags.2?int | Time to live of self-destructing document |
 
 

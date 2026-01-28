@@ -22,4 +22,5 @@ Bool
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 400 | BOT_INVALID | This is not a valid bot. |
+| 400 | USERNAME_NOT_MODIFIED | The username was not modified. |
 

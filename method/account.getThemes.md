@@ -12,7 +12,7 @@ account.getThemes#7206e458 format:string hash:long = account.Themes;
 | Name | Type | Description |
 | ---- | :----: | ----------- |
 | format | string | Theme format, a string that identifies the theming engines supported by the client |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

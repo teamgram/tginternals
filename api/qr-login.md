@@ -35,7 +35,7 @@ The token must be extracted from the tg://login URI and base64url-decoded before
 
 Possible errors returned by the method are:
 
-- 400 - AUTH_TOKEN_INVALID, an invalid authorization token was provided
+- 400 - AUTH_TOKEN_INVALID, AUTH_TOKEN_INVALID1, an invalid authorization token was provided
 
 - 400 - AUTH_TOKEN_EXPIRED, the provided authorization token has expired and the updated QR-code must be re-scanned
 

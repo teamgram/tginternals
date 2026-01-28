@@ -2,11 +2,10 @@
 
 In some situations user and channel constructors have reduced set of fields present (although id is always there) and min flag set. This is done for performance and privacy reasons.
 
-When receiving said constructors, the client must first check if user or chat object without min flag is already present in local cache. If it is present, then the client should just ignore constructors with min flag and use local one instead.
+When receiving said constructors, the client must first check if user or chat object without min flag is already present in the local peer database ».
+If it is present, then the client should merge the remote and the local object, ignoring some specific fields of the remote object as specified by the user and channel pages.
 
-The rest of the article assumes the client receives a min-constructor and doesn't have the full object in its local cache.
-
-The client must store the context (similar to file references) in which the user/channel was seen. Later, when the client needs to pass the user/channel as input argument (e.g. fetch profile, mute, ban etc), the context is used to generate the input*FromMessage constructor, instead of normal inputUser, inputChannel or inputPeer.
+Additionally, the client must store the context (similar to file references) in which the user/channel was seen. Later, when the client needs to pass the user/channel as input argument (e.g. passing the access_hash to fetch profile, mute, ban info etc), the context is used to generate the input*FromMessage constructor, instead of normal inputUser, inputChannel or inputPeer.
 
 - inputPeerUserFromMessage
 
@@ -16,7 +15,7 @@ The client must store the context (similar to file references) in which the user
 
 - inputChannelFromMessage
 
-The access_hash value, if present, is only suitable to use in inputPeerPhotoFileLocation, to directly download the profile pictures of channels and users without having to generate an inputPeer*FromMessage, simply using inputPeer* with the specified access hash.
+The access_hash value of a min constructor is only suitable to use in certain conditions as specified by the user and channel pages.
 
 Usually min constructors are encountered in messages inside of groups or channels.
 When a message mentioning (sender, forwarder or forwardee, et cetera) such a user or channel is found, the constuctor must be associated with the message ID of the message and with the chat where the message was seen.
@@ -38,6 +37,12 @@ When and if the client will need to interact with user 102424212, it will genera
 
 user_id can also be set to the IDs of users met in the fwd_header (messages forwarded from a user can be used to interact with the original sender, if they don't have privacy settings for forwards enabled).
 Users mentioned via messageEntityMentionName in a message can also be used.
+
+The same can be done with min channels.
+
+Example implementations: Telegram for iOS, tdlib.
+
+in a message can also be used.
 
 The same can be done with min channels.
 

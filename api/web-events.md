@@ -12,22 +12,61 @@ The postEvent function will try sending the event to the Telegram app in a numbe
 
 In mobile apps, the event receiver API should be typically exposed as a window.TelegramWebviewProxy object with a postEvent method.
 
+```
+window.TelegramWebviewProxy.postEvent(eventType, eventData)
+```
+
 #### window.external
 
 Alternatively, a window.external.notify method can be exposed, accepting a string JSON payload with the event type and payload:
+
+```
+window.external.notify(JSON.stringify({eventType: eventType, eventData: eventData}));
+```
 
 #### postMessage API
 
 Finally, web MTProto clients that need to open a game, open a bot mini app or process a payment in an iframe can use the postMessage API to receive events from iframes.
 The GamingCommunication and bot mini apps libraries by default will use '*' as targetOrigin, sending messages to parent pages regardless of the origin of the embedder.
 
+```
+window.parent.postMessage(JSON.stringify({eventType: eventType, eventData: eventData}), targetOrigin);
+```
+
 ### Event types
 
 eventType is a simple string indicating the event type, and eventData is a payload with an object that will be parsed by the Telegram app.
 
-#### web_app_close
+#### payment_form_submit
+
+Event payload: JSON object with credentials and title fields.
+
+- title is the censored credit card title.
+
+- credentials is a service-specific JSON object with information about the payment credentials provided by the user to the payment system.
+
+Neither Telegram, nor bots will have access to your credit card information.
+Credit card details will be handled only by the payment system, see the payment documentation for more info ».
+
+#### share_score
 
 No event payload.
+
+Will be called by games when the user explicitly clicks on the share score button to share the game, along with their score.
+Typically done by using messages.forwardMessages on the game message with the with_my_score flag.
+
+#### share_game
+
+No event payload.
+
+Will be called by games when the user explicitly clicks on the share game button to share the game, without sharing their score.
+Typically done by using messages.forwardMessages on the game message without the with_my_score flag, or by sharing the game's deep link.
+
+#### web_app_close
+
+No event payload, OR a JSON object with the following fields (which should be properly validated by the client).
+
+- return_back - If true, if the web app was opened through a deep link in another app (i.e. not through a deep link in a Telegram client), the Telegram client should return to the app that opened the link, not to the main page of the Telegram client. (boolean, optional)
 
 Emitted by bot mini apps when the mini app webview should be closed.
 
@@ -68,13 +107,13 @@ Emitted by bot mini apps to ask permission from the user to send them messages.
 
 Upon receiving this event, clients should first invoke bots.canSendMessage, to check whether they have already granted the bot permission to write them in some way.
 
-- If the method returns boolTrue, a write_access_requested event » with {"status": "allowed"} should be sent to the Mini App.
+- If the method returns boolTrue, a write_access_requested event » with {"status": "allowed"} should be sent to the Mini App.
 
 - Otherwise, if the method returns boolFalse, a prompt should be shown to the user, indicating that the bot is asking permission to send messages to them.
 
-- If the user accepts, invoke bots.allowSendMessage, and if the method call succeeds emit a write_access_requested event » with {"status": "allowed"}.
+- If the user accepts, invoke bots.allowSendMessage, and if the method call succeeds emit a write_access_requested event » with {"status": "allowed"}.
 
-- Otherwise, if the user refuses or the bots.allowSendMessage call fails, emit a write_access_requested event » with {"status": "cancelled"}.
+- Otherwise, if the user refuses or the bots.allowSendMessage call fails, emit a write_access_requested event » with {"status": "cancelled"}.
 
 #### web_app_request_phone
 
@@ -84,9 +123,59 @@ Emitted by bot mini apps to ask the user to share their phone number as a contac
 
 Upon receiving this event, clients should show a prompt to the user, indicating that the bot is asking them to share their phone number (optionally also asking the user to unblock the bot, if it's currently blocked).
 
-If they accept, the user's phone number should be shared by sending a contact to the bot (unblocking it first, if it's currently blocked by the user); if all RPC queries (to unblock the bot, to send the message) succeed, a phone_requested event » should be sent with {"status": "sent"}.
+If they accept, the user's phone number should be shared by sending a contact to the bot (unblocking it first, if it's currently blocked by the user); if all RPC queries (to unblock the bot, to send the message) succeed, a phone_requested event » should be sent with {"status": "sent"}.
 
-If the user refuses or any intermdiate method call fails, a phone_requested event » should be sent with {"status": "cancelled"}.
+If the user refuses or any intermdiate method call fails, a phone_requested event » should be sent with {"status": "cancelled"}.
+
+#### web_app_biometry_get_info
+
+Event data: null
+
+Emitted by bot mini apps to ask the client to initialize the biometric authentication manager object for the current bot, emitting a biometry_info_received event » on completion.
+
+This request should just initialize the client-side state, i.e. by checking if biometric authentication is even available or not, it should not ask the user anything.
+
+#### web_app_biometry_request_access
+
+Event data: a JSON object, with an optional reason string field (1-128 chars, used in the prompt), containing the reason why the bot is asking to use biometric authentication.
+
+Emitted by bot mini apps to ask the user permission to use biometric authentication, emitting a biometry_info_received event » on completion.
+
+This request should not actually prompt biometric authentication, it should just ask the user permission to use it through a popup that should be shown only once (for this bot): no popup must be shown if the user has already previously allowed, denied or cancelled a biometry permission popup from this bot.
+
+#### web_app_biometry_update_token
+
+Event data: a JSON object with the following fields:
+
+- token - The new token (string, 0-1024 chars), or an empty string to remove it.
+
+- reason - Optional string field, containing the reason why the bot is asking to authenticate using biometrics (1-128 chars, used in the prompt).
+
+Emitted by bot mini apps to authenticate using biometrics and store the biometric token securely stored on-device, emitting a biometry_token_updated event » on completion.
+
+This token (which may be for example the private key of a cryptocurrency wallet, or some other data the app must keep safe) must be safely stored by the Telegram client, associating it to the bot that owns the mini app.
+
+For example, the token may be directly stored in the on-device secure storage, accessible only after biometric authentication, or it may be stored to normal, non-secure storage, but in encrypted form, encrypted using the key returned from the device's secure storage after biometric authentication (for example on Android, using the CryptoObject returned by the biometric prompt authentication result).
+
+If the user has previously disallowed the bot from using biometric authentication, this request should immediately fail, emitting an appropriate biometry_token_updated event ».
+
+#### web_app_biometry_request_auth
+
+Event data: a JSON object, with an optional reason string field, containing the reason why the bot is asking to authenticate using biometrics (1-128 chars, used in the prompt).
+
+Emitted by bot mini apps to authenticate using biometrics and fetch the previously stored secure token, emitting a biometry_auth_requested event » on completion, containing either an error, or the decrypted biometric token » (or an empty string if no token was configured yet).
+
+Should only be used if the token_saved field of the biometry_info_received object » is equal to true, otherwise set a new token first using web_app_biometry_update_token ».
+
+If the user has previously disallowed the bot from using biometric authentication, this request should immediately fail, emitting an appropriate biometry_auth_requested event ».
+
+#### web_app_biometry_open_settings
+
+Event data: null
+
+Emitted by bot mini apps to open the biometric authentication settings page for bots, useful when the app needs to request permission to use biometrics from users who have previously denied it.
+
+Note that this event should only be handled in response to user interaction with the Mini App interface (e.g. a click inside the Mini App or on the main button), and it must be handled at most once a second.
 
 #### web_app_invoke_custom_method
 
@@ -102,7 +191,7 @@ Emitted by bot mini apps to make custom method calls to Telegram's servers on be
 
 This event should trigger a bots.invokeWebViewCustomMethod request, passing the method to custom_method, and the params to params.
 
-Upon receiving a reply, a custom_method_invoked event » should be emitted, with the following fields:
+Upon receiving a reply, a custom_method_invoked event » should be emitted, with the following fields:
 
 - req_id - The req_id from the web_app_invoke_custom_method object
 
@@ -118,16 +207,16 @@ Event data: a JSON object with the following fields:
 
 Emitted by bot mini apps to obtain the contents of the system clipboard.
 
-Only for Mini Apps owned by bots added to the attachment menu, regardles of how the Mini App itself was launched, this event should trigger a clipboard_text_received event » with the following payload:
+Only for Mini Apps owned by bots added to the attachment menu, regardles of how the Mini App itself was launched, this event should trigger a clipboard_text_received event » with the following payload:
 
 - req_id - The req_id from the web_app_read_text_from_clipboard request
 
 - data - A string with the clipboard contents
 
 Note that this method can be called only in response to a user interaction with the Mini App interface (e.g. a click inside the Mini App or on the main or settings button).
-Note that user interactions must have a TTL of 10 seconds: events of this type must be ignored and a clipboard_text_received event » with the correct req_id and no data field must be sent if the last Mini App user interaction (as described above) happened more than 10 seconds ago.
+Note that user interactions must have a TTL of 10 seconds: events of this type must be ignored and a clipboard_text_received event » with the correct req_id and no data field must be sent if the last Mini App user interaction (as described above) happened more than 10 seconds ago.
 
-A clipboard_text_received event » with the correct req_id and no data field must also be sent if the bot is not installed in the attachment menu.
+A clipboard_text_received event » with the correct req_id and no data field must also be sent if the bot is not installed in the attachment menu.
 
 #### web_app_open_scan_qr_popup
 
@@ -137,9 +226,9 @@ Event data: a JSON object with the following fields:
 
 Emitted by bot mini apps to prompt the client to open the native QR code scanner and start continuously scanning for QR codes.
 
-A qr_text_received event » should be emitted every time a new QR code is scanned, until the user closes the popup via the UI or the Mini App closes the popup with a web_app_close_scan_qr_popup event.
+A qr_text_received event » should be emitted every time a new QR code is scanned, until the user closes the popup via the UI or the Mini App closes the popup with a web_app_close_scan_qr_popup event.
 
-Closing the popup should emit a scan_qr_popup_closed event »; the same event should be emitted if the scan QR code popup cannot be opened due to permission issues.
+Closing the popup should emit a scan_qr_popup_closed event »; the same event should be emitted if the scan QR code popup cannot be opened due to permission issues.
 
 #### web_app_close_scan_qr_popup
 
@@ -147,7 +236,7 @@ Event data: null
 
 Emitted by bot mini apps to prompt the client to close the native QR code scanner opened using web_app_open_scan_qr_popup.
 
-The scan_qr_popup_closed event » event should not be emitted if the QR code popup is closed using this event.
+The scan_qr_popup_closed event » event should not be emitted if the QR code popup is closed using this event.
 
 #### web_app_setup_closing_behavior
 
@@ -181,7 +270,7 @@ Used to set the mini app header and upper overscroll color.
 
 Event data: a JSON object with a string data field.
 
-Used only by keyboard button mini apps to send back data to the bot as specified here ». The Mini App will be closed.
+Used only by keyboard button mini apps to send back data to the bot as specified here ». The Mini App will be closed.
 
 #### web_app_switch_inline_query
 
@@ -199,7 +288,7 @@ Event data: a JSON object with the following keys:
 
 - If empty, the current chat is used.
 
-Used by inline mode mini apps to send back data to the bot as specified here ». The Mini App will be closed.
+Used by inline mode mini apps to send back data to the bot as specified here ». The Mini App will be closed.
 
 #### web_app_trigger_haptic_feedback
 
@@ -243,7 +332,35 @@ Event data: a JSON object with the following fields:
 
 - try_instant_view - Optional boolean, if set, equal to true and the scheme of the URL is either http or https, the link should be opened in Instant View mode if possible.
 
+- try_browser - Optional string, if set, must contain one of the following browser identifiers, and the client should attempt to open the link using the specified browser (if it's currently installed on the device):
+
+- google-chrome or chrome - Google Chrome
+
+- mozilla-firefox or firefox - Firefox
+
+- microsoft-edge or edge - Microsoft Edge
+
+- opera - Opera
+
+- opera-mini - Opera Mini
+
+- brave or brave-browser - Brave Browser
+
+- duckduckgo or duckduckgo-browser - Duckduckgo Browser
+
+- samsung or samsung-browser - Samsung Browser
+
+- vivaldi or vivaldi-browser - Vivaldi
+
+- kiwi or ĸiwi-browser - Kiwi
+
+- uc or uc-browser - UC browser
+
+- tor or tor-browser - TOR browser
+
 Used to open a link in an external browser (or in a new tab for browser clients). The Mini App will not be closed.
+
+Only URLs with the scheme equal to one of the schemes specified in web_app_allowed_protocols may be opened.
 
 Note that this method can be called only in response to a user interaction with the Mini App interface (e.g. a click inside the Mini App or on the main or settings button).
 After opening the URL, further events of this type should be ignored until the user interacts again with the Mini App interface (as above).
@@ -251,15 +368,19 @@ Note that user interactions must have a TTL of 1 second: events of this type mus
 
 #### web_app_open_tg_link
 
-Event data: a JSON object with a string path_full field, containing the path+query component of a t.me deep link (url = 'https://t.me' + path_full).
+Event data: a JSON object with the following fields:
 
-Used to open a t.me deep link. The Mini App must be closed.
+- path_full - string field, containing the path+query component of a t.me deep link (url = 'https://t.me' + path_full)
+
+- force_request - optional boolean field, if set and true the client must ignore any locally cached information for the deep link (mainly used to refresh the cache information for stickerset links »)
+
+Used to open a t.me deep link. The Mini App must not be closed.
 
 #### web_app_open_invoice
 
 Event data: a JSON object with a string slug field, containing an invoice deep link.
 
-Used to initiate payment of an invoice », by opening an invoice popup over the Mini App: the Mini App itself must not be closed.
+Used to initiate payment of an invoice », by opening an invoice popup over the Mini App: the Mini App itself must not be closed.
 
 The payment status must be reported back to the mini app using invoice_closed.
 
@@ -308,10 +429,12 @@ Event payload: JSON object with the following fields:
 
 - is_progress_visible - Indicates whether the button should display a loading indicator (boolean, false by default)
 
+- has_shine_effect - Whether the button should have a shine effect (boolean, false by default)
+
 Configures the main button, located immediately below the webview: when the user presses it a main_button_pressed event should be emitted by the client.
 
 Some clients implement a horizontal media type tab bar located at the bottom of the screen, opened when the user clicks on the attachment menu button: this tab bar contains a horizontal list of buttons used to attach media of a certain type and to open installed attachment menu mini apps.
-In clients that implements a tab bar, iff the user opens a mini app through a tab bar button and the mini app emits a web_app_setup_main_button with is_visible=true, the main button should be displayed (replacing the tab bar) only after the first tap inside of the webview, to prevent bots from immediately blocking the tab bar.
+In clients that implements a tab bar, if and only if the user opens a mini app through a tab bar button and the mini app emits a web_app_setup_main_button with is_visible=true, the main button should be displayed (replacing the tab bar) only after the first tap inside of the webview, to prevent bots from immediately blocking the tab bar.
 
 Otherwise, the main button can be displayed right away with no user interaction when receiving a web_app_setup_main_button event with is_visible=true.
 
@@ -328,46 +451,373 @@ Event data: a JSON object with an is_visible boolean field.
 
 Determines whether to show or hide the settings button: when the user presses it a settings_button_pressed event should be emitted by the client.
 
-#### payment_form_submit
-
-Event payload: JSON object with credentials and title fields.
-
-- title is the censored credit card title.
-
-- credentials is a service-specific JSON object with information about the payment credentials provided by the user to the payment system.
-
-Neither Telegram, nor bots will have access to your credit card information.
-Credit card details will be handled only by the payment system, see the payment documentation for more info ».
-
-#### share_score
-
-No event payload.
-
-Will be called by games when the user explicitly clicks on the share score button to share the game, along with their score.
-Typically done by using messages.forwardMessages on the game message with the with_my_score flag.
-
-#### share_game
-
-No event payload.
-
-Will be called by games when the user explicitly clicks on the share game button to share the game, without sharing their score.
-Typically done by using messages.forwardMessages on the game message without the with_my_score flag, or by sharing the game's deep link.
-
-#### game_over
-
-No event payload.
-
-Can be called by games when the user loses a game.
-
-#### game_loaded
-
-No event payload.
-
-Can be called by games once the game fully loads.
-
 #### resize_frame
 
 Event payload: JSON object with height field.
 
 Called by supported pages inside of IV iframe embeds, indicates the new size of the embed frame.
+
+#### web_app_setup_swipe_behavior
+
+Event payload: JSON object with boolean allow_vertical_swipe field.
+
+Called bot web apps to tell the client to enable or disable the vertical swipe gesture usually used on mobile to minimize the web app.
+
+#### web_app_set_bottom_bar_color
+
+Event data: a JSON object with a string color with a hex RGB color.
+
+Used to set the mini app bottom bar color.
+
+#### web_app_setup_secondary_button
+
+Event payload: JSON object with the following fields:
+
+- is_visible - Whether the button is visible (boolean, false by default)
+
+- is_active - Whether the button is active (boolean, true by default)
+
+- text - Button text (string, if trim(text) is empty the button must be hidden)
+
+- color - Button color in hex RGB format (string, defaults to the button_color theme parameter)
+
+- text_color - Button text color in hex RGB format (string, defaults to the button_text_color theme parameter)
+
+- is_progress_visible - Indicates whether the button should display a loading indicator (boolean, false by default)
+
+- has_shine_effect - Whether the button should have a shine effect (boolean, false by default)
+
+- position - One of left, right, top, bottom (string, defaults to left)
+
+Configures the secondary button, located immediately below the webview, either on the left, right, top or bottom of the main button (if it is visible, otherwise it is located where the main button is usually located).
+
+When the user presses it a secondary_button_pressed event should be emitted by the client.
+
+Some clients implement a horizontal media type tab bar located at the bottom of the screen, opened when the user clicks on the attachment menu button: this tab bar contains a horizontal list of buttons used to attach media of a certain type and to open installed attachment menu mini apps.
+In clients that implements a tab bar, if and only if the user opens a mini app through a tab bar button and the mini app emits a web_app_setup_secondary_button with is_visible=true, the secondary button should be displayed (replacing the tab bar) only after the first tap inside of the webview, to prevent bots from immediately blocking the tab bar.
+
+Otherwise, the secondary button can be displayed right away with no user interaction when receiving a web_app_setup_secondary_button event with is_visible=true.
+
+#### web_app_share_to_story
+
+Event payload: JSON object with the following fields:
+
+- media_url - A string containing an HTTPS URL of the media to share as a story
+
+- text - An optional string caption for the media
+
+- widget_link - An optional object describing a URL media area » to be included in the story, with the following fields:
+
+- url - A string with the URL of the widget
+
+- text - An optional string with a label for the widget
+
+Used by mini apps to share a story on the user's profile », specifying an optional caption and URL widget ».
+
+This event should open the app's story editor with the specified media, caption and widget, letting the user tweak the story before posting it.
+
+#### web_app_request_fullscreen
+
+Event payload: null
+
+Emitted by mini web apps to request expansion of the web app to fullscreen mode.
+
+On success, emits a fullscreen_changed event with is_fullscreen=true.
+On failure, emits a fullscreen_failed event with error equal to UNSUPPORTED (Fullscreen mode is not supported on this device or platform) or ALREADY_FULLSCREEN (The Mini App is already in fullscreen mode).
+
+#### web_app_exit_fullscreen
+
+Event payload: null
+
+Emitted by mini web apps to request exiting fullscreen mode.
+
+This method should unconditionally emit a fullscreen_changed event with is_fullscreen=false (even if we've already exited fullscreen mode).
+On platforms where fullscreen mode is not supported, must emit a fullscreen_failed event with error equal to UNSUPPORTED instead of fullscreen_changed.
+
+#### web_app_start_accelerometer
+
+Event payload: JSON object with the following fields:
+
+- refresh_rate - An optional integer indicating the refresh rate in milliseconds, ranging from 20 to 1000 (defaults to 1000).
+
+Used by mini apps to start accelerometer tracking.
+
+The specified refresh rate may be ignored on platforms where it is not supported, or if it doesn't fall within the supported range: this should not cause an error, tracking should be started with the closest supported refresh rate.
+
+Emits an accelerometer_started event on success, or an accelerometer_failed event with error=UNSUPPORTED on platforms with no accelerometer tracking.
+
+Until web_app_stop_accelerometer is emitted by the mini app, the client will emit accelerometer_changed events at most every refresh_rate milliseconds with accelerometer readings.
+
+#### web_app_stop_accelerometer
+
+Event payload: null
+
+Used by mini apps to stop accelerometer tracking, stopping the emission of accelerometer_changed events.
+
+Emits an accelerometer_stopped event on success, or an accelerometer_failed event with error=UNSUPPORTED on platforms with no accelerometer tracking.
+
+#### web_app_start_gyroscope
+
+Event payload: JSON object with the following fields:
+
+- refresh_rate - An optional integer indicating the refresh rate in milliseconds, ranging from 20 to 1000 (defaults to 1000).
+
+Used by mini apps to start gyroscope tracking.
+
+The specified refresh rate may be ignored on platforms where it is not supported, or if it doesn't fall within the supported range: this should not cause an error, tracking should be started with the closest supported refresh rate.
+
+Emits a gyroscope_started event on success, or a gyroscope_failed event with error=UNSUPPORTED on platforms with no gyroscope tracking.
+
+Until web_app_stop_gyroscope is emitted by the mini app, the client will emit gyroscope_changed events at most every refresh_rate milliseconds with gyroscope readings.
+
+#### web_app_stop_gyroscope
+
+Event payload: null
+
+Used by mini apps to stop gyroscope tracking, stopping the emission of gyroscope_changed events.
+
+Emits a gyroscope_stopped event on success, or a gyroscope_failed event with error=UNSUPPORTED on platforms with no gyroscope tracking.
+
+#### web_app_start_device_orientation
+
+Event payload: JSON object with the following fields:
+
+- refresh_rate - An optional integer indicating the refresh rate in milliseconds, ranging from 20 to 1000 (defaults to 1000).
+
+- need_absolute - An optional boolean, indicating whether the app is requesting to receive absolute orientation data, allowing it to determine the device's attitude relative to magnetic north (useful to implement features like a compass, defaults to false)
+
+Used by mini apps to start device orientation tracking.
+
+The specified refresh rate may be ignored on platforms where it is not supported, or if it doesn't fall within the supported range: this should not cause an error, tracking should be started with the closest supported refresh rate.
+Absolute orientation data may also not be supported on some platforms, in which case relative orientation events will be sent, instead.
+
+Emits a device_orientation_started event on success, or a device_orientation_failed event with error=UNSUPPORTED on platforms with no device orientation tracking.
+
+Until web_app_stop_device_orientation is emitted by the mini app, the client will emit device_orientation_changed events at most every refresh_rate milliseconds with device orientation readings.
+
+#### web_app_stop_device_orientation
+
+Event payload: null
+
+Used by mini apps to stop device orientation tracking, stopping the emission of device_orientation_changed events.
+
+Emits a device_orientation_stopped event on success, or a device_orientation_failed event with error=UNSUPPORTED on platforms with no device orientation tracking.
+
+#### web_app_add_to_home_screen
+
+Event payload: null
+
+Used by mini apps to ask the user to add a shortcut to the mini app (using the bot's logo) on the homescreen.
+
+Ignore incoming events of this type if another event of the same type is still being handled, or if the last click of the user within the app occurred more than 10 seconds ago.
+
+Emits a home_screen_added event if the shortcut was (already) added successfully, and a home_screen_failed event with error="UNSUPPORTED" on unsupported platforms.
+
+It is acceptable to not emit the home_screen_added and home_screen_failed events if the current platform doesn't have a way to determine the installation status of the shortcut.
+
+#### web_app_check_home_screen
+
+Event payload: null
+
+Used by mini apps to check if a shortcut to the mini app was added to the homescreen.
+
+Must emit a home_screen_checked event » event with the status (including on unsupported platforms, see the event documentation » for this case).
+
+#### web_app_set_emoji_status
+
+Event payload: JSON object with the following fields:
+
+- custom_emoji_id - Long integer in string form, containing the ID of the custom emoji to set as emoji status (string)
+
+- duration - Optional integer, indicating the TTL of the status; if 0, the status doesn't expire (integer, defaults to 0)
+
+Used by mini apps to manually set (or remove) the status emoji of a user.
+
+Ignore incoming events of this type if another event of the same type is still being handled, or if the last click of the user within the app occurred more than 10 seconds ago.
+
+Emits an emoji_status_set event on success and emoji_status_failed event on failure.
+
+#### web_app_request_emoji_status_access
+
+Event payload: null
+
+Ignore incoming events of this type if another event of the same type is still being handled, or if the last click of the user within the app occurred more than 10 seconds ago.
+
+Used by mini apps to ask permission to update the emoji status of a user using the bots.updateUserEmojiStatus method.
+
+If the user already previously agreed (i.e. the userFull.bot_can_manage_emoji_status flag of the bot is set for the user), emit an emoji_status_access_requested event event with status="allowed" and terminate the flow.
+
+If the user refuses, emit an emoji_status_access_requested event event with status="cancelled" and terminate the flow.
+
+If the user agrees, the client must invoke the bots.toggleUserEmojiStatusPermission method, passing enabled=true and the ID of the bot: if the method returns boolTrue, emit an emoji_status_access_requested event event with status="allowed"; otherwise emit the same event with status="cancelled".
+
+On success, the bot will be able to use bots.updateUserEmojiStatus to change the emoji status of the user.
+
+#### web_app_request_safe_area
+
+Event payload: null
+
+Used by mini apps to request the emission of a safe_area_changed event », containing the current system-defined safe area inset padding values.
+
+#### web_app_request_content_safe_area
+
+Event payload: null
+
+Used by mini apps to request the emission of a content_safe_area_changed event », containing the current content-defined safe area inset padding values.
+
+#### web_app_check_location
+
+Event payload: null
+
+Must be used by mini apps to initialize the geolocation object in the client and obtain basic information about geolocation capabilities and status, as a location_checked event ».
+
+This event should not actually ask anything from the user, just return the current settings (not the current geolocation).
+
+#### web_app_request_location
+
+Event payload: null
+
+Used by mini apps to request the emission of a location_requested event », containing current geolocation data of the user (or nothing if the user denied access to their current geolocation).
+
+This event should ask the user permission to share their location with the current mini app only if the user hasn't already denied or allowed location access to the mini app, in which case no prompt must be shown.
+
+#### web_app_open_location_settings
+
+Event payload: null
+
+Used by mini apps to request opening the geolocation settings page for bots, useful when the app needs to request permission to use the current geolocation from users who have previously denied it.
+
+Note that this event should only be handled in response to user interaction with the Mini App interface (e.g. a click inside the Mini App or on the main button within the last 10 seconds) and only if an event of the same type isn't already being handled.
+
+#### web_app_request_file_download
+
+Event data: a JSON object with url and filename string fields.
+
+Used by bot web apps to request the download of a file.
+
+Handle this event using the following steps:
+
+#### web_app_send_prepared_message
+
+Event data: a JSON object with an id string field.
+
+Used by bot web apps to invite the user to send a prepared inline message ».
+
+#### web_app_toggle_orientation_lock
+
+Event data: a JSON object with a locked boolean field (defaults to false).
+
+Used by bot web apps to enable or disable the orientation lock.
+
+#### web_app_device_storage_save_key
+
+Event data: a JSON object with the following keys:
+
+- req_id - A string with the ID of the current request
+
+- key - A string with the key to save
+
+- value - A string with the value to save, or null to remove the key.
+
+Used by bot web apps to save or remove a key from a persistent local storage on the user's device, associated to the currently logged in user and mini app.
+
+All data is stored locally and is available only to the bot that created it. Each bot can store up to 5 MB per user using this storage.
+
+Emits a device_storage_key_saved event » on success and a device_storage_failed event » on failure.
+
+#### web_app_device_storage_get_key
+
+Event data: a JSON object with the following keys:
+
+- req_id - A string with the ID of the current request
+
+- key - A string with the key to fetch
+
+Used by bot web apps to fetch a key from a persistent local storage on the user's device, associated to the currently logged in user and mini app.
+
+Emits a device_storage_key_received event » on success and a device_storage_failed event » on failure.
+
+#### web_app_device_storage_clear
+
+Event data: a JSON object with the following keys:
+
+- req_id - A string with the ID of the current request
+
+Used by bot web apps to clear the persistent local storage on the user's device, associated to the currently logged in user and mini app.
+
+Emits a device_storage_cleared event » on success and a device_storage_failed event » on failure.
+
+#### web_app_secure_storage_save_key
+
+Event data: a JSON object with the following keys:
+
+- req_id - A string with the ID of the current request
+
+- key - A string with the key to save
+
+- value - A string with the value to save, or null to remove the key.
+
+Used by bot web apps to save or remove a key from a secure storage on the user's device, associated to the currently logged in user and mini app.
+
+On iOS, it uses the system Keychain; on Android, it uses the Keystore. This ensures that all stored values are encrypted at rest and inaccessible to unauthorized applications.
+
+Secure storage is suitable for storing tokens, secrets, authentication state, and other sensitive user-specific information. Each bot can store up to 10 items per user.
+
+Emits a secure_storage_key_saved event » on success and a secure_storage_failed event » on failure.
+
+#### web_app_secure_storage_get_key
+
+Event data: a JSON object with the following keys:
+
+- req_id - A string with the ID of the current request
+
+- key - A string with the key to get.
+
+Used by bot web apps to fetch a key from a secure storage on the user's device, associated to the currently logged in user and mini app.
+
+Emits a secure_storage_key_received event » on success and a secure_storage_failed event » on failure.
+
+If the returned can_restore flag is true, the key will not be returned, but it can be restored by invoking web_app_secure_storage_restore_key.
+
+#### web_app_secure_storage_clear
+
+Event data: a JSON object with the following keys:
+
+- req_id - A string with the ID of the current request
+
+Used by bot web apps to clear the secure storage on the user's device, associated to the currently logged in user and mini app.
+
+Emits a secure_storage_cleared event » on success and a secure_storage_failed event » on failure.
+
+#### web_app_secure_storage_restore_key
+
+Event data: a JSON object with the following keys:
+
+- req_id - A string with the ID of the current request
+
+- key - A string with the key to restore.
+
+Used by bot web apps to restore a key from a secure storage on the user's device, associated to the currently logged in user and mini app.
+
+Emits a secure_storage_key_restored event » on success and a secure_storage_failed event » on failure.
+
+#### web_app_hide_keyboard
+
+Event payload: null
+
+Hides the on-screen keyboard, if it is currently visible. Does nothing if the keyboard is not active.
+
+#### web_app_verify_age
+
+Event payload: a JSON object with the following keys:
+
+- passed - Boolean, indicates whether the user passed age verification
+
+- age - Optional integer, detected age if the user passed age verification
+
+- gender - Optional boolean, indicates the detected gender if the user passed age verification
+
+- genderProbability - Optional float, probability of the detected gender if the user passed age verification
+
+Indicates the result of age verification, see here for more info on the full flow ».
 

@@ -4,6 +4,10 @@
 
 Receipt of virtually all messages (with the exception of some purely service ones as well as the plain-text messages used in the protocol for creating an authorization key) must be acknowledged.This requires the use of the following service message (not requiring an acknowledgment):
 
+```
+msgs_ack#62d6b459 msg_ids:Vector<long> = MsgsAck;
+```
+
 A server usually acknowledges the receipt of a message from a client (normally, an RPC query) using an RPC response. If a response is a long time coming, a server may first send a receipt acknowledgment, and somewhat later, the RPC response itself.
 
 A client normally acknowledges the receipt of a message from a server (usually, an RPC response) by adding an acknowledgment to the next RPC query if it is not transmitted too late (if it is generated, say, 60-120 seconds following the receipt of a message from the server). However, if for a long period of time there is no reason to send messages to the server or if there is a large number of unacknowledged messages from the server (say, over 16), the client transmits a stand-alone acknowledgment.
@@ -13,6 +17,11 @@ Max 8192 IDs are allowed per constructor.
 #### Notice of Ignored Error Message
 
 In certain cases, a server may notify a client that its incoming message was ignored for whatever reason. Note that such a notification cannot be generated unless a message is correctly decoded by the server.
+
+```
+bad_msg_notification#a7eff811 bad_msg_id:long bad_msg_seqno:int error_code:int = BadMsgNotification;
+bad_server_salt#edab447b bad_msg_id:long bad_msg_seqno:int error_code:int new_server_salt:long = BadMsgNotification;
+```
 
 Here, error_code can also take on the following values:
 
@@ -50,11 +59,19 @@ In addition, the client can update the server_salt value used to send messages t
 
 If either party has not received information on the status of its outgoing messages for a while, it may explicitly request it from the other party:
 
+```
+msgs_state_req#da69fb52 msg_ids:Vector long = MsgsStateReq;
+```
+
 Max 8192 IDs are allowed per constructor.
 
 The response to the query contains the following information:
 
 #### Informational Message regarding Status of Messages
+
+```
+msgs_state_info#04deb57d req_msg_id:long info:string = MsgsStateInfo;
+```
 
 Here, info is a string that contains exactly one byte of message status for each message from the incoming msg_ids list:
 
@@ -84,6 +101,10 @@ Note that if it turns out suddenly that the other party is missing a message tha
 
 Either party may voluntarily inform the other party of the status of the messages transmitted by the other party.
 
+```
+msgs_all_info#8cc0d131 msg_ids:Vector long info:string = MsgsAllInfo
+```
+
 All message codes known to this party are enumerated, with the exception of those for which the +128 and the +16 flags are set. However, if the +32 flag is set but not +64, then the message status will still be communicated.
 
 This message does not require an acknowledgment.
@@ -92,6 +113,11 @@ This message does not require an acknowledgment.
 
 Normally used by the server to respond to the receipt of a duplicate msg_id, especially if a response to the message has already been generated and the response is large. If the response is small, the server may re-send the answer itself instead. This message can also be used as a notification instead of resending a large message.
 
+```
+msg_detailed_info#276d3ec6 msg_id:long answer_msg_id:long bytes:int status:int = MsgDetailedInfo;
+msg_new_detailed_info#809db6df answer_msg_id:long bytes:int status:int = MsgDetailedInfo;
+```
+
 The second version is used to notify of messages that were created on the server not in response to an RPC query (such as notifications of new messages) and were transmitted to the client some time ago, but not acknowledged.
 
 Currently, status is always zero. This may change in future.
@@ -99,6 +125,10 @@ Currently, status is always zero. This may change in future.
 This message does not require an acknowledgment.
 
 #### Explicit Request to Re-Send Messages
+
+```
+msg_resend_req#7d861a08 msg_ids:Vector long = MsgResendReq;
+```
 
 The remote party immediately responds by re-sending the requested messages, normally using the same connection that was used to transmit the query. If at least one message with requested msg_id does not exist or has already been forgotten, or has been sent by the requesting party (known from parity), MsgsStateInfo is returned for all messages requested as if the MsgResendReq query had been a MsgsStateReq query as well.Max 8192 IDs are allowed per constructor.
 

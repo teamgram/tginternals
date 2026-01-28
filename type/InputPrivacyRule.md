@@ -11,6 +11,9 @@ inputPrivacyValueDisallowUsers#90110467 users:Vector<InputUser> = InputPrivacyRu
 inputPrivacyValueAllowChatParticipants#840649cf chats:Vector<long> = InputPrivacyRule;
 inputPrivacyValueDisallowChatParticipants#e94f0f86 chats:Vector<long> = InputPrivacyRule;
 inputPrivacyValueAllowCloseFriends#2f453e49 = InputPrivacyRule;
+inputPrivacyValueAllowPremium#77cdc9f1 = InputPrivacyRule;
+inputPrivacyValueAllowBots#5a4fcce5 = InputPrivacyRule;
+inputPrivacyValueDisallowBots#c4e57915 = InputPrivacyRule;
 ```
 
 ## Constructors
@@ -25,6 +28,9 @@ inputPrivacyValueAllowCloseFriends#2f453e49 = InputPrivacyRule;
 | inputPrivacyValueAllowChatParticipants | Allow only participants of certain chats |
 | inputPrivacyValueDisallowChatParticipants | Disallow only participants of certain chats |
 | inputPrivacyValueAllowCloseFriends | Allow only close friends » |
+| inputPrivacyValueAllowPremium | Allow only users with a Premium subscription », currently only usable for inputPrivacyKeyChatInvite. |
+| inputPrivacyValueAllowBots | Allow bots and mini apps |
+| inputPrivacyValueDisallowBots | Disallow bots and mini apps |
 
 
 ## Methods

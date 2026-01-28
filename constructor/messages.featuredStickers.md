@@ -10,7 +10,7 @@ messages.featuredStickers#be382906 flags:# premium:flags.0?true hash:long count:
 | ---- | :----: | ----------- |
 | flags | # | Flags, see TL conditional fields |
 | premium | flags.0?true | Whether this is a premium stickerset |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here |
 | count | int | Total number of featured stickers |
 | sets | Vector<StickerSetCovered> | Featured stickersets |
 | unread | Vector<long> | IDs of new featured stickersets |

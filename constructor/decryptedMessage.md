@@ -18,13 +18,12 @@ decryptedMessage#91cc4674 flags:# no_webpage:flags.1?true silent:flags.5?true ra
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| flags | # | Flags, see TL conditional fields (added in layer 45) |
-| no_webpage | flags.1?true | Whether the webpage preview is disabled |
-| silent | flags.5?true | Whether this is a silent message (no notification triggered) |
 | random_id | long | Random message ID, assigned by the author of message.Must be equal to the ID passed to sending method. |
-| ttl | int | Message lifetime. Has higher priority than decryptedMessageActionSetMessageTTL.Parameter added in Layer 17. |
+| random_bytes | bytes | Random bytes, removed in layer 17. |
 | message | string | Message text |
 | media | flags.9?DecryptedMessageMedia | Media content |
+| ttl | int | Message lifetime. Has higher priority than decryptedMessageActionSetMessageTTL.Parameter added in Layer 17. |
+| flags | # | Flags, see TL conditional fields (added in layer 45) |
 | entities | flags.7?Vector<MessageEntity> | Message entities for styled text (parameter added in layer 45) |
 | via_bot_name | flags.11?string | Specifies the ID of the inline bot that generated the message (parameter added in layer 45) |
 | reply_to_random_id | flags.3?long | Random message ID of the message this message replies to (parameter added in layer 45) |

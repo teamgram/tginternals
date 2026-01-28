@@ -1,5 +1,5 @@
 # inputPrivacyKeyStatusTimestamp
-Whether people will be able to see your exact last online timestamp
+Whether people will be able to see our exact last online timestamp.
 
 ```
 inputPrivacyKeyStatusTimestamp#4f96cb18 = InputPrivacyKey;
@@ -11,6 +11,6 @@ inputPrivacyKeyStatusTimestamp#4f96cb18 = InputPrivacyKey;
 
 
 ## Type
-This constructor does not require any parameters.
+
 
 ## Related pages

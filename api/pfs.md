@@ -29,6 +29,22 @@ An unbound temp_auth_key_id may only be used with the following methods:
 
 In order to bind a temporary authorization key to the permanent key the client creates a special binding message and executes the auth.bindTempAuthKey method using temp_auth_key. Once auth.bindTempAuthKey has been executed successfully, the client may continue using the API as usual; the client must also rewrite client info using initConnection after each binding. Each permanent key may only be bound to one temporary key at a time, binding a new temporary key overwrites the previous one.
 
+An auth.bindTempAuthKey request may also return an ENCRYPTED_MESSAGE_INVALID error, which must be handled as follows:
+
+- If and only if the permanent auth key used in the request was created more than 60 seconds ago:
+
+- Drop both the temporary and permanent auth keys.
+
+- If the dropped main auth key is the main logged in auth key (the one used for logging into the user's native DC), this means the user was also logged out.
+
+- Recreate temporary and permanent auth keys.
+
+- Retry binding the temporary and permanent keys.
+
+- On success, if the dropped auth key is not the main logged in auth key, re-import authorization from the user's native DC.
+
+- Otherwise, retry binding the temporary and permanent keys
+
 Once the temporary key expires, the client needs to generate a new temporary key using p_q_inner_data_temp. Then it needs to re-bind that new temporary key to the initial permanent key. A new key can also be generated in advance, so that the client has a new key ready by the time the old one has expired.
 
 For additional security, the client can store the temporary authorization key in RAM only and never save it in persistent storage.

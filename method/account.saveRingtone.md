@@ -21,4 +21,5 @@ account.saveRingtone#3dea5b03 id:InputDocument unsave:Bool = account.SavedRingto
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | RINGTONE_INVALID | The specified ringtone is invalid. |
 

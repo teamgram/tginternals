@@ -22,6 +22,6 @@ help.UserInfo
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
-| 400 | ENTITY_BOUNDS_INVALID | A specified entity offset or length is invalid, see here » for info on how to properly compute the entity offset/length. |
+| 400 | ENTITY_BOUNDS_INVALID | A specified entity offset or length is invalid, see here » for info on how to properly compute the entity offset/length. |
 | 403 | USER_INVALID | Invalid user provided. |
 

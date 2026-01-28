@@ -6,22 +6,66 @@ It should be noted that in the TL schema of the overwhelming majority of API cal
 
 For example, let us consider the IntList, which is defined as follows:
 
+```
+int_cons hd:int tl:IntList = IntList;
+int_nil = IntList;
+```
+
 The “int_cons” and “int_nil” constructors as well as the “IntList” type itself are expressions of the following types (writing A : X means that A is an expression of type X):
+
+```
+IntList : Type;
+int_cons : int -> IntList -> IntList;
+int_nil : IntList;
+```
 
 The keyword Type is used to denote the type of all types. Note that Type is not Object (Object is the type of all terms). 
 Here is alternative syntax that could be used in some other functional programming language (but not in TL):
+
+```
+NewType IntList :=
+| int_cons hd:int tl:IntList
+| int_nil
+EndType
+```
 
 ### Polymorphic type
 
 TL supports the following version (curly brackets indicate optional fields, see below):
 
+```
+cons {X:Type} hd:X tl:(List X) = List X;
+nil {X:Type} = List X
+```
+
 Here is an alternative formulation in other functional languages with dependent types:
+
+```
+NewType List {X:Type} :=
+| cons {X:Type} hd:X tl:(List X)
+| nil {X:Type}
+EndType
+```
 
 In any event, these variations are equivalent to one another from the point of view of the formal theory of types and lead to the definition of the following terms:
 
+```
+List : Type -> Type;
+cons : forall (X:Type), X -> List X -> List X;
+nil : forall (X:Type), X -> List X;
+```
+
 In each case, remember that writing “A -> B” is shorthand for “forall (x : A), B” for any variable x not entering into A and B. For example, the “cons” type could be written as follows:
 
+```
+cons : forall (X:Type), forall (hd : X), forall (tl : List X), List X
+```
+
 or more compactly:
+
+```
+cons : forall (X : Type) (hd : X) (tl : List X), List X
+```
 
 See Calculus of constructions. Examples of functional languages with dependent types, which support similar constructions are Coq and Agda.
 
@@ -49,8 +93,16 @@ Note that @'''constr-id''' means the constructor's “full form” (in which all
 
 There is a small problem: if we want to serialize the value of the bare type '%pair string int' or '%pair string Y' (which in TL is usually denoted simply as “pair”, though the form “%Pair” is preferable), we cannot simultaneously use both the full constructor @pair and the partial pair, because the constructor's name will not be serialized. Therefore, we must differentiate the bare types %@pair (type X, type Y, value x:X, and value y:Y are serialized) and %pair (only x:X and y:Y are serialized; types X and Y are known from the context). In practice, we nearly almost always need the bare type %pair, and this is precisely what “pair” means in the type's context in TL. Therefore,
 
+```
+record name:string map:(List (pair int string)) = Record;
+```
+
 will be serialized approximately like we want it to be (the serialization of list elements will consist of the serialization of int and the serialization of string, without any additional headers, types, or combinator names).
 Incidentally, when calculating the “record” combinator's name 'record' in the example given above, the CRC32 of record name:string map:List pair int string = Record will be computed.
 
 Also note that a more precise description of this type would be
+
+```
+record name:string map:(List %(Pair int string)) = Record
+```
 

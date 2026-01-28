@@ -11,7 +11,7 @@ help.getAppConfig#61e3f854 hash:int = help.AppConfig;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | int | Hash for pagination, for more info click here |
+| hash | int | Hash used for caching, for more info click here. |
 
 
 ## Result

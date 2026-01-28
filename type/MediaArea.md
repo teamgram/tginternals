@@ -4,10 +4,13 @@ Represents a story media area »
 ```
 mediaAreaVenue#be82db9c coordinates:MediaAreaCoordinates geo:GeoPoint title:string address:string provider:string venue_id:string venue_type:string = MediaArea;
 inputMediaAreaVenue#b282217f coordinates:MediaAreaCoordinates query_id:long result_id:string = MediaArea;
-mediaAreaGeoPoint#df8b3b22 coordinates:MediaAreaCoordinates geo:GeoPoint = MediaArea;
+mediaAreaGeoPoint#cad5452d flags:# coordinates:MediaAreaCoordinates geo:GeoPoint address:flags.0?GeoPointAddress = MediaArea;
 mediaAreaSuggestedReaction#14455871 flags:# dark:flags.0?true flipped:flags.1?true coordinates:MediaAreaCoordinates reaction:Reaction = MediaArea;
 mediaAreaChannelPost#770416af coordinates:MediaAreaCoordinates channel_id:long msg_id:int = MediaArea;
 inputMediaAreaChannelPost#2271f2bf coordinates:MediaAreaCoordinates channel:InputChannel msg_id:int = MediaArea;
+mediaAreaUrl#37381085 coordinates:MediaAreaCoordinates url:string = MediaArea;
+mediaAreaWeather#49a6549c coordinates:MediaAreaCoordinates emoji:string temperature_c:double color:int = MediaArea;
+mediaAreaStarGift#5787686d coordinates:MediaAreaCoordinates slug:string = MediaArea;
 ```
 
 ## Constructors
@@ -19,6 +22,9 @@ inputMediaAreaChannelPost#2271f2bf coordinates:MediaAreaCoordinates channel:Inpu
 | mediaAreaSuggestedReaction | Represents a reaction bubble. |
 | mediaAreaChannelPost | Represents a channel post. |
 | inputMediaAreaChannelPost | Represents a channel post |
+| mediaAreaUrl | Represents a URL media area. |
+| mediaAreaWeather | Represents a weather widget ». |
+| mediaAreaStarGift | Represents a collectible gift ». |
 
 
 ## Methods

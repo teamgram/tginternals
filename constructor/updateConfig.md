@@ -1,5 +1,5 @@
 # updateConfig
-The server-side configuration has changed; the client should re-fetch the config using help.getConfig
+The server-side configuration has changed; the client should re-fetch the config using help.getConfig and help.getAppConfig.
 
 ```
 updateConfig#a229dd06 = Update;

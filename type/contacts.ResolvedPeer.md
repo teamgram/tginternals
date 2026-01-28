@@ -6,7 +6,7 @@ contacts.resolvedPeer#7f077ad9 peer:Peer chats:Vector<Chat> users:Vector<User> =
 
 ---functions---
 
-contacts.resolveUsername#f93ccba3 username:string = contacts.ResolvedPeer;
+contacts.resolveUsername#725afbbc flags:# username:string referer:flags.0?string = contacts.ResolvedPeer;
 contacts.resolvePhone#8af94344 phone:string = contacts.ResolvedPeer;
 ```
 

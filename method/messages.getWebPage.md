@@ -11,7 +11,7 @@ messages.getWebPage#8d9692a3 url:string hash:int = messages.WebPage;
 | Name | Type | Description |
 | ---- | :----: | ----------- |
 | url | string | URL of IV page to fetch |
-| hash | int | Hash for pagination, for more info click here |
+| hash | int | Hash used for caching, for more info click here. Note: the usual hash generation algorithm cannot be used in this case, please re-use the webPage.hash field returned by a previous call to the method, or pass 0 if this is the first call or if the previous call did not return a webPage. |
 
 
 ## Result

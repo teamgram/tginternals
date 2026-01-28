@@ -12,7 +12,7 @@ messages.getStickers#d5a5d3a1 emoticon:string hash:long = messages.Stickers;
 | Name | Type | Description |
 | ---- | :----: | ----------- |
 | emoticon | string | The emoji |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

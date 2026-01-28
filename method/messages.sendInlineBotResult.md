@@ -10,7 +10,7 @@ updatesCombined#725b04c3 updates:Vector<Update> users:Vector<User> chats:Vector<
 updates#74ae4240 updates:Vector<Update> users:Vector<User> chats:Vector<Chat> date:int seq:int = Updates;
 updateShortSentMessage#9015e101 flags:# out:flags.1?true id:int pts:int pts_count:int date:int media:flags.9?MessageMedia entities:flags.7?Vector<MessageEntity> ttl_period:flags.25?int = Updates;
 ---functions---
-messages.sendInlineBotResult#f7bc68ba flags:# silent:flags.5?true background:flags.6?true clear_draft:flags.7?true hide_via:flags.11?true peer:InputPeer reply_to:flags.0?InputReplyTo random_id:long query_id:long id:string schedule_date:flags.10?int send_as:flags.13?InputPeer = Updates;
+messages.sendInlineBotResult#c0cf7646 flags:# silent:flags.5?true background:flags.6?true clear_draft:flags.7?true hide_via:flags.11?true peer:InputPeer reply_to:flags.0?InputReplyTo random_id:long query_id:long id:string schedule_date:flags.10?int send_as:flags.13?InputPeer quick_reply_shortcut:flags.17?InputQuickReplyShortcut allow_paid_stars:flags.21?long = Updates;
 ```
 
 ## Parameters
@@ -28,6 +28,8 @@ messages.sendInlineBotResult#f7bc68ba flags:# silent:flags.5?true background:fla
 | id | string | Result ID from messages.getInlineBotResults |
 | schedule_date | flags.10?int | Scheduled message date for scheduled messages |
 | send_as | flags.13?InputPeer | Send this message as the specified peer |
+| quick_reply_shortcut | flags.17?InputQuickReplyShortcut | Add the message to the specified quick reply shortcut », instead. |
+| allow_paid_stars | flags.21?long | For paid messages », specifies the amount of Telegram Stars the user has agreed to pay in order to send the message. |
 
 
 ## Result
@@ -36,10 +38,11 @@ Updates
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 403 | ALLOW_PAYMENT_REQUIRED_%d | This peer charges %d Telegram Stars per message, but the allow_paid_stars was not set or its value is smaller than %d. |
 | 400 | CHANNEL_INVALID | The provided channel is invalid. |
 | 400 | CHANNEL_PRIVATE | You haven't joined this channel/supergroup. |
 | 400 | CHAT_ADMIN_REQUIRED | You must be an admin in this chat to do this. |
-| 403 | CHAT_GUEST_SEND_FORBIDDEN | You join the discussion group before commenting, see here » for more info. |
+| 403 | CHAT_GUEST_SEND_FORBIDDEN | You join the discussion group before commenting, see here » for more info. |
 | 400 | CHAT_RESTRICTED | You can't send messages in this chat, you were restricted. |
 | 403 | CHAT_SEND_AUDIOS_FORBIDDEN | You can't send audio messages in this chat. |
 | 403 | CHAT_SEND_GAME_FORBIDDEN | You can't send a game to this chat. |
@@ -51,18 +54,22 @@ Updates
 | 403 | CHAT_SEND_STICKERS_FORBIDDEN | You can't send stickers in this chat. |
 | 403 | CHAT_SEND_VOICES_FORBIDDEN | You can't send voice recordings in this chat. |
 | 403 | CHAT_WRITE_FORBIDDEN | You can't write in this chat. |
-| 400 | ENTITY_BOUNDS_INVALID | A specified entity offset or length is invalid, see here » for info on how to properly compute the entity offset/length. |
+| 400 | ENTITY_BOUNDS_INVALID | A specified entity offset or length is invalid, see here » for info on how to properly compute the entity offset/length. |
 | 400 | INLINE_RESULT_EXPIRED | The inline query expired. |
 | 400 | INPUT_USER_DEACTIVATED | The specified user was deleted. |
 | 400 | MEDIA_EMPTY | The provided media object is invalid. |
 | 400 | MSG_ID_INVALID | Invalid message ID provided. |
 | 400 | PEER_ID_INVALID | The provided peer id is invalid. |
+| 403 | PRIVACY_PREMIUM_REQUIRED | You need a Telegram Premium subscription to send a message to this user. |
 | 400 | QUERY_ID_EMPTY | The query ID is empty. |
+| 400 | QUICK_REPLIES_TOO_MUCH | A maximum of appConfig.quick_replies_limit shortcuts may be created, the limit was reached. |
 | 500 | RANDOM_ID_DUPLICATE | You provided a random ID that was already used. |
+| 400 | REPLY_MESSAGES_TOO_MUCH | Each shortcut can contain a maximum of appConfig.quick_reply_messages_limit messages, the limit was reached. |
 | 400 | RESULT_ID_EMPTY | Result ID empty. |
 | 400 | RESULT_ID_INVALID | One of the specified result IDs is invalid. |
 | 400 | SCHEDULE_DATE_TOO_LATE | You can't schedule a message this far in the future. |
 | 400 | SCHEDULE_TOO_MUCH | There are too many scheduled messages. |
+| 400 | SEND_AS_PEER_INVALID | You can't send messages as the specified peer. |
 | 500 | SEND_MEDIA_INVALID | The specified media is invalid. |
 | 420 | SLOWMODE_WAIT_%d | Slowmode is enabled in this chat: wait %d seconds before sending another message to this chat. |
 | 400 | TOPIC_DELETED | The specified topic was deleted. |

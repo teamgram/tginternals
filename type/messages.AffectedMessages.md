@@ -24,7 +24,7 @@ channels.deleteMessages#84c1fd4e channel:InputChannel id:Vector<int> = messages.
 | ---- | ----------- |
 | messages.readHistory | Marks message history as read. |
 | messages.deleteMessages | Deletes messages by their identifiers. |
-| messages.readMessageContents | Notifies the sender about the recipient having listened a voice message or watched a video. |
+| messages.readMessageContents | Notifies the sender about the recipient having listened a voice message or watched a video, emitting an updateReadMessagesContents. |
 | channels.deleteMessages | Delete messages in a channel/supergroup |
 
 

@@ -2,9 +2,9 @@
 Open a bot mini app, sending over user information after user confirmation.
 
 ```
-webViewResultUrl#c14557c query_id:long url:string = WebViewResult;
+webViewResultUrl#4d22ff98 flags:# fullsize:flags.1?true fullscreen:flags.2?true query_id:flags.0?long url:string = WebViewResult;
 ---functions---
-messages.requestWebView#269dc2c1 flags:# from_bot_menu:flags.4?true silent:flags.5?true peer:InputPeer bot:InputUser url:flags.1?string start_param:flags.3?string theme_params:flags.2?DataJSON platform:string reply_to:flags.0?InputReplyTo send_as:flags.13?InputPeer = WebViewResult;
+messages.requestWebView#269dc2c1 flags:# from_bot_menu:flags.4?true silent:flags.5?true compact:flags.7?true fullscreen:flags.8?true peer:InputPeer bot:InputUser url:flags.1?string start_param:flags.3?string theme_params:flags.2?DataJSON platform:string reply_to:flags.0?InputReplyTo send_as:flags.13?InputPeer = WebViewResult;
 ```
 
 ## Parameters
@@ -13,6 +13,8 @@ messages.requestWebView#269dc2c1 flags:# from_bot_menu:flags.4?true silent:flags
 | flags | # | Flags, see TL conditional fields |
 | from_bot_menu | flags.4?true | Whether the webview was opened by clicking on the bot's menu button ». |
 | silent | flags.5?true | Whether the inline message that will be sent by the bot on behalf of the user once the web app interaction is terminated should be sent silently (no notifications for the receivers). |
+| compact | flags.7?true | If set, requests to open the mini app in compact mode (as opposed to normal or fullscreen mode). Must be set if the mode parameter of the attachment menu deep link is equal to compact. |
+| fullscreen | flags.8?true | If set, requests to open the mini app in fullscreen mode (as opposed to normal or compact mode). Must be set if the mode parameter of the attachment menu deep link is equal to fullscreen. |
 | peer | InputPeer | Dialog where the web app is being opened, and where the resulting message will be sent (see the docs for more info »). |
 | bot | InputUser | Bot that owns the web app |
 | url | flags.1?string | Web app URL |
@@ -31,7 +33,13 @@ messages.requestWebView#269dc2c1 flags:# from_bot_menu:flags.4?true silent:flags
 | ---- | :----: | ----------- |
 | 400 | BOT_INVALID | This is not a valid bot. |
 | 400 | BOT_WEBVIEW_DISABLED | A webview cannot be opened in the specified conditions: emitted for example if from_bot_menu or url are set and peer is not the chat with the bot. |
+| 403 | CHAT_WRITE_FORBIDDEN | You can't write in this chat. |
 | 400 | INPUT_USER_DEACTIVATED | The specified user was deleted. |
+| 400 | MSG_ID_INVALID | Invalid message ID provided. |
 | 400 | PEER_ID_INVALID | The provided peer id is invalid. |
+| 403 | PRIVACY_PREMIUM_REQUIRED | You need a Telegram Premium subscription to send a message to this user. |
+| 400 | SEND_AS_PEER_INVALID | You can't send messages as the specified peer. |
+| 400 | THEME_PARAMS_INVALID | The specified theme_params field is invalid. |
+| 400 | URL_INVALID | Invalid URL provided. |
 | 400 | YOU_BLOCKED_USER | You blocked this user. |
 

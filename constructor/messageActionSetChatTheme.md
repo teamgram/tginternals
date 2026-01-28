@@ -2,13 +2,13 @@
 The chat theme was changed
 
 ```
-messageActionSetChatTheme#aa786345 emoticon:string = MessageAction;
+messageActionSetChatTheme#b91bbd3a theme:ChatTheme = MessageAction;
 ```
 
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| emoticon | string | The emoji that identifies a chat theme |
+| theme | ChatTheme | The new chat theme. |
 
 
 ## Type

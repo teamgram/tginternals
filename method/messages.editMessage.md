@@ -10,7 +10,7 @@ updatesCombined#725b04c3 updates:Vector<Update> users:Vector<User> chats:Vector<
 updates#74ae4240 updates:Vector<Update> users:Vector<User> chats:Vector<Chat> date:int seq:int = Updates;
 updateShortSentMessage#9015e101 flags:# out:flags.1?true id:int pts:int pts_count:int date:int media:flags.9?MessageMedia entities:flags.7?Vector<MessageEntity> ttl_period:flags.25?int = Updates;
 ---functions---
-messages.editMessage#48f71778 flags:# no_webpage:flags.1?true invert_media:flags.16?true peer:InputPeer id:int message:flags.11?string media:flags.14?InputMedia reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> schedule_date:flags.15?int = Updates;
+messages.editMessage#dfd14005 flags:# no_webpage:flags.1?true invert_media:flags.16?true peer:InputPeer id:int message:flags.11?string media:flags.14?InputMedia reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> schedule_date:flags.15?int quick_reply_shortcut_id:flags.17?int = Updates;
 ```
 
 ## Parameters
@@ -26,6 +26,7 @@ messages.editMessage#48f71778 flags:# no_webpage:flags.1?true invert_media:flags
 | reply_markup | flags.2?ReplyMarkup | Reply markup for inline keyboards |
 | entities | flags.3?Vector<MessageEntity> | Message entities for styled text |
 | schedule_date | flags.15?int | Scheduled message date for scheduled messages |
+| quick_reply_shortcut_id | flags.17?int | If specified, edits a quick reply shortcut message, instead ». |
 
 
 ## Result
@@ -36,6 +37,9 @@ Updates
 | ---- | :----: | ----------- |
 | 400 | BOT_DOMAIN_INVALID | Bot domain invalid. |
 | 400 | BOT_INVALID | This is not a valid bot. |
+| 400 | BUSINESS_CONNECTION_INVALID | The connection_id passed to the wrapping invokeWithBusinessConnection call is invalid. |
+| 400 | BUSINESS_PEER_INVALID | Messages can't be set to the specified peer through the current business connection. |
+| 400 | BUTTON_COPY_TEXT_INVALID | The specified keyboardButtonCopy.copy_text is invalid. |
 | 400 | BUTTON_DATA_INVALID | The data of one or more of the buttons you provided is invalid. |
 | 400 | BUTTON_TYPE_INVALID | The type of one or more of the buttons you provided is invalid. |
 | 400 | BUTTON_URL_INVALID | Button URL invalid. |
@@ -47,7 +51,7 @@ Updates
 | 403 | CHAT_WRITE_FORBIDDEN | You can't write in this chat. |
 | 400 | DOCUMENT_INVALID | The specified document is invalid. |
 | 400 | ENTITIES_TOO_LONG | You provided too many styled message entities. |
-| 400 | ENTITY_BOUNDS_INVALID | A specified entity offset or length is invalid, see here » for info on how to properly compute the entity offset/length. |
+| 400 | ENTITY_BOUNDS_INVALID | A specified entity offset or length is invalid, see here » for info on how to properly compute the entity offset/length. |
 | 400 | FILE_PARTS_INVALID | The number of file parts is invalid. |
 | 400 | IMAGE_PROCESS_FAILED | Failure while processing image. |
 | 403 | INLINE_BOT_REQUIRED | Only the inline bot can edit message. |
@@ -68,8 +72,14 @@ Updates
 | 400 | MSG_ID_INVALID | Invalid message ID provided. |
 | 500 | MSG_WAIT_FAILED | A waiting call returned an error. |
 | 400 | PEER_ID_INVALID | The provided peer id is invalid. |
+| 400 | PEER_TYPES_INVALID | The passed keyboardButtonSwitchInline.peer_types field is invalid. |
+| 400 | PHOTO_INVALID_DIMENSIONS | The photo dimensions are invalid. |
+| 400 | PHOTO_SAVE_FILE_INVALID | Internal issues, try again later. |
 | 400 | REPLY_MARKUP_INVALID | The provided reply markup is invalid. |
 | 400 | REPLY_MARKUP_TOO_LONG | The specified reply_markup is too long. |
 | 400 | SCHEDULE_DATE_INVALID | Invalid schedule date provided. |
+| 400 | TODO_ITEMS_EMPTY | A checklist was specified, but no checklist items were passed. |
+| 400 | TODO_ITEM_DUPLICATE | Duplicate checklist items detected. |
 | 400 | USER_BANNED_IN_CHANNEL | You're banned from sending messages in supergroups/channels. |
+| 400 | WEBPAGE_NOT_FOUND | A preview for the specified webpage url could not be generated. |
 

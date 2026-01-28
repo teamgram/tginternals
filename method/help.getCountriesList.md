@@ -12,7 +12,7 @@ help.getCountriesList#735787a8 lang_code:string hash:int = help.CountriesList;
 | Name | Type | Description |
 | ---- | :----: | ----------- |
 | lang_code | string | Language code of the current user |
-| hash | int | Hash for pagination, for more info click here |
+| hash | int | Hash used for caching, for more info click here. |
 
 
 ## Result

@@ -1,5 +1,5 @@
 # updateUser
-User information was updated, it must be refetched using users.getFullUser.
+User (user and/or userFull) information was updated.
 
 ```
 updateUser#20529438 user_id:long = Update;
@@ -12,6 +12,6 @@ updateUser#20529438 user_id:long = Update;
 
 
 ## Type
-Update
+
 
 ## Related pages

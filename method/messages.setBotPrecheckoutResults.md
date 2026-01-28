@@ -26,4 +26,5 @@ Bool
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 400 | ERROR_TEXT_EMPTY | The provided error message is empty. |
+| 400 | USER_BOT_REQUIRED | This method can only be called by a bot. |
 

@@ -6,6 +6,35 @@ When working with the API, it is sometimes necessary to send a relatively large 
 
 There are a number of API methods to save files. The schema of the types and methods used is presented below:
 
+```
+inputFile#f52ff27f id:long parts:int name:string md5_checksum:string = InputFile;
+inputFileBig#fa4f0bb5 id:long parts:int name:string = InputFile;
+
+
+inputEncryptedFileUploaded#64bd0306 id:long parts:int md5_checksum:string key_fingerprint:int = InputEncryptedFile;
+inputEncryptedFileBigUploaded#2dc173c8 id:long parts:int key_fingerprint:int = InputEncryptedFile;
+
+inputSecureFileUploaded#3334b0f0 id:long parts:int md5_checksum:string file_hash:bytes secret:bytes = InputSecureFile;
+inputSecureFile#5367e5be id:long access_hash:long = InputSecureFile;
+
+inputMediaUploadedPhoto#1e287d04 flags:# spoiler:flags.2?true file:InputFile stickers:flags.0?Vector<InputDocument> ttl_seconds:flags.1?int = InputMedia;
+inputMediaUploadedDocument#37c9330 flags:# nosound_video:flags.3?true force_file:flags.4?true spoiler:flags.5?true file:InputFile thumb:flags.2?InputFile mime_type:string attributes:Vector<DocumentAttribute> stickers:flags.0?Vector<InputDocument> video_cover:flags.6?InputPhoto video_timestamp:flags.7?int ttl_seconds:flags.1?int = InputMedia;
+
+inputChatUploadedPhoto#bdcdaec0 flags:# file:flags.0?InputFile video:flags.1?InputFile video_start_ts:flags.2?double video_emoji_markup:flags.3?VideoSize = InputChatPhoto;
+
+
+---functions---
+
+messages.sendMedia#ac55d9c1 flags:# silent:flags.5?true background:flags.6?true clear_draft:flags.7?true noforwards:flags.14?true update_stickersets_order:flags.15?true invert_media:flags.16?true allow_paid_floodskip:flags.19?true peer:InputPeer reply_to:flags.0?InputReplyTo media:InputMedia message:string random_id:long reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> schedule_date:flags.10?int send_as:flags.13?InputPeer quick_reply_shortcut:flags.17?InputQuickReplyShortcut effect:flags.18?long allow_paid_stars:flags.21?long suggested_post:flags.22?SuggestedPost = Updates;
+messages.uploadMedia#14967978 flags:# business_connection_id:flags.0?string peer:InputPeer media:InputMedia = MessageMedia;
+messages.sendEncryptedFile#5559481d flags:# silent:flags.0?true peer:InputEncryptedChat random_id:long data:bytes file:InputEncryptedFile = messages.SentEncryptedMessage;
+
+photos.uploadProfilePhoto#388a3b5 flags:# fallback:flags.3?true bot:flags.5?InputUser file:flags.0?InputFile video:flags.1?InputFile video_start_ts:flags.2?double video_emoji_markup:flags.4?VideoSize = photos.Photo;    
+
+upload.saveFilePart#b304a621 file_id:long file_part:int bytes:bytes = Bool;
+upload.saveBigFilePart#de7b673d file_id:long file_part:int file_total_parts:int bytes:bytes = Bool;
+```
+
 Before transmitting the contents of the file itself, the file has to be assigned a unique 64-bit client identifier: file_id.
 
 The file's binary content is then split into parts. All parts must have the same size (part_size) and the following conditions must be met:
@@ -48,6 +77,16 @@ When using one of the methods mentioned above to save file parts, one of the fol
 
 - FILE_PART_SIZE_CHANGED - The part size is different from the size of one of the previous parts in the same file
 
+- FLOOD_PREMIUM_WAIT_X: Indicates that upload speed is limited because the current account does not have a Premium subscription, and that the query must be automatically repeated by the client after X seconds.
+
+- When receiving this error, clients should display the Telegram Premium subscription modal, offering the user to purchase a Premium subscription to increase upload speed upload_premium_speedup_upload » times.
+
+- Note that this modal should only be displayed if the file that is being uploaded is currently visible to the user; if it isn't, the modal should be displayed once the loading/already loaded media becomes visible.
+
+- Also, this modal should only be shown at most every upload_premium_speedup_notify_period », to avoid bombarding the user with this popup for every file whose upload is slowed down.
+
+- This error can only be received when the user has uploaded tens of gigabytes or more.
+
 While the parts are being uploaded, an MD5 hash of the file contents can also be computed to be used later as the md5_checksum parameter in the inputFile constructor (since it is checked only by the server, for encrypted secret chat files it must be generated from the encrypted file).
 After the entire file is successfully saved, the final method may be called and passed the generated inputFile object. In case the upload.saveBigFilePart method is used, the inputFileBig constructor must be passed, in other cases use inputFile.
 
@@ -64,6 +103,50 @@ The file save operation may return one of the following data input errors:
 - FILE_PART_X_MISSING: Part X (where X is a number) of the file is missing from storage. Try repeating the method call to resave the part.
 
 - MD5_CHECKSUM_INVALID: The file's MD5 checksum did not match the md5_checksum parameter
+
+#### Resending existing files
+
+```
+inputMediaPhoto#b3ba0635 flags:# spoiler:flags.1?true id:InputPhoto ttl_seconds:flags.0?int = InputMedia;
+inputMediaDocument#a8763ab5 flags:# spoiler:flags.2?true id:InputDocument video_cover:flags.3?InputPhoto video_timestamp:flags.4?int ttl_seconds:flags.0?int query:flags.1?string = InputMedia;
+
+---functions---
+
+messages.sendMedia#ac55d9c1 flags:# silent:flags.5?true background:flags.6?true clear_draft:flags.7?true noforwards:flags.14?true update_stickersets_order:flags.15?true invert_media:flags.16?true allow_paid_floodskip:flags.19?true peer:InputPeer reply_to:flags.0?InputReplyTo media:InputMedia message:string random_id:long reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> schedule_date:flags.10?int send_as:flags.13?InputPeer quick_reply_shortcut:flags.17?InputQuickReplyShortcut effect:flags.18?long allow_paid_stars:flags.21?long suggested_post:flags.22?SuggestedPost = Updates;
+
+messages.sendMultiMedia#1bf89d74 flags:# silent:flags.5?true background:flags.6?true clear_draft:flags.7?true noforwards:flags.14?true update_stickersets_order:flags.15?true invert_media:flags.16?true allow_paid_floodskip:flags.19?true peer:InputPeer reply_to:flags.0?InputReplyTo multi_media:Vector<InputSingleMedia> schedule_date:flags.10?int send_as:flags.13?InputPeer quick_reply_shortcut:flags.17?InputQuickReplyShortcut effect:flags.18?long allow_paid_stars:flags.21?long = Updates;
+```
+
+Non-protected media (i.e. media from messages without the noforwards flag) may be resent to other chats, without reuploading it: simply pass to messages.sendMedia or messages.sendMultiMedia an inputMediaPhoto constructor for photos or an inputMediaDocument constructor for every other kind of media, appropriately generated from an existing photo or document.
+
+All the flags in inputMediaPhoto and inputMediaDocument may be modified to modify some of the media file's attributes.
+
+When resending existing media, messages.sendMedia may return a FILE_REFERENCE_EXPIRED error (or a FILE_REFERENCE_INVALID, which should be treated in the same way), in this case, the file_reference field of the input location must be refreshed as specified here ».
+
+messages.sendMultiMedia may also return file reference errors in a slightly different form, as FILE_REFERENCE_%d_EXPIRED errors (or a FILE_REFERENCE_%d_INVALID, which should be treated in the same way): in this case, the media with the file reference to refresh will be located at index %d of the passed multi_media vector.
+
+#### Editing uploaded files
+
+```
+inputMediaPhoto#b3ba0635 flags:# spoiler:flags.1?true id:InputPhoto ttl_seconds:flags.0?int = InputMedia;
+inputMediaDocument#a8763ab5 flags:# spoiler:flags.2?true id:InputDocument video_cover:flags.3?InputPhoto video_timestamp:flags.4?int ttl_seconds:flags.0?int query:flags.1?string = InputMedia;
+
+
+inputMediaUploadedPhoto#1e287d04 flags:# spoiler:flags.2?true file:InputFile stickers:flags.0?Vector<InputDocument> ttl_seconds:flags.1?int = InputMedia;
+inputMediaUploadedDocument#37c9330 flags:# nosound_video:flags.3?true force_file:flags.4?true spoiler:flags.5?true file:InputFile thumb:flags.2?InputFile mime_type:string attributes:Vector<DocumentAttribute> stickers:flags.0?Vector<InputDocument> video_cover:flags.6?InputPhoto video_timestamp:flags.7?int ttl_seconds:flags.1?int = InputMedia;
+
+---functions---
+
+messages.editMessage#dfd14005 flags:# no_webpage:flags.1?true invert_media:flags.16?true peer:InputPeer id:int message:flags.11?string media:flags.14?InputMedia reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> schedule_date:flags.15?int quick_reply_shortcut_id:flags.17?int = Updates;
+```
+
+Use messages.editMessage to edit or replace a media file sent using messages.sendMedia and messages.sendMultiMedia.
+
+If one wishes to edit only the spoiler, ttl_seconds or query attributes of the media, this may be done without reuploading the entire media file, by simply passing the old media to the id parameter of inputMediaPhoto, inputMediaDocument and updating the values of the spoiler/ttl_seconds/query attributes as needed.
+
+If one wishes to edit any other attribute (for example, the file name specified in documentAttributeFilename, any other DocumentAttribute or any flag different from spoiler/ttl_seconds/query/video_cover/video_timestamp) a full reupload of the file is required, in order to be able to specify the new attributes in inputMediaUploadedPhoto/inputMediaUploadedDocument.
+
+The only exception to the above rule is when editing the documentAttributeVideo.video_start_ts attribute of video stories, in which case inputMediaDocument may still be used with inputFileStoryDocument instead of inputFile without reuploading the entire story video, see here » for more info on the full flow.
 
 #### Streamed uploads
 
@@ -87,7 +170,79 @@ Everything works similarly to normal uploads, with a few key differences:
 
 Note that streamed uploads cannot be used when uploading photos with inputMediaUploadedPhoto.
 
+#### Video qualities
+
+```
+messageMediaDocument#52d8ccd9 flags:# nopremium:flags.3?true spoiler:flags.4?true video:flags.6?true round:flags.7?true voice:flags.8?true document:flags.0?Document alt_documents:flags.5?Vector<Document> video_cover:flags.9?Photo video_timestamp:flags.10?int ttl_seconds:flags.2?int = MessageMedia;
+
+updateNewScheduledMessage#39a51dfb message:Message = Update;
+updateDeleteScheduledMessages#f2a71983 flags:# peer:Peer messages:Vector<int> sent_messages:flags.0?Vector<int> = Update;
+```
+
+When sending videos to big channels, Telegram will automatically convert them, generating multiple versions in multiple qualities and formats, available to users in the alt_documents vector of the sent messageMediaDocument.
+
+Note that if the video_ignore_alt_documents client configuration flag » set and equal to true, the messageMediaDocument.alt_documents field must be ignored by clients.
+
+Since server-side processing takes some time, videos sent to big channels will not be sent immediately after invoking sendMedia/sendMultiMedia: instead, they will be added to the schedule queue similarly to scheduled messages », with schedule date equal to the approximated server-side conversion date:
+
+- Immediately after invoking sendMedia an updateNewScheduledMessage will be returned, containing a message with ID equal to the ID of the message in the schedule queue for the current chat (each PM, chat, supergroup and channel has its own schedule queue and ID sequence), the video_processing_pending flag set and date equal to the estimated conversion date (not the schedule date).
+
+- Approximately at date, an updateNewMessage or updateNewChannelMessage with the from_scheduled flag set, indicating to the sender that the specified message with pending video processing was sent.
+
+- Approximately at date, an updateDeleteScheduledMessages, indicating that the message was flushed from the schedule queue.
+
+- The messages field will contain the scheduled message IDs for the sent messages (initially returned in updateNewScheduledMessage), and sent_messages will contain the real message IDs for the sent messages.
+
+- The scheduled and real message ID for a given message will be at the same vector index, in messages and sent_messages respectively.
+
+In other words, these messages should be treated similarly to scheduled messages ».
+
+#### Video covers
+
+```
+inputMediaUploadedDocument#37c9330 flags:# nosound_video:flags.3?true force_file:flags.4?true spoiler:flags.5?true file:InputFile thumb:flags.2?InputFile mime_type:string attributes:Vector<DocumentAttribute> stickers:flags.0?Vector<InputDocument> video_cover:flags.6?InputPhoto video_timestamp:flags.7?int ttl_seconds:flags.1?int = InputMedia;
+inputMediaDocumentExternal#779600f9 flags:# spoiler:flags.1?true url:string ttl_seconds:flags.0?int video_cover:flags.2?InputPhoto video_timestamp:flags.3?int = InputMedia;
+inputMediaDocument#a8763ab5 flags:# spoiler:flags.2?true id:InputDocument video_cover:flags.3?InputPhoto video_timestamp:flags.4?int ttl_seconds:flags.0?int query:flags.1?string = InputMedia;
+
+messageMediaDocument#52d8ccd9 flags:# nopremium:flags.3?true spoiler:flags.4?true video:flags.6?true round:flags.7?true voice:flags.8?true document:flags.0?Document alt_documents:flags.5?Vector<Document> video_cover:flags.9?Photo video_timestamp:flags.10?int ttl_seconds:flags.2?int = MessageMedia;
+```
+
+Custom video covers can be provided by separately, including when resending existing videos with inputMediaDocument, by populating the video_cover field, using a photo (if necessary uploaded using messages.uploadMedia).
+
+The cover will then be available in messageMediaDocument.video_cover.
+
+Custom video covers aren't supported in self-destructing messages, and aren't yet supported in secret chats.
+
+#### Start video at timestamp
+
+```
+inputMediaUploadedDocument#37c9330 flags:# nosound_video:flags.3?true force_file:flags.4?true spoiler:flags.5?true file:InputFile thumb:flags.2?InputFile mime_type:string attributes:Vector<DocumentAttribute> stickers:flags.0?Vector<InputDocument> video_cover:flags.6?InputPhoto video_timestamp:flags.7?int ttl_seconds:flags.1?int = InputMedia;
+inputMediaDocumentExternal#779600f9 flags:# spoiler:flags.1?true url:string ttl_seconds:flags.0?int video_cover:flags.2?InputPhoto video_timestamp:flags.3?int = InputMedia;
+inputMediaDocument#a8763ab5 flags:# spoiler:flags.2?true id:InputDocument video_cover:flags.3?InputPhoto video_timestamp:flags.4?int ttl_seconds:flags.0?int query:flags.1?string = InputMedia;
+
+messageMediaDocument#52d8ccd9 flags:# nopremium:flags.3?true spoiler:flags.4?true video:flags.6?true round:flags.7?true voice:flags.8?true document:flags.0?Document alt_documents:flags.5?Vector<Document> video_cover:flags.9?Photo video_timestamp:flags.10?int ttl_seconds:flags.2?int = MessageMedia;
+
+---functions---
+
+messages.forwardMessages#978928ca flags:# silent:flags.5?true background:flags.6?true with_my_score:flags.8?true drop_author:flags.11?true drop_media_captions:flags.12?true noforwards:flags.14?true allow_paid_floodskip:flags.19?true from_peer:InputPeer id:Vector<int> random_id:Vector<long> to_peer:InputPeer top_msg_id:flags.9?int reply_to:flags.22?InputReplyTo schedule_date:flags.10?int send_as:flags.13?InputPeer quick_reply_shortcut:flags.17?InputQuickReplyShortcut video_timestamp:flags.20?int allow_paid_stars:flags.21?long suggested_post:flags.23?SuggestedPost = Updates;
+```
+
+The timestamp from which a video will start playing can be customized by populating the video_timestamp field, when uploading videos with inputMediaUploadedDocument.video_timestamp, resending existing videos with inputMediaDocument.video_timestamp and when forwarding them with messages.forwardMessages.video_timestamp.
+
+The starting timestamp will be available in messageMediaDocument.video_timestamp.
+
 #### Albums, grouped media
+
+```
+inputMediaUploadedPhoto#1e287d04 flags:# spoiler:flags.2?true file:InputFile stickers:flags.0?Vector<InputDocument> ttl_seconds:flags.1?int = InputMedia;
+inputMediaUploadedDocument#37c9330 flags:# nosound_video:flags.3?true force_file:flags.4?true spoiler:flags.5?true file:InputFile thumb:flags.2?InputFile mime_type:string attributes:Vector<DocumentAttribute> stickers:flags.0?Vector<InputDocument> video_cover:flags.6?InputPhoto video_timestamp:flags.7?int ttl_seconds:flags.1?int = InputMedia;
+
+inputSingleMedia#1cc6e91f flags:# media:InputMedia random_id:long message:string entities:flags.0?Vector<MessageEntity> = InputSingleMedia;
+
+---functions---
+
+messages.sendMultiMedia#1bf89d74 flags:# silent:flags.5?true background:flags.6?true clear_draft:flags.7?true noforwards:flags.14?true update_stickersets_order:flags.15?true invert_media:flags.16?true allow_paid_floodskip:flags.19?true peer:InputPeer reply_to:flags.0?InputReplyTo multi_media:Vector<InputSingleMedia> schedule_date:flags.10?int send_as:flags.13?InputPeer quick_reply_shortcut:flags.17?InputQuickReplyShortcut effect:flags.18?long allow_paid_stars:flags.21?long = Updates;
+```
 
 Telegram allows grouping photos into albums and generic files (audio, docuemnts) into media groups.
 
@@ -96,12 +251,51 @@ To do this, messages.sendMultiMedia is used, wrapping each InputMedia constructo
 For photo albums, clients should display an album caption only if exactly one photo in the group has a caption, otherwise no album caption should be displayed, and only when viewing in detail a specific photo of the group the caption should be shown.
 Other grouped media can display a caption under each file.
 
-#### Re-using pre-uploaded files
+#### Uploading by hash
+
+```
+document#8fd4c4d8 flags:# id:long access_hash:long file_reference:bytes date:int mime_type:string size:long thumbs:flags.0?Vector<PhotoSize> video_thumbs:flags.1?Vector<VideoSize> dc_id:int attributes:Vector<DocumentAttribute> = Document;
+
+---functions---
+
+messages.getDocumentByHash#b1f2061f sha256:bytes size:long mime_type:string = Document;
+```
 
 For some types of documents like GIFs, messages.getDocumentByHash can be used to search for the document on Telegram servers.
 The SHA256 hash of the file is computed, and it is passed along with the file's mime type and size to the method: if the file type is correct and the file is found, a document is returned.
 
 ### Uploading profile or chat pictures
+
+```
+photo#fb197a65 flags:# has_stickers:flags.0?true id:long access_hash:long file_reference:bytes date:int sizes:Vector<PhotoSize> video_sizes:flags.1?Vector<VideoSize> dc_id:int = Photo;
+
+photos.photo#20212ca8 photo:Photo users:Vector<User> = photos.Photo;
+
+inputPhoto#3bb3b94a id:long access_hash:long file_reference:bytes = InputPhoto;
+
+inputFile#f52ff27f id:long parts:int name:string md5_checksum:string = InputFile;
+
+videoSizeEmojiMarkup#f85c413c emoji_id:long background_colors:Vector<int> = VideoSize;
+videoSizeStickerMarkup#da082fe stickerset:InputStickerSet sticker_id:long background_colors:Vector<int> = VideoSize;
+
+inputChatUploadedPhoto#bdcdaec0 flags:# file:flags.0?InputFile video:flags.1?InputFile video_start_ts:flags.2?double video_emoji_markup:flags.3?VideoSize = InputChatPhoto;
+inputChatPhoto#8953ad37 id:InputPhoto = InputChatPhoto;
+
+emojiListNotModified#481eadfa = EmojiList;
+emojiList#7a1e11d1 hash:long document_id:Vector<long> = EmojiList;
+
+---functions---
+
+photos.updateProfilePhoto#9e82039 flags:# fallback:flags.0?true bot:flags.1?InputUser id:InputPhoto = photos.Photo;
+photos.uploadProfilePhoto#388a3b5 flags:# fallback:flags.3?true bot:flags.5?InputUser file:flags.0?InputFile video:flags.1?InputFile video_start_ts:flags.2?double video_emoji_markup:flags.4?VideoSize = photos.Photo;
+
+messages.editChatPhoto#35ddd674 chat_id:long photo:InputChatPhoto = Updates;
+
+channels.editPhoto#f12e57c9 channel:InputChannel photo:InputChatPhoto = Updates;
+
+account.getDefaultProfilePhotoEmojis#e2750328 hash:long = EmojiList;
+account.getDefaultGroupPhotoEmojis#915860ae hash:long = EmojiList;
+```
 
 User profile pictures can be uploaded using the photos.uploadProfilePhoto method: the actual profile picture has to be uploaded as for normal files.
 photos.uploadProfilePhoto can also be used to reupload previously uploaded profile pictures.
@@ -125,18 +319,73 @@ If animated or video stickers/custom emojis are used, the video_start_ts flag ca
 
 account.getDefaultProfilePhotoEmojis may be used to fetch a list of suggested custom emojis that can be used as profile pictures even by non-premium accounts; account.getDefaultGroupPhotoEmojis is the counterpart for group profile pictures.
 
+The custom emoji selection UI should offer a list of categories to quickly filter results by a (list of) emojis, or by some other criteria, see here » for more info.
+
 ### Downloading files
 
 There are methods available to download files which have been successfully uploaded. The schema of the types and methods used is presented below:
 
+```
+upload.file#96a18d5 type:storage.FileType mtime:int bytes:bytes = upload.File;
+upload.fileCdnRedirect#f18cda44 dc_id:int file_token:bytes encryption_key:bytes encryption_iv:bytes file_hashes:Vector<FileHash> = upload.File;
+
+storage.fileUnknown#aa963b05 = storage.FileType;
+storage.fileJpeg#7efe0e = storage.FileType;
+storage.fileGif#cae1aadf = storage.FileType;
+storage.filePng#a4f63c0 = storage.FileType;
+storage.fileMp3#528a0677 = storage.FileType;
+storage.fileMov#4b09ebbc = storage.FileType;
+storage.filePartial#40bc6f52 = storage.FileType;
+storage.fileMp4#b3cea0e4 = storage.FileType;
+storage.fileWebp#1081464c = storage.FileType;
+
+---functions---
+
+upload.getFile#be5335be flags:# precise:flags.0?true cdn_supported:flags.1?true location:InputFileLocation offset:long limit:int = upload.File;
+```
+
 Any file can be downloaded by calling upload.getFile. 
 The data for the input parameter of the InputFileLocation type is generated as follows:
+
+```
+inputFileLocation#dfdaabe1 volume_id:long local_id:int secret:long file_reference:bytes = InputFileLocation;
+inputEncryptedFileLocation#f5235d55 id:long access_hash:long = InputFileLocation;
+inputDocumentFileLocation#bad07584 id:long access_hash:long file_reference:bytes thumb_size:string = InputFileLocation;
+inputSecureFileLocation#cbc7ee28 id:long access_hash:long = InputFileLocation;
+inputTakeoutFileLocation#29be5899 = InputFileLocation;
+inputPhotoFileLocation#40181ffe id:long access_hash:long file_reference:bytes thumb_size:string = InputFileLocation;
+inputPhotoLegacyFileLocation#d83466f3 id:long access_hash:long file_reference:bytes volume_id:long local_id:int secret:long = InputFileLocation;
+inputPeerPhotoFileLocation#37257e99 flags:# big:flags.0?true peer:InputPeer photo_id:long = InputFileLocation;
+inputStickerSetThumb#9d84f3db stickerset:InputStickerSet thumb_version:int = InputFileLocation;
+inputGroupCallStream#598a92a flags:# call:InputGroupCall time_ms:long scale:int video_channel:flags.0?int video_quality:flags.0?int = InputFileLocation;
+
+inputStickerSetEmpty#ffb62b95 = InputStickerSet;
+inputStickerSetID#9de7a269 id:long access_hash:long = InputStickerSet;
+inputStickerSetShortName#861cc8a0 short_name:string = InputStickerSet;
+inputStickerSetAnimatedEmoji#28703c8 = InputStickerSet;
+inputStickerSetDice#e67f520e emoticon:string = InputStickerSet;
+inputStickerSetAnimatedEmojiAnimations#cde3739 = InputStickerSet;
+
+inputPeerSelf#7da07ec9 = InputPeer;
+inputPeerChat#35a95cb9 chat_id:long = InputPeer;
+inputPeerUser#dde8a54c user_id:long access_hash:long = InputPeer;
+inputPeerChannel#27bcbbfc channel_id:long access_hash:long = InputPeer;
+
+photo#fb197a65 flags:# has_stickers:flags.0?true id:long access_hash:long file_reference:bytes date:int sizes:Vector<PhotoSize> video_sizes:flags.1?Vector<VideoSize> dc_id:int = Photo;
+document#8fd4c4d8 flags:# id:long access_hash:long file_reference:bytes date:int mime_type:string size:long thumbs:flags.0?Vector<PhotoSize> video_thumbs:flags.1?Vector<VideoSize> dc_id:int attributes:Vector<DocumentAttribute> = Document;
+
+photoSize#75c78e60 type:string w:int h:int size:int = PhotoSize;
+photoCachedSize#21e1ad6 type:string w:int h:int bytes:bytes = PhotoSize;
+
+chatPhoto#1c6e1c11 flags:# has_video:flags.0?true photo_id:long stripped_thumb:flags.1?bytes dc_id:int = ChatPhoto;
+userProfilePhoto#82d1f706 flags:# has_video:flags.0?true personal:flags.2?true photo_id:long stripped_thumb:flags.1?bytes dc_id:int = UserProfilePhoto;
+```
 
 - For photos, inputPhotoFileLocation is used:
 
 - id, file_reference and access_hash taken from the photo constructor
 
-- thumb_size taken from the type field of the desired PhotoSize of the photo
+- thumb_size taken from the type field of the desired PhotoSize/VideoSize of the photo
 
 - For profile pictures of users, channels, supergroups and groups, inputPeerPhotoFileLocation has to be used:
 
@@ -150,7 +399,7 @@ The data for the input parameter of the InputFileLocation type is generated as f
 
 - id, file_reference and access_hash taken from the document constructor
 
-- If downloading the thumbnail of a document, thumb_size should be taken from the type field of the desired PhotoSize of the photo; otherwise, provide an empty string.
+- If downloading the thumbnail of a document or a premium sticker effect, thumb_size should be taken from the type field of the desired PhotoSize/VideoSize of the photo; otherwise, provide an empty string.
 
 - For previews of sticker sets, inputStickerSetThumb is used (note: to download stickers and previews of stickers use the document method described above for documents):
 
@@ -198,11 +447,14 @@ In any case the requested part should be within one 1 MB chunk from the beginnin
 
 - offset / (1024 * 1024) == (offset + limit - 1) / (1024 * 1024).
 
-When downloading multiple files in parallel from the same DC, clients should limit the parallelism to download at most small_queue_max_active_operations_count/large_queue_max_active_operations_count files in parallel when downloading files smaller/bigger than 20MB (client configuration parameters »).
+When downloading multiple files in parallel from the same DC, clients should limit the parallelism to download at most small_queue_max_active_operations_count/large_queue_max_active_operations_count files in parallel when downloading files smaller/bigger than 20MB (client configuration parameters »).
 
-The file download operation may return a FILE_REFERENCE_EXPIRED error (or another error starting with FILE_REFERENCE_): in this case, the file_reference field of the input location must be refreshed.
 The file download operation may return an upload.fileCdnRedirect constructor: in this case, these instructions must be followed for downloading CDN files.
 The file download operation may also return one of the following data input errors:
+
+- FILE_REFERENCE_EXPIRED: The file_reference field of the input location must be refreshed as specified here ».
+
+- FILE_REFERENCE_INVALID: The file_reference field of the input location is invalid and must be refreshed as specified here ».
 
 - FILE_ID_INVALID: The file address is invalid
 
@@ -212,7 +464,27 @@ The file download operation may also return one of the following data input erro
 
 - FILE_MIGRATE_X: The file is in the datacenter No. X
 
+- FLOOD_WAIT_X: Repeat the query after X seconds
+
+- FLOOD_PREMIUM_WAIT_X: Indicates that download speed is limited because the current account does not have a Premium subscription, and that the query must be automatically repeated by the client after X seconds.
+
+- When receiving this error, clients should display the Telegram Premium subscription modal, offering the user to purchase a Premium subscription to increase download speed upload_premium_speedup_download » times.
+
+- Note that this modal should only be displayed if the file that is being downloaded is currently visible to the user; if it isn't, the modal should be displayed once the loading/already loaded media becomes visible.
+
+- Also, this modal should only be shown at most every upload_premium_speedup_notify_period », to avoid bombarding the user with this popup for every file whose download is slowed down.
+
+- This error can only be received when the user has uploaded tens of gigabytes or more.
+
 #### Verifying downloaded chunks
+
+```
+fileHash#f39b035c offset:long limit:int hash:bytes = FileHash;
+
+---functions---
+
+upload.getFileHashes#9156982a location:InputFileLocation offset:long = Vector<FileHash>;
+```
 
 In order to confirm the integrity of the downloaded file, clients are recommended to verify hashes for each downloaded part, as for CDN DCs. 
 upload.getFileHashes contain FileHash constructors. Each of these constructors contains the SHA-256 hash of a part of the file that starts with offset and takes limit bytes.
@@ -222,6 +494,22 @@ Before saving each portion of the data received from the DC into the file, the c
 #### Handling audio, video and vector previews
 
 Schema:
+
+```
+photoSizeEmpty#e17e23c type:string = PhotoSize;
+photoSize#75c78e60 type:string w:int h:int size:int = PhotoSize;
+photoCachedSize#21e1ad6 type:string w:int h:int bytes:bytes = PhotoSize;
+photoStrippedSize#e0b0bc2e type:string bytes:bytes = PhotoSize;
+photoSizeProgressive#fa3efb95 type:string w:int h:int sizes:Vector<int> = PhotoSize;
+photoPathSize#d8214d41 type:string bytes:bytes = PhotoSize;
+
+videoSize#de33b094 flags:# type:string w:int h:int size:int video_start_ts:flags.0?double = VideoSize;
+
+document#8fd4c4d8 flags:# id:long access_hash:long file_reference:bytes date:int mime_type:string size:long thumbs:flags.0?Vector<PhotoSize> video_thumbs:flags.1?Vector<VideoSize> dc_id:int attributes:Vector<DocumentAttribute> = Document;
+photo#fb197a65 flags:# has_stickers:flags.0?true id:long access_hash:long file_reference:bytes date:int sizes:Vector<PhotoSize> video_sizes:flags.1?Vector<VideoSize> dc_id:int = Photo;
+
+photo#fb197a65 flags:# has_stickers:flags.0?true id:long access_hash:long file_reference:bytes date:int sizes:Vector<PhotoSize> video_sizes:flags.1?Vector<VideoSize> dc_id:int = Photo;
+```
 
 Telegram attaches a vector of thumbnails with reduced resolution to all uploaded media.
 The server also generates a trimmed and scaled down video preview for videos, GIFs and animated profile pictures.
@@ -234,12 +522,20 @@ Special types:
 
 #### Stripped thumbnails
 
+```
+photoStrippedSize#e0b0bc2e type:string bytes:bytes = PhotoSize;
+```
+
 A photoStrippedSize (with type i) is an extremely low-res thumbnail, embedded directly inside media location objects.
 It should be shown to the user in chat message previews, or while still downloading the most appropriately sized photoSize through the media DCs as described above.
 
-The stripped bytes payload should be inflated to a JPG payload as seen here ».
+The stripped bytes payload should be inflated to a JPG payload as seen here ».
 
 #### Vector thumbnails
+
+```
+photoPathSize#d8214d41 type:string bytes:bytes = PhotoSize;
+```
 
 Messages with animated, video, static stickers can have a compressed svg (< 300 bytes) to show the outline of the sticker before fetching the actual sticker.
 Sticker outlines will have a j type photoPathSize thumbnail.
@@ -249,11 +545,47 @@ This path will be the outline of the animated sticker, and should be shown to th
 
 The payload should be inflated using the following algorithm:
 
+```
+encoded := photoPathSize.bytes
+
+lookup := "AACAAAAHAAALMAAAQASTAVAAAZaacaaaahaaalmaaaqastava.az0123456789-,"
+
+path := "M"
+
+len := strlen(encoded)
+for (i = 0; i < len; i++) {
+  num := ord(encoded[i])
+  if (num >= 128 + 64) {
+    path += lookup[num - 128 - 64]
+  } else {
+    if (num >= 128) {
+      path += ','
+    } else if (num >= 64) {
+      path += '-'
+    }
+    path += itoa(num & 63)
+  }
+}
+path += "z"
+```
+
 path will contain the actual SVG path that can be directly inserted in the d attribute of an svg <path> element:
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+   viewBox="0 0 512 512" xml:space="preserve">
+<path d="{$path}"/>
+</svg>
+```
 
 #### Video types
 
-A videoSize constructor is typically used for animated profile pictures and video previews.
+```
+videoSize#de33b094 flags:# type:string w:int h:int size:int video_start_ts:flags.0?double = VideoSize;
+```
+
+A videoSize constructor is typically used for animated profile pictures, video previews and premium sticker effects ».
 
 ### Downloading webfiles
 
@@ -268,7 +600,37 @@ The upload.getWebFile method is also used to generate preview pictures for maps 
 
 Note: the upload.getWebFile query must be sent to the DC specified in the webfile_dc_id MTProto configuration field.
 
+```
+upload.webFile#21e753bc size:int mime_type:string file_type:storage.FileType mtime:int bytes:bytes = upload.WebFile;
+
+storage.fileUnknown#aa963b05 = storage.FileType;
+storage.fileJpeg#7efe0e = storage.FileType;
+storage.fileGif#cae1aadf = storage.FileType;
+storage.filePng#a4f63c0 = storage.FileType;
+storage.fileMp3#528a0677 = storage.FileType;
+storage.fileMov#4b09ebbc = storage.FileType;
+storage.filePartial#40bc6f52 = storage.FileType;
+storage.fileMp4#b3cea0e4 = storage.FileType;
+storage.fileWebp#1081464c = storage.FileType;
+
+ ---functions---
+
+upload.getWebFile#24e6818d location:InputWebFileLocation offset:int limit:int = upload.WebFile;
+```
+
 The InputWebFileLocation constructor is generated as follows.
+
+```
+inputWebFileLocation#c239d686 url:string access_hash:long = InputWebFileLocation;
+inputWebFileGeoPointLocation#9f2221c9 geo_point:InputGeoPoint access_hash:long w:int h:int zoom:int scale:int = InputWebFileLocation;
+inputWebFileAudioAlbumThumbLocation#f46fe924 flags:# small:flags.2?true document:flags.0?InputDocument title:flags.1?string performer:flags.1?string = InputWebFileLocation;
+
+webDocument#1c570ed1 url:string access_hash:long size:int mime_type:string attributes:Vector<DocumentAttribute> = WebDocument;
+
+inputGeoPoint#48222faf flags:# lat:double long:double accuracy_radius:flags.0?int = InputGeoPoint;
+
+geoPoint#b2a2f663 flags:# long:double lat:double access_hash:long accuracy_radius:flags.0?int = GeoPoint;
+```
 
 - inputWebFileLocation is simply generated by taking the url and access_hash fields of the webDocument constructor.
 
@@ -301,6 +663,10 @@ The InputWebFileLocation constructor is generated as follows.
 - performer contains the song performer: should only be provided in secret chats.
 
 ### General Considerations
+
+```
+dcOption#18b7a10d flags:# ipv6:flags.0?true media_only:flags.1?true tcpo_only:flags.2?true cdn:flags.3?true static:flags.4?true this_port_only:flags.5?true id:int ip_address:string port:int secret:flags.10?bytes = DcOption;
+```
 
 It is recommended that large queries (upload.getFile, upload.saveFilePart, upload.getWebFile) be handled through one or more separate sessions and separate connections, in which no methods other than these should be executed.
 This way, data transfer will cause less interference with getting updates and other method calls.

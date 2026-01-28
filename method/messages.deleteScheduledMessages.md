@@ -26,5 +26,6 @@ Updates
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 403 | MESSAGE_DELETE_FORBIDDEN | You can't delete one of the messages you tried to delete, most likely because it is a service message. |
 | 400 | PEER_ID_INVALID | The provided peer id is invalid. |
 

@@ -21,6 +21,7 @@ Bool
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | CHANNEL_INVALID | The provided channel is invalid. |
 | 400 | PEER_ID_INVALID | The provided peer id is invalid. |
 | 400 | SEND_AS_PEER_INVALID | You can't send messages as the specified peer. |
 

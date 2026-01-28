@@ -2,7 +2,7 @@
 Represents the rights of an admin in a channel/supergroup.
 
 ```
-chatAdminRights#5fb224d5 flags:# change_info:flags.0?true post_messages:flags.1?true edit_messages:flags.2?true delete_messages:flags.3?true ban_users:flags.4?true invite_users:flags.5?true pin_messages:flags.7?true add_admins:flags.9?true anonymous:flags.10?true manage_call:flags.11?true other:flags.12?true manage_topics:flags.13?true post_stories:flags.14?true edit_stories:flags.15?true delete_stories:flags.16?true = ChatAdminRights;
+chatAdminRights#5fb224d5 flags:# change_info:flags.0?true post_messages:flags.1?true edit_messages:flags.2?true delete_messages:flags.3?true ban_users:flags.4?true invite_users:flags.5?true pin_messages:flags.7?true add_admins:flags.9?true anonymous:flags.10?true manage_call:flags.11?true other:flags.12?true manage_topics:flags.13?true post_stories:flags.14?true edit_stories:flags.15?true delete_stories:flags.16?true manage_direct_messages:flags.17?true = ChatAdminRights;
 ```
 
 ## Parameters
@@ -24,6 +24,7 @@ chatAdminRights#5fb224d5 flags:# change_info:flags.0?true post_messages:flags.1?
 | post_stories | flags.14?true | If set, allows the admin to post stories as the channel. |
 | edit_stories | flags.15?true | If set, allows the admin to edit stories posted by the other admins of the channel. |
 | delete_stories | flags.16?true | If set, allows the admin to delete stories posted by the other admins of the channel. |
+| manage_direct_messages | flags.17?true | If set, allows the admin to manage the direct messages monoforum » and decline suggested posts ». |
 
 
 ## Type

@@ -27,6 +27,10 @@ This will help reduce the effect of ping latency and maximize the channel worklo
 Sometimes a client needs to transmit several send message method calls to the server all at once in a single message or in several consecutive messages. However, the server may execute these requests out of order (queries are handled by different servers to improve performance, which introduces a degree of randomness to the process).
 This requires that dependencies be explicitly stated when processing queries by using the function
 
+```
+invokeAfterMsg#cb9f372d {X:Type} msg_id:long query:!X = X;
+```
+
 Actually, this means padding the beginning of the query with the 32-bit number 0xcb9f372d and the 64-bit message identifier of the query on which the current query is dependent.
 
 ### Grouping Updates

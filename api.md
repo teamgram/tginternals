@@ -1,10 +1,10 @@
 # Telegram APIs
 
-We offer two kinds of APIs for developers. The Bot API allows you to easily create programs that use Telegram messages for an interface. The Telegram API and TDLib allow you to build your own customized Telegram clients. You are welcome to use both APIs free of charge.
+We offer three kinds of APIs for developers. The Bot API allows you to easily create programs that use Telegram messages for an interface. The Telegram API and TDLib allow you to build your own customized Telegram clients. You are welcome to use both APIs free of charge. Lastly, the Gateway API allows any business, app or website to send verification codes through Telegram instead of traditional SMS.
 
 You can also add Telegram Widgets to your website.
 
-Designers are welcome to create Animated Stickers or Custom Themes for Telegram.
+Designers are welcome to create Animated Stickers and Emoji or Custom Themes for Telegram.
 
 ---
 
@@ -29,6 +29,12 @@ TDLib takes care of all network implementation details, encryption and local dat
 TDLib supports all Telegram features and makes developing Telegram apps a breeze on any platform. It can be used on Android, iOS, Windows, macOS, Linux and virtually any other system. The library is open source and compatible with virtually any programming language.
 
 > Learn more about TDLib here »
+
+---
+
+The Telegram Gateway API allows any business, app or website to send authorization codes through Telegram instead of traditional SMS – offering a powerful and convenient way to lower costs while increasing the security and delivery speed of your codes to Telegram’s 1 billion monthly active users. Users will instantly receive messages with codes in a special chat inside Telegram.
+
+> Telegram's Gateway API is completely free to test. Learn more here »
 
 ---
 
@@ -86,6 +92,10 @@ How to handle channels, supergroups, gigagroups, basic groups, and what's the di
 
 Telegram allows creating forums with multiple distinct topics.
 
+#### Direct messages to channels
+
+Telegram supports direct messages to channels, which can also be used to suggest (even paid) channel posts.
+
 #### Channel statistics
 
 Telegram offers detailed channel statistics for channels and supergroups.
@@ -140,15 +150,21 @@ A list of available high-level methods.
 
 Text and JSON-presentation of types and methods used in API.
 
-#### Available layer list
+#### Layer changelog
 
-A list of available schema versions.
+A detailed changelog of available schema versions.
 
 ### Other articles
 
 #### Working with bots, using the MTProto API
 
 How to work with bots using the MTProto API.
+
+#### Bot API dialog IDs
+
+A bot API dialog ID is a single, unique 64-bit peer ID sequence derived from the user, chat, channel and secret chat ID sequences, maintaining uniqueness across all of them.
+
+This page specifies how to convert MTProto peer IDs to bot API dialog IDs and vice versa.
 
 #### Commands
 
@@ -174,6 +190,10 @@ Bots can offer users HTML5 games to play solo or to compete against each other i
 
 Bots can offer users interactive HTML5 mini apps to completely replace any website.
 
+#### Affiliate programs
+
+Developers can open affiliate programs for their mini app – allowing content creators, other mini app developers and any Telegram user to promote it and earn commissions on purchases made by people they referred.
+
 #### Attachment menu
 
 Bots can install attachment menu entries, offering conveniently accessible, versatile mini apps.
@@ -182,9 +202,9 @@ Bots can install attachment menu entries, offering conveniently accessible, vers
 
 Telegram users and channels can easily post and view stories through the API.
 
-#### Similar channels
+#### Similar channels and bots
 
-The API offers a method to obtain a list of similarly themed public channels, selected based on similarities in their subscriber bases.
+The API offers a method to obtain a list of similarly themed public channels and bots, selected based on similarities in their subscriber bases.
 
 #### Accent colors
 
@@ -203,9 +223,21 @@ This allows the server to filter messages based on a text query, and even on the
 
 Telegram allows sending polls and quizzes, that can be voted on by thousands, if not millions of users in chats and channels.
 
+#### Checklists
+
+Premium users can now create collaborative checklists in any chat to track tasks and coordinate teams — or manage shopping and to-do lists.
+
 #### Reactions
 
 Telegram allows users to react on any message using specific emojis, triggering cute lottie animations.
+
+#### Animated message effects
+
+Telegram allows adding spectacular animated effects to messages you send.
+
+#### Emoji categories
+
+Sticker, custom emoji and GIF selection UIs should offer a list of categories to quickly filter results by a (list of) emojis, or by some other criteria.
 
 #### Emoji status
 
@@ -247,6 +279,10 @@ Telegram allows scheduling messages.
 
 Telegram allows sending the live geolocation of a user in a chat, optionally setting a proximity alert.
 
+### Peer database
+
+How to work with peer information in the API.
+
 #### Min constructors
 
 Sometimes, user and channel constructors met in group chat updates may not contain full info about the user: how to handle such constructors.
@@ -267,9 +303,17 @@ How to work with Telegram Passport directly using the MTProto API.
 
 How to work with Telegram Payments directly using the MTProto API.
 
+#### Third-party verification
+
+To further improve transparency on Telegram, official third-party services are able to assign extra verification icons to user accounts and chats — in order to prevent scams and reduce misinformation.
+
 #### Styled text with message entities
 
 How to create styled text with message entities
+
+#### Working with GIFs
+
+Telegram clients support displaying GIFs.
 
 #### Working with stickers
 
@@ -327,11 +371,45 @@ Telegram allows translating chat messages, and Telegram Premium users may even e
 
 Admins of supergroups with a certain number of members can choose to unleash the full proactive power of Telegram's own antispam algorithms – turning on the new Aggressive mode for the automated spam filters.
 
-#### Collectible usernames
+#### Collectibles
 
-Telegram users can make it easy for others to contact them or find their public groups and channels via usernames: clients can also assign multiple collectible usernames to accounts, supergroups and channels they own.
+Telegram users can make it easy for others to contact them or find their public groups and channels via usernames: clients can also assign multiple Fragment » collectible usernames to accounts, supergroups and channels they own; Fragment » also allows purchasing phone number collectibles that can be used to register Telegram accounts.
 
-#### Channel boosts
+#### Telegram Premium
+
+Telegram Premium is an optional subscription service that unlocks additional exclusive client-side and API-side features, while helping support the development of the app. It is a part of Telegram’s sustainable monetization – driven by our users, rather than advertisers or shareholders. This way, Telegram can remain independent and prioritize its users first.
+
+#### Telegram Business
+
+Users can turn their Telegram account into a business account, gaining access to business features such as opening hours, location, quick replies, automated messages, custom start page, chatbot support, and more.
+
+For the moment, all Telegram Business features are available for free to Telegram Premium subscribers.
+
+#### Telegram Stars
+
+Telegram Stars are virtual items that allow users to purchase digital goods and services from bots and mini apps inside the Telegram ecosystem, send gifts to content creators on the Telegram platform, and more.
+
+#### Subscriptions
+
+Bots and channels may create subscriptions, periodically charging users a certain amount of Telegram Stars in exchange for content and services.
+
+#### Gifts
+
+Users can send Gifts to their friends. The recipients of gifts can display them on their profile pages or turn them into Telegram Stars ». Telegram Stars can be used for many things, including supporting creators and buying services in mini apps.
+
+#### Paid media
+
+Content creators can accept Stars by publishing paid photos or videos on their channels.  Subscribers will be allowed to view such posts only after paying the author to unlock them.
+
+#### Paid messages
+
+Telegram Stars can be used to pay for sending messages to users, supergroups and channels that have configured Star Messages », requiring a payment for every message sent to them.
+
+#### Suggested posts
+
+Telegram offers a powerful monetization feature to channel administrators: suggested posts.
+
+#### Channel and supergroup boosts
 
 Telegram Premium users can grant their favorite channels additional features like the ability to post stories by giving them boosts.
 
@@ -347,6 +425,28 @@ Sometimes, when interacting with Telegram users via private or secret chats, an 
 
 The Saved Messages chat allows users to bookmark messages and media: it's a personal cloud storage for any messages or media you may want to send or forward there.
 
+#### Profile
+
+Telegram offers many customization options for your profile!
+
+#### Themes
+
+Telegram apps support generating, sharing and synchronizing app themes.
+
+### Sponsored messages
+
+If your app allows accessing content from Telegram channels, you must include support for official sponsored messages in Telegram channels.
+
+### Channel and bot ad revenue
+
+Telegram has one of the most generous reward systems in the history of social media. Telegram channel and bot owners can now receive 50% of the revenue from ads displayed in their channels and bots.
+
+This page describes the methods used to withdraw channel and bot ad revenue, as well as view detailed revenue stats.
+
+### Fact-checks
+
+Telegram clients support displaying fact-checks added to messages by independent fact-checkers.
+
 ### Contacts
 
 Working with contacts in the API.
@@ -359,9 +459,17 @@ Working with the blocklist.
 
 How to work with geolocation-based features like geochats and the nearby users feature.
 
+### Age verification
+
+Some legislations require age verification to view restricted content: Telegram implements this through the Main Mini App of a special bot.
+
 #### Web events
 
 When interacting with HTML5 games and the websites of payment gateways, Telegram apps should expose the following JS APIs.
+
+#### Deep links
+
+Telegram clients must handle special tg:// and t.me deep links encountered in messages, link entities and in other apps by registering OS handlers.
 
 #### Takeout
 

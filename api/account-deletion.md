@@ -2,14 +2,22 @@
 
 A user can delete their Telegram account using account.deleteAccount.
 
+```
+---functions---
+account.deleteAccount#a2c0cf74 flags:# reason:string password:flags.0?InputCheckPasswordSRP = Bool;
+
+account.confirmPhone#5f2178c3 phone_code_hash:string phone_code:string = Bool;
+account.sendConfirmPhoneCode#1b3faa88 hash:string settings:CodeSettings = auth.SentCode;
+```
+
 If the account doesn't have a 2FA password, calling this method  will immediately delete the Telegram account.
 If the account has a 2FA password and it is provided to account.deleteAccount:password, calling this method will immediately delete the Telegram account.
 
-If the account has a 2FA password but the user doesn't remember it, password reset may be requested first », or otherwise, the password field may simply be left empty.
+If the account has a 2FA password but the user doesn't remember it, password reset may be requested first », or otherwise, the password field may simply be left empty.
 
 In this case, if the account's 2FA password was modified more than 7 days ago and was active in the last 7 days, account deletion will be delayed for 7 days.
 Otherwise, the account will be immediately deleted.
-In the first case, a service message will be sent to the user, containing a phone number confirmation link ».
+In the first case, a service message will be sent to the user, containing a phone number confirmation link ».
 
 When such a link is clicked, account.sendConfirmPhoneCode must be called with the specified hash, using the account with the specified phone number.
 This will send a phone number verification code to the phone number associated with the account.

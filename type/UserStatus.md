@@ -5,9 +5,9 @@ User online status
 userStatusEmpty#9d05049 = UserStatus;
 userStatusOnline#edb93949 expires:int = UserStatus;
 userStatusOffline#8c703f was_online:int = UserStatus;
-userStatusRecently#e26f42f1 = UserStatus;
-userStatusLastWeek#7bf09fc = UserStatus;
-userStatusLastMonth#77ebc742 = UserStatus;
+userStatusRecently#7b197dc8 flags:# by_me:flags.0?true = UserStatus;
+userStatusLastWeek#541a1d1a flags:# by_me:flags.0?true = UserStatus;
+userStatusLastMonth#65899777 flags:# by_me:flags.0?true = UserStatus;
 ```
 
 ## Constructors

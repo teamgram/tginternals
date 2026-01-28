@@ -21,4 +21,5 @@ Bool
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | USER_BOT_REQUIRED | This method can only be called by a bot. |
 

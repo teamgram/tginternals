@@ -6,7 +6,7 @@ channels.sendAsPeers#f496b0c6 peers:Vector<SendAsPeer> chats:Vector<Chat> users:
 
 ---functions---
 
-channels.getSendAs#dc770ee peer:InputPeer = channels.SendAsPeers;
+channels.getSendAs#e785a43f flags:# for_paid_reactions:flags.0?true peer:InputPeer = channels.SendAsPeers;
 ```
 
 ## Constructors

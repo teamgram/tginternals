@@ -2,13 +2,13 @@
 Reply to a story.
 
 ```
-inputReplyToStory#15b0f283 user_id:InputUser story_id:int = InputReplyTo;
+inputReplyToStory#5881323a peer:InputPeer story_id:int = InputReplyTo;
 ```
 
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| user_id | InputUser | ID of the user that posted the story. |
+| peer | InputPeer | Sender of the story |
 | story_id | int | ID of the story to reply to. |
 
 

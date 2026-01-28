@@ -11,7 +11,7 @@ messages.setDefaultHistoryTTL#9eb51445 period:int = Bool;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| period | int | The new default Time-To-Live of all messages sent in new chats. |
+| period | int | The new default Time-To-Live of all messages sent in new chats, in seconds. |
 
 
 ## Result

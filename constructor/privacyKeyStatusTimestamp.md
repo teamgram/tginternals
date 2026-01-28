@@ -1,5 +1,5 @@
 # privacyKeyStatusTimestamp
-Whether we can see the last online timestamp of this user
+Whether we can see the last online timestamp of this user.
 
 ```
 privacyKeyStatusTimestamp#bc2eab30 = PrivacyKey;
@@ -11,6 +11,6 @@ privacyKeyStatusTimestamp#bc2eab30 = PrivacyKey;
 
 
 ## Type
-This constructor does not require any parameters.
+
 
 ## Related pages

@@ -31,6 +31,10 @@ If the verification takes too long (which is the case for older mobile devices),
 
 Another way to optimize this is to embed into the client application code a small table with some known "good" couples (g,p) (or just known safe primes p, since the condition on g is easily verified during execution), checked during code generation phase, so as to avoid doing such verification during runtime altogether. The server rarely changes these values, thus one usually needs to put the current value of server's dh_prime into such a table. For example, the current value of dh_prime equals (in big-endian byte order)
 
+```
+C7 1C AE B9 C6 B1 C9 04 8E 6C 52 2F 70 F1 3F 73 98 0D 40 23 8E 3E 21 C1 49 34 D0 37 56 3D 93 0F 48 19 8A 0A A7 C1 40 58 22 94 93 D2 25 30 F4 DB FA 33 6F 6E 0A C9 25 13 95 43 AE D4 4C CE 7C 37 20 FD 51 F6 94 58 70 5A C6 8C D4 FE 6B 6B 13 AB DC 97 46 51 29 69 32 84 54 F1 8F AF 8C 59 5F 64 24 77 FE 96 BB 2A 94 1D 5B CD 1D 4A C8 CC 49 88 07 08 FA 9B 37 8E 3C 4F 3A 90 60 BE E6 7C F9 A4 A4 A6 95 81 10 51 90 7E 16 27 53 B5 6B 0F 6B 41 0D BA 74 D8 A8 4B 2A 14 B3 14 4E 0E F1 28 47 54 FD 17 ED 95 0D 59 65 B4 B9 DD 46 58 2D B1 17 8D 16 9C 6B C4 65 B0 D6 FF 9C A3 92 8F EF 5B 9A E4 E4 18 FC 15 E8 3E BE A0 F8 7F A9 FF 5E ED 70 05 0D ED 28 49 F4 7B F9 59 D9 56 85 0C E9 29 85 1F 0D 81 15 F6 35 B1 05 EE 2E 4E 15 D0 4B 24 54 BF 6F 4F AD F0 34 B1 04 03 11 9C D8 E3 B9 2F CC 5B
+```
+
 #### g_a and g_b validation
 
 Apart from the conditions on the Diffie-Hellman prime dh_prime and generator g, both sides are to check that g, g_a and g_b are greater than 1 and less than dh_prime - 1. We recommend checking that g_a and g_b are between 2^{2048-64} and dh_prime - 2^{2048-64} as well.
@@ -38,6 +42,10 @@ Apart from the conditions on the Diffie-Hellman prime dh_prime and generator g, 
 #### Checking SHA1 hash values
 
 Once the client receives a server_DH_params_ok answer in step 5) of the Authorization Key generation protocol and decrypts it obtaining answer_with_hash, it MUST check that
+
+```
+answer_with_hash := SHA1(answer) + answer + (0-15 random bytes)
+```
 
 In other words, the first 20 bytes of answer_with_hash must be equal to SHA1 of the remainder of the decrypted message without the padding random bytes.
 

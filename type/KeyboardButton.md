@@ -18,6 +18,8 @@ keyboardButtonUserProfile#308660c1 text:string user_id:long = KeyboardButton;
 keyboardButtonWebView#13767230 text:string url:string = KeyboardButton;
 keyboardButtonSimpleWebView#a0c0505c text:string url:string = KeyboardButton;
 keyboardButtonRequestPeer#53d7bfd8 text:string button_id:int peer_type:RequestPeerType max_quantity:int = KeyboardButton;
+inputKeyboardButtonRequestPeer#c9662d05 flags:# name_requested:flags.0?true username_requested:flags.1?true photo_requested:flags.2?true text:string button_id:int peer_type:RequestPeerType max_quantity:int = KeyboardButton;
+keyboardButtonCopy#75d2698e text:string copy_text:string = KeyboardButton;
 ```
 
 ## Constructors
@@ -39,6 +41,8 @@ keyboardButtonRequestPeer#53d7bfd8 text:string button_id:int peer_type:RequestPe
 | keyboardButtonWebView | Button to open a bot mini app using messages.requestWebView, sending over user information after user confirmation.Can only be sent or received as part of an inline keyboard, use keyboardButtonSimpleWebView for reply keyboards. |
 | keyboardButtonSimpleWebView | Button to open a bot mini app using messages.requestSimpleWebView, without sending user information to the web app.Can only be sent or received as part of a reply keyboard, use keyboardButtonWebView for inline keyboards. |
 | keyboardButtonRequestPeer | Prompts the user to select and share one or more peers with the bot using messages.sendBotRequestedPeer |
+| inputKeyboardButtonRequestPeer | Prompts the user to select and share one or more peers with the bot using messages.sendBotRequestedPeer. |
+| keyboardButtonCopy | Clipboard button: when clicked, the attached text must be copied to the clipboard. |
 
 
 ## Methods

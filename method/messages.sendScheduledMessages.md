@@ -28,4 +28,5 @@ Updates
 | ---- | :----: | ----------- |
 | 400 | MESSAGE_ID_INVALID | The provided message id is invalid. |
 | 400 | PEER_ID_INVALID | The provided peer id is invalid. |
+| 500 | RANDOM_ID_DUPLICATE | You provided a random ID that was already used. |
 

@@ -2,7 +2,7 @@
 Represents a story.
 
 ```
-storyItem#af6365a1 flags:# pinned:flags.5?true public:flags.7?true close_friends:flags.8?true min:flags.9?true noforwards:flags.10?true edited:flags.11?true contacts:flags.12?true selected_contacts:flags.13?true out:flags.16?true id:int date:int fwd_from:flags.17?StoryFwdHeader expire_date:int caption:flags.0?string entities:flags.1?Vector<MessageEntity> media:MessageMedia media_areas:flags.14?Vector<MediaArea> privacy:flags.2?Vector<PrivacyRule> views:flags.3?StoryViews sent_reaction:flags.15?Reaction = StoryItem;
+storyItem#edf164f1 flags:# pinned:flags.5?true public:flags.7?true close_friends:flags.8?true min:flags.9?true noforwards:flags.10?true edited:flags.11?true contacts:flags.12?true selected_contacts:flags.13?true out:flags.16?true id:int date:int from_id:flags.18?Peer fwd_from:flags.17?StoryFwdHeader expire_date:int caption:flags.0?string entities:flags.1?Vector<MessageEntity> media:MessageMedia media_areas:flags.14?Vector<MediaArea> privacy:flags.2?Vector<PrivacyRule> views:flags.3?StoryViews sent_reaction:flags.15?Reaction albums:flags.19?Vector<int> = StoryItem;
 ```
 
 ## Parameters
@@ -20,6 +20,7 @@ storyItem#af6365a1 flags:# pinned:flags.5?true public:flags.7?true close_friends
 | out | flags.16?true | indicates whether we sent this story. |
 | id | int | ID of the story. |
 | date | int | When was the story posted. |
+| from_id | flags.18?Peer | Sender of the story. |
 | fwd_from | flags.17?StoryFwdHeader | For reposted stories », contains info about the original story. |
 | expire_date | int | When does the story expire. |
 | caption | flags.0?string | Story caption. |
@@ -29,6 +30,7 @@ storyItem#af6365a1 flags:# pinned:flags.5?true public:flags.7?true close_friends
 | privacy | flags.2?Vector<PrivacyRule> | Privacy rules indicating who can and can't view this story |
 | views | flags.3?StoryViews | View date and reaction information |
 | sent_reaction | flags.15?Reaction | The reaction we sent. |
+| albums | flags.19?Vector<int> | Albums this story is part of. |
 
 
 ## Type

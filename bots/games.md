@@ -36,11 +36,19 @@ You can also create an additional Share button inside your HTML page. Pressing t
 
 To add the sharing button, include this script at the end of the <body> tag on your page:
 
+```
+<script src="https://telegram.org/js/games.js"></script>
+```
+
 Then use the method TelegramGameProxy.shareScore() to call the sharing option.
 
 > Warning: Do not call this method without consent and direct action from the user.
 
 Example:
+
+```
+<button onclick="TelegramGameProxy.shareScore()">Share score</button>
+```
 
 This library will only work when launched from inside Telegram, so please don't use it on ordinary web pages.
 

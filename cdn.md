@@ -66,6 +66,34 @@ Before saving each portion of the data received from the CDN DC into the file, t
 
 ### Schema
 
+```
+fileHash#f39b035c offset:long limit:int hash:bytes = FileHash;
+
+upload.fileCdnRedirect#f18cda44 dc_id:int file_token:bytes encryption_key:bytes encryption_iv:bytes file_hashes:Vector<FileHash> = upload.File;
+
+upload.cdnFileReuploadNeeded#eea8e46e request_token:bytes = upload.CdnFile;
+upload.cdnFile#a99fca4f bytes:bytes = upload.CdnFile;
+
+
+dcOption#18b7a10d flags:# ipv6:flags.0?true media_only:flags.1?true tcpo_only:flags.2?true cdn:flags.3?true static:flags.4?true this_port_only:flags.5?true id:int ip_address:string port:int secret:flags.10?bytes = DcOption;
+
+cdnPublicKey#c982eaba dc_id:int public_key:string = CdnPublicKey;
+
+
+cdnConfig#5725e40a public_keys:Vector<CdnPublicKey> = CdnConfig;
+
+---functions---
+
+// CDN DC
+upload.getCdnFile#395f69da file_token:bytes offset:long limit:int = upload.CdnFile;
+
+// Master DC
+upload.reuploadCdnFile#9b2754a8 file_token:bytes request_token:bytes = Vector<FileHash>;
+upload.getCdnFileHashes#91dc3f31 file_token:bytes offset:long = Vector<FileHash>;
+
+help.getCdnConfig#52029342 = CdnConfig;
+```
+
 ### Restrictions on upload.getFile and upload.getCdnFile parameters
 
 - offset must be divisible by 4096 bytes

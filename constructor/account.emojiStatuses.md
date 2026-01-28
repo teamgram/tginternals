@@ -8,7 +8,7 @@ account.emojiStatuses#90c467d1 hash:long statuses:Vector<EmojiStatus> = account.
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here |
 | statuses | Vector<EmojiStatus> | Emoji statuses |
 
 

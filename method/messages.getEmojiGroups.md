@@ -1,5 +1,5 @@
 # messages.getEmojiGroups
-Represents a list of emoji categories, to be used when selecting custom emojis.
+Represents a list of emoji categories.
 
 ```
 messages.emojiGroupsNotModified#6fb4ad87 = messages.EmojiGroups;
@@ -11,7 +11,7 @@ messages.getEmojiGroups#7488ce5b hash:int = messages.EmojiGroups;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | int | Hash for pagination, for more info click here |
+| hash | int | Hash used for caching, for more info click here. |
 
 
 ## Result

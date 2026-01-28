@@ -8,7 +8,7 @@ help.passportConfig#a098d6af hash:int countries_langs:DataJSON = help.PassportCo
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | int | Hash for pagination, for more info click here |
+| hash | int | Hash used for caching, for more info click here |
 | countries_langs | DataJSON | Localization |
 
 

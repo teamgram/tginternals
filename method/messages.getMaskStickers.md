@@ -11,7 +11,7 @@ messages.getMaskStickers#640f82b8 hash:long = messages.AllStickers;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

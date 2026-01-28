@@ -13,7 +13,7 @@ A string literal in the form of /[A-Z_0-9]+/, which summarizes the problem. For 
 
 #### Error Database
 
-A full human-readable JSON list of RPC errors that can be returned by all methods in the API can be found here », what follows is a description of its fields:
+A full human-readable JSON list of RPC errors that can be returned by all methods in the API can be found here », what follows is a description of its fields:
 
 - errors - All error messages and codes for each method (object).
 
@@ -23,7 +23,7 @@ A full human-readable JSON list of RPC errors that can be returned by all method
 
 - Keys: Error messages (string)
 
-- Values: An array of methods which may emit this error (array of strings)
+- Values: An array of methods which may emit this error (array of strings, may be empty for errors that can be emitted by any method)
 
 - descriptions - Descriptions for every error mentioned in errors (and a few other errors not related to a specific method)
 
@@ -31,13 +31,53 @@ A full human-readable JSON list of RPC errors that can be returned by all method
 
 - Values: Error descriptions
 
-- user_only - A list of methods that can only be used by users, not bots.
+- user_only - The full list of methods that can only be used by users, not bots.
 
-- bot_only - A list of methods that can only be used by bots, not users.
+- bot_only - The full list of methods that can only be used by bots, not users.
+
+- business_supported - The full list of methods that can be used by bots over a business connection with invokeWithBusinessConnection.
+
+- unauthed_allowed - The full list of methods that can be used by not yet logged in connections.
 
 Error messages and error descriptions may contain printf placeholders in key positions, for now only %d is used to map durations contained in error messages to error descriptions.
 
 Example:
+
+```
+{
+    "errors": {
+        "420": {
+            "2FA_CONFIRM_WAIT_%d": [
+                "account.deleteAccount"
+            ],
+            "SLOWMODE_WAIT_%d": [
+                "messages.forwardMessages",
+                "messages.sendInlineBotResult",
+                "messages.sendMedia",
+                "messages.sendMessage",
+                "messages.sendMultiMedia"
+            ]
+        }
+    },
+    "descriptions": {
+        "2FA_CONFIRM_WAIT_%d": "Since this account is active and protected by a 2FA password, we will delete it in 1 week for security purposes. You can cancel this process at any time, you'll be able to reset your account in %d seconds.",
+        "SLOWMODE_WAIT_%d": "Slowmode is enabled in this chat: wait %d seconds before sending another message to this chat.",
+        "FLOOD_WAIT_%d": "Please wait %d seconds before repeating the action."
+    },
+    "user_only": [
+        "account.deleteAccount"
+    ],
+    "bot_only": [
+        "messages.setInlineBotResults"
+    ],
+    "business_supported": [
+        "messages.sendMessage"
+    ],
+    "unauthed_allowed": [
+        "auth.sendCode"
+    ]
+}
+```
 
 ---
 
@@ -153,6 +193,8 @@ The maximum allowed number of attempts to invoke the given method with the given
 #### Error Example:
 
 - FLOOD_WAIT_X: A wait of X seconds is required (where X is a number)
+
+- FLOOD_PREMIUM_WAIT_X: A wait of X seconds is required (where X is a number); the user may also purchase a Telegram Premium subscription to remove this limitation. See here » for more info on how to handle this error.
 
 ### 500 INTERNAL
 

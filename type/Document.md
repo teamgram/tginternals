@@ -23,8 +23,8 @@ account.uploadRingtone#831a83a2 file:InputFile file_name:string mime_type:string
 ## Methods
 | Method | Description |
 | ---- | ----------- |
-| messages.getDocumentByHash | Get a document by its SHA256 hash, mainly used for gifs |
 | account.uploadTheme | Upload theme |
 | account.uploadRingtone | Upload notification sound, use account.saveRingtone to convert it and add it to the list of saved notification sounds. |
+| messages.getDocumentByHash | Get a document by its SHA256 hash, mainly used for gifs |
 
 

@@ -10,7 +10,9 @@ auth.sentCodeTypeMissedCall#82006484 prefix:string length:int = auth.SentCodeTyp
 auth.sentCodeTypeEmailCode#f450f59b flags:# apple_signin_allowed:flags.0?true google_signin_allowed:flags.1?true email_pattern:string length:int reset_available_period:flags.3?int reset_pending_date:flags.4?int = auth.SentCodeType;
 auth.sentCodeTypeSetUpEmailRequired#a5491dea flags:# apple_signin_allowed:flags.0?true google_signin_allowed:flags.1?true = auth.SentCodeType;
 auth.sentCodeTypeFragmentSms#d9565c39 url:string length:int = auth.SentCodeType;
-auth.sentCodeTypeFirebaseSms#e57b1432 flags:# nonce:flags.0?bytes receipt:flags.1?string push_timeout:flags.1?int length:int = auth.SentCodeType;
+auth.sentCodeTypeFirebaseSms#9fd736 flags:# nonce:flags.0?bytes play_integrity_project_id:flags.2?long play_integrity_nonce:flags.2?bytes receipt:flags.1?string push_timeout:flags.1?int length:int = auth.SentCodeType;
+auth.sentCodeTypeSmsWord#a416ac81 flags:# beginning:flags.0?string = auth.SentCodeType;
+auth.sentCodeTypeSmsPhrase#b37794af flags:# beginning:flags.0?string = auth.SentCodeType;
 ```
 
 ## Constructors
@@ -25,6 +27,8 @@ auth.sentCodeTypeFirebaseSms#e57b1432 flags:# nonce:flags.0?bytes receipt:flags.
 | auth.sentCodeTypeSetUpEmailRequired | The user should add and verify an email address in order to login as described here ». |
 | auth.sentCodeTypeFragmentSms | The code was delivered via fragment.com. |
 | auth.sentCodeTypeFirebaseSms | An authentication code should be delivered via SMS after Firebase attestation, as described in the auth documentation ». |
+| auth.sentCodeTypeSmsWord | The code was sent via SMS as a secret word, starting with the letter specified in beginning |
+| auth.sentCodeTypeSmsPhrase | The code was sent via SMS as a secret phrase starting with the word specified in beginning |
 
 
 ## Methods

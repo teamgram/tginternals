@@ -64,6 +64,21 @@ As mentioned above, payloads can also be encrypted using P-256 Elliptic Curve Di
 
 An (optionally encrypted) notification is provided as a JSON object in the following format:
 
+```
+{
+  "data": {
+    "loc_key": "CHAT_MESSAGE_CONTACT",
+    "loc_args": ["John Doe", "My magical group", "Contact Exchange"],
+    "user_id": 14124122,
+    "custom": {
+      "chat_id": 241233,
+      "msg_id": 123
+    },
+    "sound": "sound1.mp3",
+  }
+}
+```
+
 Each notification has several parameters that describe it.
 
 - loc_key - Notification type: a string literal in the form /[A-Z_0-9]+/, which summarizes the notification. For example, CHAT_MESSAGE_TEXT.
@@ -105,6 +120,8 @@ Each notification has several parameters that describe it.
 - silent - Whether the message was posted silently (no sound should be played for this notification)
 
 - schedule - Whether the message is outgoing and was sent via scheduled messages
+
+- report_delivery_until_date - If set and the current unixtime is bigger than the specified unixtime, invoke messages.reportMessagesDelivery, setting the push flag and passing the ID and the peer of this message as soon as it is received by the client (optionally batching requests for the same peer), used for Telegram Gateway verification messages.
 
 - edit_date - When was the message last edited
 

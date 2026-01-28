@@ -2,7 +2,7 @@
 Invoice
 
 ```
-invoice#5db95a15 flags:# test:flags.0?true name_requested:flags.1?true phone_requested:flags.2?true email_requested:flags.3?true shipping_address_requested:flags.4?true flexible:flags.5?true phone_to_provider:flags.6?true email_to_provider:flags.7?true recurring:flags.9?true currency:string prices:Vector<LabeledPrice> max_tip_amount:flags.8?long suggested_tip_amounts:flags.8?Vector<long> terms_url:flags.10?string = Invoice;
+invoice#49ee584 flags:# test:flags.0?true name_requested:flags.1?true phone_requested:flags.2?true email_requested:flags.3?true shipping_address_requested:flags.4?true flexible:flags.5?true phone_to_provider:flags.6?true email_to_provider:flags.7?true recurring:flags.9?true currency:string prices:Vector<LabeledPrice> max_tip_amount:flags.8?long suggested_tip_amounts:flags.8?Vector<long> terms_url:flags.10?string subscription_period:flags.11?int = Invoice;
 ```
 
 ## Parameters
@@ -18,11 +18,12 @@ invoice#5db95a15 flags:# test:flags.0?true name_requested:flags.1?true phone_req
 | phone_to_provider | flags.6?true | Set this flag if user's phone number should be sent to provider |
 | email_to_provider | flags.7?true | Set this flag if user's email address should be sent to provider |
 | recurring | flags.9?true | Whether this is a recurring payment |
-| currency | string | Three-letter ISO 4217 currency code |
+| currency | string | Three-letter ISO 4217 currency code, or XTR for Telegram Stars. |
 | prices | Vector<LabeledPrice> | Price breakdown, a list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.) |
 | max_tip_amount | flags.8?long | The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). |
 | suggested_tip_amounts | flags.8?Vector<long> | A vector of suggested amounts of tips in the smallest units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed max_tip_amount. |
 | terms_url | flags.10?string | Terms of service URL |
+| subscription_period | flags.11?int | The number of seconds between consecutive Telegram Star debiting for bot subscription invoices |
 
 
 ## Type

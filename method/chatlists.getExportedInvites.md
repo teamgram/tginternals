@@ -19,4 +19,5 @@ chatlists.ExportedInvites
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | FILTER_ID_INVALID | The specified filter ID is invalid. |
 

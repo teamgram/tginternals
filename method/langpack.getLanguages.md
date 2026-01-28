@@ -9,7 +9,7 @@ langpack.getLanguages#42c6978f lang_pack:string = Vector<LangPackLanguage>;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| lang_pack | string | Language pack |
+| lang_pack | string | Platform identifier (i.e. android, tdesktop, etc). |
 
 
 ## Result

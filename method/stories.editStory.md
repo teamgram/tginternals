@@ -27,7 +27,7 @@ stories.editStory#b583ba46 flags:# peer:InputPeer id:int media:flags.0?InputMedi
 
 
 ## Result
-Updates
+
 
 ## Possible errors
 | Code | Type | Description |

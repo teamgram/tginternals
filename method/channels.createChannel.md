@@ -41,5 +41,5 @@ Updates
 | 500 | CHAT_INVALID | Invalid chat. |
 | 400 | CHAT_TITLE_EMPTY | No chat title provided. |
 | 400 | TTL_PERIOD_INVALID | The specified TTL period is invalid. |
-| 406 | USER_RESTRICTED | You're spamreported, you can't create channels or chats. |
+| 403 | USER_RESTRICTED | You're spamreported, you can't create channels or chats. |
 

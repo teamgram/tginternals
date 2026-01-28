@@ -18,6 +18,7 @@ decryptedMessageMediaDocument#6abd9782 thumb:bytes thumb_w:int thumb_h:int mime_
 | thumb | bytes | Thumbnail-file contents (JPEG-file, quality 55, set in a 90x90 square) |
 | thumb_w | int | Thumbnail width |
 | thumb_h | int | Thumbnail height |
+| file_name | string | File name, moved to attributes in Layer 45. |
 | mime_type | string | File MIME-type |
 | size | long | Document size (int on layer <143, long on layer >=143) |
 | key | bytes | Key to decrypt the attached document file |

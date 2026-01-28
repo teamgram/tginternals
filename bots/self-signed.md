@@ -38,6 +38,20 @@ On the commandline:certreq -new TEMPLATE.txt RequestFileOut
 
 TEMPLATE.txt example file:
 
+```
+[NewRequest]
+
+; At least one value must be set in this section
+Subject = "CN=DOMAIN.EXAMPLE"
+KeyLength = 2048
+KeyAlgorithm = RSA
+HashAlgorithm = sha256
+;MachineKeySet = true
+RequestType = Cert
+UseExistingKeySet=false ;generates a new private key (for export)
+Exportable = true ;makes the private key exportable with the PFX
+```
+
 A self-signed certificate will be generated and installed, to view the certificate:certutil -store -user my
 
 To export in DER format (intermediate step for conversion to PEM)certutil -user -store -split my SERIALNUMBER YOURDER.crt

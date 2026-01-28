@@ -46,6 +46,11 @@ Both parties A (the Caller) and B (the Callee) transform the voice information i
 
 The low-level data chunk raw_data:string, obtained from voice encoder, is first encapsulated into one of the two constructors for the DecryptedDataBlock type, similar to DecryptedMessage used in secret chats:
 
+```
+decryptedDataBlock#dbf948c1 random_id:long random_bytes:string flags:# voice_call_id:flags.2?int128 in_seq_no:flags.4?int out_seq_no:flags.4?int recent_received_mask:flags.5?int proto:flags.3?int extra:flags.1?string raw_data:flags.0?string = DecryptedDataBlock;
+simpleDataBlock#cc0d0e76 random_id:long random_bytes:string raw_data:string = DecryptedDataBlock;
+```
+
 Here out_seq_no is the chunk's sequence number among all sent by this party (starting from one), in_seq_no -- the highest known out_seq_no from the received packets. The parameter recent_received_mask is a 32-bit mask, used to track delivery of the last 32 packets sent by the other party. The bit i is set if a packet with out_seq_no equal to in_seq_no-i has been received.
 
 The higher 8 bits in flags are reserved for use by the lower-level protocol (the one which generates and interprets raw_data), and will never be used for future extensions of decryptedDataBlock.

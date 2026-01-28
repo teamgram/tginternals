@@ -9,6 +9,7 @@ decryptedMessageLayer#1be31789 random_bytes:bytes layer:int in_seq_no:int out_se
 ## Constructors
 | Constructor | Description |
 | ---- | ----------- |
+| decryptedMessageLayer | Sets the layer number for the contents of an encrypted message. |
 
 
 ## Methods

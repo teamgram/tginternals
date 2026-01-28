@@ -8,7 +8,7 @@ account.wallPapers#cdc3858c hash:long wallpapers:Vector<WallPaper> = account.Wal
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here |
 | wallpapers | Vector<WallPaper> | Wallpapers |
 
 

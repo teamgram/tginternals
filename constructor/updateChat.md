@@ -1,5 +1,5 @@
 # updateChat
-A new chat is available
+Chat (chat and/or chatFull) information was updated.
 
 ```
 updateChat#f89a6a4e chat_id:long = Update;
@@ -12,6 +12,6 @@ updateChat#f89a6a4e chat_id:long = Update;
 
 
 ## Type
-Update
+
 
 ## Related pages

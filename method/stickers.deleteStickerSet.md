@@ -1,5 +1,5 @@
 # stickers.deleteStickerSet
-Deletes a stickerset we created, bots only.
+Deletes a stickerset we created.
 
 ```
 boolFalse#bc799737 = Bool;
@@ -20,6 +20,5 @@ Bool
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
-| 400 | BOT_MISSING | Only bots can call this method, please use @stickers if you're a user. |
 | 400 | STICKERSET_INVALID | The provided sticker set is invalid. |
 

@@ -14,7 +14,7 @@ invokeAfterMsg#cb9f372d {X:Type} msg_id:long query:!X = X;
 
 
 ## Result
-The type returned by the invoked method.
+Returns the type returned by the invoked method.
 
 ## Possible errors
 | Code | Type | Description |

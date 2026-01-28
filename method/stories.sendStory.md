@@ -10,7 +10,7 @@ updatesCombined#725b04c3 updates:Vector<Update> users:Vector<User> chats:Vector<
 updates#74ae4240 updates:Vector<Update> users:Vector<User> chats:Vector<Chat> date:int seq:int = Updates;
 updateShortSentMessage#9015e101 flags:# out:flags.1?true id:int pts:int pts_count:int date:int media:flags.9?MessageMedia entities:flags.7?Vector<MessageEntity> ttl_period:flags.25?int = Updates;
 ---functions---
-stories.sendStory#e4e6694b flags:# pinned:flags.2?true noforwards:flags.4?true fwd_modified:flags.7?true peer:InputPeer media:InputMedia media_areas:flags.5?Vector<MediaArea> caption:flags.0?string entities:flags.1?Vector<MessageEntity> privacy_rules:Vector<InputPrivacyRule> random_id:long period:flags.3?int fwd_from_id:flags.6?InputPeer fwd_from_story:flags.6?int = Updates;
+stories.sendStory#737fc2ec flags:# pinned:flags.2?true noforwards:flags.4?true fwd_modified:flags.7?true peer:InputPeer media:InputMedia media_areas:flags.5?Vector<MediaArea> caption:flags.0?string entities:flags.1?Vector<MessageEntity> privacy_rules:Vector<InputPrivacyRule> random_id:long period:flags.3?int fwd_from_id:flags.6?InputPeer fwd_from_story:flags.6?int albums:flags.8?Vector<int> = Updates;
 ```
 
 ## Parameters
@@ -30,14 +30,19 @@ stories.sendStory#e4e6694b flags:# pinned:flags.2?true noforwards:flags.4?true f
 | period | flags.3?int | Period after which the story is moved to archive (and to the profile if pinned is set), in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400 for Telegram Premium users, and 86400 otherwise. |
 | fwd_from_id | flags.6?InputPeer | If set, indicates that this story is a repost of story with ID fwd_from_story posted by the peer in fwd_from_id. |
 | fwd_from_story | flags.6?int | If set, indicates that this story is a repost of story with ID fwd_from_story posted by the peer in fwd_from_id. |
+| albums | flags.8?Vector<int> | If set, adds the story to the specified albums. |
 
 
 ## Result
-Updates
+
 
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | BOOSTS_REQUIRED | The specified channel must first be boosted by its users in order to perform this action. |
+| 403 | BOT_ACCESS_FORBIDDEN | The specified method can be used over a business connection for some operations, but the specified query attempted an operation that is not allowed over a business connection. |
+| 400 | CHANNEL_INVALID | The provided channel is invalid. |
+| 400 | CHAT_ADMIN_REQUIRED | You must be an admin in this chat to do this. |
 | 400 | IMAGE_PROCESS_FAILED | Failure while processing image. |
 | 400 | MEDIA_EMPTY | The provided media object is invalid. |
 | 400 | MEDIA_FILE_INVALID | The specified media file is invalid. |

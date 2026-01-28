@@ -20,6 +20,10 @@ A bot, on the other hand, is essentially a routine, software or script that quer
 
 Since your browser is capable of sending HTTPS requests, you can use it to quickly try out the API. After obtaining your token, try pasting this string into your browser:
 
+```
+https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getMe
+```
+
 In theory, you could interact with the API with basic requests like this, either via your browser or other tailor-made tools like cURL. While this can work for simple requests like the example above, it's not practical for larger applications and doesn't scale well.For that reason, this guide will show you how to use libraries and frameworks, along with some basic programming skills, to build a more robust and scalable project.
 
 If you know how to code, you'll fly right through each step in no time – and if you're just starting out, this guide will show you everything you need to learn.
@@ -39,6 +43,10 @@ In this context, a token is a string that authenticates your bot (not your accou
 Obtaining a token is as simple as contacting @BotFather, issuing the /newbot command and following the steps until you're given a new token. You can find a step-by-step guide here.
 
 Your token will look something like this:
+
+```
+4839574812:AAFD39kkdpWt3ywyRZergyOLMaJhac60qc
+```
 
 > Make sure to save your token in a secure place, treat it like a password and don't share it with anyone.
 
@@ -82,6 +90,17 @@ Fill in the fields accordingly:
 
 After hitting Create, if you did everything correctly, your Project view in the top left should show a project structure along these lines:
 
+```
+BotTutorial
+├─ .idea
+├─ src
+│  └─ main
+│     └─ java
+│        └─ tutorial
+│           └─ Main
+└─ pom.xml
+```
+
 > Other IDEs will follow a similar pattern. Your dependency management system will have a different name (or no name at all if it's built-in) depending on the language you chose.
 
 If this looks scary, don't worry. We will only be using the Main file and the pom.xml file.In fact, to check that everything is working so far, double click on Main and click on the small green arrow on the left of public class Main, then select the first option.If you followed the steps correctly, Hello world! should appear in the console below.
@@ -91,6 +110,16 @@ If this looks scary, don't worry. We will only be using the Main file and the po
 We will now instruct the IDE to download and configure everything needed to work with the API.This is very easy and happens automatically behind the scenes.
 
 First, locate your pom.xml file on the left side of the screen.Open it by double-clicking and simply add:
+
+```
+<dependencies>
+    <dependency>
+        <groupId>org.telegram</groupId>
+        <artifactId>telegrambots</artifactId>
+        <version>6.0.1</version>
+    </dependency>
+</dependencies>
+```
 
 right after the </properties> tag.
 
@@ -112,6 +141,29 @@ To fix this, hover over the red line, click on implement methods, then hit OK.De
 
 You should end up with this – if something went wrong, feel free to copy it from here and paste it in your class:
 
+```
+package tutorial;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.objects.Update;
+
+public class Bot extends TelegramLongPollingBot {
+
+  @Override
+  public String getBotUsername() {
+      return null;
+  }
+
+  @Override
+  public String getBotToken() {
+      return null;
+  }
+
+  @Override
+  public void onUpdateReceived(Update update) {}
+
+}
+```
+
 > If you get a red line under TelegramLongPollingBot, it means you didn't set up your pom.xml correctly. If this is the case, restart from here.
 
 #### Available Methods
@@ -126,6 +178,23 @@ Let's look into these 3 methods one by one.
 
 After you've replaced all the strings, you should end up with this:
 
+```
+@Override
+public String getBotUsername() {
+    return "TutorialBot";
+}
+
+@Override
+public String getBotToken() {
+    return "4839574812:AAFD39kkdpWt3ywyRZergyOLMaJhac60qc";
+}
+
+@Override
+public void onUpdateReceived(Update update) {
+    System.out.println(update);
+}
+```
+
 At this point, the bot is configured and ready to go – time to register it on the API and start processing updates.
 
 > In the future, you should consider storing your token in a dedicated settings file or in environment variables. Keeping it in the code is fine for the scope of this tutorial, however, it's not very versatile and is generally considered bad practice.
@@ -133,6 +202,13 @@ At this point, the bot is configured and ready to go – time to register it on 
 #### Registering the Bot
 
 To register the bot on the API, simply add a couple of lines in the main method that will launch the application. If you named your class Bot, this is what your main method should look like:
+
+```
+public static void main(String[] args) throws TelegramApiException {
+  TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+  botsApi.registerBot(new Bot());
+}
+```
 
 > You can place this method in any class. Since we have an auto-generated main method in the Main class, we'll be using that one for this tutorial.
 
@@ -158,6 +234,16 @@ Let's focus on two values for now:
 
 Knowing this, we can make it a bit more clear in the console output.
 
+```
+@Override
+public void onUpdateReceived(Update update) {
+    var msg = update.getMessage();
+    var user = msg.getFrom();
+
+    System.out.println(user.getFirstName() + " wrote " + msg.getText());
+}
+```
+
 This is just a basic example – you can now play around with all the methods to see everything you can pull out of these objects. You can try getUsername, getLanguageCode, and dozens more.
 
 Knowing how to receive, process and print incoming messages, now it's time to learn how to answer them.
@@ -176,7 +262,29 @@ To send a private text message, you generally need three things:
 
 With that out of the way, let's create a new method to send the first message:
 
+```
+public void sendText(Long who, String what){
+   SendMessage sm = SendMessage.builder()
+                    .chatId(who.toString()) //Who are we sending a message to
+                    .text(what).build();    //Message content
+   try {
+        execute(sm);                        //Actually sending the message
+   } catch (TelegramApiException e) {
+        throw new RuntimeException(e);      //Any error will be printed here
+   }
+}
+```
+
 And proceed to run this in the main method, right after registering the bot.For this example, we'll assume your User ID is 1234.
+
+```
+public static void main(String[] args) throws TelegramApiException {
+   TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+   Bot bot = new Bot();                  //We moved this line out of the register method, to access it later
+   botsApi.registerBot(bot);            
+   bot.sendText(1234L, "Hello World!");  //The L just turns the Integer into a Long
+}
+```
 
 If you did everything correctly, your bot should text you Hello World! every time you launch your code. Sending messages to groups or channels – assuming you have the relevant permissions – is as simple as replacing 1234 with the ID of the respective chat.
 
@@ -192,11 +300,37 @@ The most intuitive way of coding this is saving the User ID and calling sendText
 
 In other words:
 
+```
+@Override
+public void onUpdateReceived(Update update) {
+    var msg = update.getMessage();
+    var user = msg.getFrom();
+    var id = user.getId();
+
+    sendText(id, msg.getText());
+}
+```
+
 This works for text but can be extended to stickers, media and files.
 
 #### Copying Everything
 
 There are more specific functions that can be used to copy messages and send them back.Let's build a method to do just that:
+
+```
+public void copyMessage(Long who, Integer msgId){
+   CopyMessage cm = CopyMessage.builder()
+              .fromChatId(who.toString())  //We copy from the user
+           .chatId(who.toString())      //And send it back to him
+           .messageId(msgId)            //Specifying what message
+           .build();
+    try {
+        execute(cm);
+    } catch (TelegramApiException e) {
+        throw new RuntimeException(e);
+    }
+}
+```
 
 After replacing the method call inonUpdateReceived, running the code will result in a fully functional Echo Bot.
 
@@ -212,15 +346,57 @@ Begin by opening @BotFather.Type /mybots > Your_Bot_Name > Edit Bot > Edit Comma
 
 Now send a new command, followed by a brief description.For the purpose of this tutorial, we'll implement two simple commands:
 
+```
+scream - Speak, I'll scream right back 
+whisper - Shhhhhhh
+```
+
 #### Command Logic
 
 We want the Echo Bot to reply in uppercase when it's in scream mode and normally otherwise.
 
 First, let's create a variable to store the current mode.
 
+```
+public class Bot extends TelegramLongPollingBot {
+
+   private boolean screaming = false;
+
+   [...]
+}
+```
+
 Then, let's change some logic to account for this mode.
 
+```
+public void onUpdateReceived(Update update) {
+    [...]                                   //Same variables as the previous versions
+   if(screaming)                            //If we are screaming
+       scream(id, update.getMessage());     //Call a custom method
+   else
+       copyMessage(id, msg.getMessageId()); //Else proceed normally
+}
+
+private void scream(Long id, Message msg) {
+   if(msg.hasText())
+       sendText(id, msg.getText().toUpperCase());
+   else
+       copyMessage(id, msg.getMessageId());  //We can't really scream a sticker
+}
+```
+
 Finally, let's add a couple more lines to the onUpdateReceived method to process each command before replying.
+
+```
+if(msg.isCommand()){ 
+   if(msg.getText().equals("/scream"))         //If the command was /scream, we switch gears
+      screaming = true;
+   else if (msg.getText().equals("/whisper"))  //Otherwise, we return to normal
+      screaming = false;
+
+   return;                                     //We don't want to echo commands, so we exit
+}
+```
 
 As you can see, it checks if the message is a command. If it is, the bot enters scream mode.In the update method, we check which mode we are in and either copy the message or convert it to upper case before sending it back.
 
@@ -250,6 +426,21 @@ This guide will focus on inline buttons since they only require a few extra line
 
 First of all, let's create some buttons.
 
+```
+var next = InlineKeyboardButton.builder()
+            .text("Next").callbackData("next")           
+            .build();
+
+ var back = InlineKeyboardButton.builder()
+            .text("Back").callbackData("back")
+            .build();
+
+ var url = InlineKeyboardButton.builder()
+            .text("Tutorial")
+            .url("https://core.telegram.org/bots/api")
+            .build();
+```
+
 Let's go back through the fields we specified:
 
 - Text - This is what the user will see, the text that appears on the button
@@ -264,7 +455,25 @@ The buttons we created can be assembled into two keyboards, which will then be u
 
 First, add two fields to store the necessary keyboards.
 
+```
+private boolean screaming = false;
+
+private InlineKeyboardMarkup keyboardM1;
+private InlineKeyboardMarkup keyboardM2;
+```
+
 Then, build and assign them.
+
+```
+keyboardM1 = InlineKeyboardMarkup.builder()
+          .keyboardRow(List.of(next)).build();  
+
+//Buttons are wrapped in lists since each keyboard is a set of button rows
+keyboardM2 = InlineKeyboardMarkup.builder()
+          .keyboardRow(List.of(back))
+          .keyboardRow(List.of(url))
+          .build();
+```
 
 > You can place this code wherever you prefer, the important thing is making sure that keyboard variables are accessible from the method call that will send the new menu. If you're confused by this concept and don't know where to put them, just paste them above the command processing flow.
 
@@ -272,11 +481,38 @@ Then, build and assign them.
 
 Sending a keyboard only requires specifying a reply markup for the message.
 
+```
+public void sendMenu(Long who, String txt, InlineKeyboardMarkup kb){
+    SendMessage sm = SendMessage.builder().chatId(who.toString())
+            .parseMode("HTML").text(txt)
+            .replyMarkup(kb).build();
+
+    try {
+        execute(sm);
+    } catch (TelegramApiException e) {
+        throw new RuntimeException(e);
+    }
+}
+```
+
 > You may have noticed that we also added a new parameter, HTML.This is called a formatting option and will allow us to use HTML tags and add formatting to the text later on.
 
 #### Menu Trigger
 
 We could send a new menu for each new user, but for simplicity let's add a new command that will spawn a menu. We can achieve this by adding a new else clause to the previous command flow.
+
+```
+var txt = msg.getText();
+ if(msg.isCommand()) {
+        if (txt.equals("/scream"))
+            screaming = true;
+        else if (txt.equals("/whisper"))
+            screaming = false;
+        else if (txt.equals("/menu"))
+            sendMenu(id, "<b>Menu 1</b>", keyboardM1);
+        return;
+ }
+```
 
 Try sending /menu to your bot now. If you did everything correctly, you should see a brand new menu pop up.
 
@@ -299,6 +535,33 @@ A CallbackQuery is essentially composed of three main parameters:
 Processing in this context just means executing the action uniquely identified by the button, then closing the query.
 
 A very basic button handler could look something like:
+
+```
+private void buttonTap(Long id, String queryId, String data, int msgId) {
+
+    EditMessageText newTxt = EditMessageText.builder()
+            .chatId(id.toString())
+            .messageId(msgId).text("").build();
+
+    EditMessageReplyMarkup newKb = EditMessageReplyMarkup.builder()
+            .chatId(id.toString()).messageId(msgId).build();                           
+
+    if(data.equals("next")) {
+        newTxt.setText("MENU 2");
+        newKb.setReplyMarkup(keyboardM2);
+    } else if(data.equals("back")) {
+        newTxt.setText("MENU 1");
+        newKb.setReplyMarkup(keyboardM1);
+    }
+
+    AnswerCallbackQuery close = AnswerCallbackQuery.builder()
+            .callbackQueryId(queryId).build();
+
+    execute(close);
+    execute(newTxt);
+    execute(newKb);
+}
+```
 
 With this handler, whenever a button is tapped, your bot will automatically navigate between inline menus.Expanding on this concept allows for endless combinations of navigable submenus, settings and dynamic pages.
 
@@ -328,13 +591,27 @@ This can be done in four steps:
 
 Once you have a working ssh connection between your machine and your new server, you should upload your executable and all associated files.We will assume the runnable jar TutorialBot.jar and its database dbase.db are currently in the /TBot folder.
 
+```
+$ scp -r /TBot/ username@server_ip:/bots/TBotRemote/
+```
+
 - Run your application
 
 Depending on which language you chose, you might have to configure your server environment differently. If you chose Java, you just need to install a compatible JDK.
 
+```
+$ apt install openjdk-17-jre
+$ java -version
+```
+
 If you did everything correctly, you should see a Java version as the output, along with a few other values. This means you're ready to run your application.
 
 Now, to run the executable:
+
+```
+$ cd /bots/TBotRemote/
+$ java -jar TutorialBot.jar
+```
 
 Your bot is now online and users can interact with it at any time.
 

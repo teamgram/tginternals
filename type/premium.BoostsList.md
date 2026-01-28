@@ -19,7 +19,7 @@ premium.getUserBoosts#39854d1f peer:InputPeer user_id:InputUser = premium.Boosts
 ## Methods
 | Method | Description |
 | ---- | ----------- |
-| premium.getBoostsList | Obtains info about the boosts that were applied to a certain channel (admins only) |
-| premium.getUserBoosts | Returns the lists of boost that were applied to a channel by a specific user (admins only) |
+| premium.getBoostsList | Obtains info about the boosts that were applied to a certain channel or supergroup (admins only) |
+| premium.getUserBoosts | Returns the lists of boost that were applied to a channel/supergroup by a specific user (admins only) |
 
 

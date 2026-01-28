@@ -26,5 +26,6 @@ Updates
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | GROUPCALL_INVALID | The specified group call is invalid. |
 | 403 | PARTICIPANT_JOIN_MISSING | Trying to enable a presentation, when the user hasn't joined the Video Chat with phone.joinGroupCall. |
 

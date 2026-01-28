@@ -24,4 +24,5 @@ messages.getSearchResultsPositions#9c7f2f10 flags:# peer:InputPeer saved_peer_id
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | PEER_ID_INVALID | The provided peer id is invalid. |
 

@@ -1,5 +1,5 @@
 # channels.updateEmojiStatus
-Set an emoji status for a channel.
+Set an emoji status for a channel or supergroup.
 
 ```
 updatesTooLong#e317af7e = Updates;
@@ -16,7 +16,7 @@ channels.updateEmojiStatus#f0d3e6a8 channel:InputChannel emoji_status:EmojiStatu
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| channel | InputChannel | The channel, must have at least channel_emoji_status_level_min boosts. |
+| channel | InputChannel | The channel/supergroup, must have at least channel_emoji_status_level_min/group_emoji_status_level_min boosts. |
 | emoji_status | EmojiStatus | Emoji status to set |
 
 

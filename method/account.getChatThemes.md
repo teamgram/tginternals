@@ -11,7 +11,7 @@ account.getChatThemes#d638de89 hash:long = account.Themes;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

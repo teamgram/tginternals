@@ -8,7 +8,7 @@ help.appConfig#dd18782e hash:int config:JSONValue = help.AppConfig;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | int | Hash for pagination, for more info click here |
+| hash | int | Hash used for caching, for more info click here |
 | config | JSONValue | Client configuration parameters |
 
 

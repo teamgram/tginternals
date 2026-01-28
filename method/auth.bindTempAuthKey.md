@@ -23,7 +23,9 @@ auth.bindTempAuthKey#cdd42a05 perm_auth_key_id:long nonce:long expires_at:int en
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
-| 400 | ENCRYPTED_MESSAGE_INVALID | Encrypted message invalid. |
-| 400 | TEMP_AUTH_KEY_ALREADY_BOUND | The passed temporary key is already bound to another perm_auth_key_id. |
-| 400 | TEMP_AUTH_KEY_EMPTY | No temporary auth key provided. |
+| nonce | long | Random long |
+| temp_auth_key_id | long | Temporary auth_key_id |
+| perm_auth_key_id | long | Permanent auth_key_id to bind to |
+| temp_session_id | long | Session id, which will be used to invoke auth.bindTempAuthKey method |
+| expires_at | int | Unix timestamp to invalidate temporary key |
 

@@ -1,5 +1,5 @@
 # channels.readMessageContents
-Mark channel/supergroup message contents as read
+Mark channel/supergroup message contents as read, emitting an updateChannelReadMessagesContents.
 
 ```
 boolFalse#bc799737 = Bool;

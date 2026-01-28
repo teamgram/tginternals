@@ -1,5 +1,5 @@
 # stickers.renameStickerSet
-Renames a stickerset, bots only.
+Renames a stickerset.
 
 ```
 messages.stickerSet#6e153f16 set:StickerSet packs:Vector<StickerPack> keywords:Vector<StickerKeyword> documents:Vector<Document> = messages.StickerSet;

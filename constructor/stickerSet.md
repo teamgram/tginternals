@@ -2,7 +2,7 @@
 Represents a stickerset (stickerpack)
 
 ```
-stickerSet#2dd14edc flags:# archived:flags.1?true official:flags.2?true masks:flags.3?true animated:flags.5?true videos:flags.6?true emojis:flags.7?true text_color:flags.9?true channel_emoji_status:flags.10?true installed_date:flags.0?int id:long access_hash:long title:string short_name:string thumbs:flags.4?Vector<PhotoSize> thumb_dc_id:flags.4?int thumb_version:flags.4?int thumb_document_id:flags.8?long count:int hash:int = StickerSet;
+stickerSet#2dd14edc flags:# archived:flags.1?true official:flags.2?true masks:flags.3?true emojis:flags.7?true text_color:flags.9?true channel_emoji_status:flags.10?true creator:flags.11?true installed_date:flags.0?int id:long access_hash:long title:string short_name:string thumbs:flags.4?Vector<PhotoSize> thumb_dc_id:flags.4?int thumb_version:flags.4?int thumb_document_id:flags.8?long count:int hash:int = StickerSet;
 ```
 
 ## Parameters
@@ -12,11 +12,10 @@ stickerSet#2dd14edc flags:# archived:flags.1?true official:flags.2?true masks:fl
 | archived | flags.1?true | Whether this stickerset was archived (due to too many saved stickers in the current account) |
 | official | flags.2?true | Is this stickerset official |
 | masks | flags.3?true | Is this a mask stickerset |
-| animated | flags.5?true | Is this an animated stickerpack |
-| videos | flags.6?true | Is this a video stickerpack |
 | emojis | flags.7?true | This is a custom emoji stickerset |
 | text_color | flags.9?true | Whether the color of this TGS custom emoji stickerset should be changed to the text color when used in messages, the accent color if used as emoji status, white on chat photos, or another appropriate color based on context. |
-| channel_emoji_status | flags.10?true | If set, this custom emoji stickerset can be used in channel emoji statuses. |
+| channel_emoji_status | flags.10?true | If set, this custom emoji stickerset can be used in channel/supergroup emoji statuses. |
+| creator | flags.11?true | Whether we created this stickerset |
 | installed_date | flags.0?int | When was this stickerset installed |
 | id | long | ID of the stickerset |
 | access_hash | long | Access hash of stickerset |

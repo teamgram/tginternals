@@ -11,7 +11,7 @@ account.getWallPapers#7967d36 hash:long = account.WallPapers;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

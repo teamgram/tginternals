@@ -10,7 +10,7 @@ updatesCombined#725b04c3 updates:Vector<Update> users:Vector<User> chats:Vector<
 updates#74ae4240 updates:Vector<Update> users:Vector<User> chats:Vector<Chat> date:int seq:int = Updates;
 updateShortSentMessage#9015e101 flags:# out:flags.1?true id:int pts:int pts_count:int date:int media:flags.9?MessageMedia entities:flags.7?Vector<MessageEntity> ttl_period:flags.25?int = Updates;
 ---functions---
-phone.joinGroupCall#b132ff7b flags:# muted:flags.0?true video_stopped:flags.2?true call:InputGroupCall join_as:InputPeer invite_hash:flags.1?string params:DataJSON = Updates;
+phone.joinGroupCall#8fb53057 flags:# muted:flags.0?true video_stopped:flags.2?true call:InputGroupCall join_as:InputPeer invite_hash:flags.1?string public_key:flags.3?int256 block:flags.3?bytes params:DataJSON = Updates;
 ```
 
 ## Parameters
@@ -22,6 +22,8 @@ phone.joinGroupCall#b132ff7b flags:# muted:flags.0?true video_stopped:flags.2?tr
 | call | InputGroupCall | The group call |
 | join_as | InputPeer | Join the group call, presenting yourself as the specified user/channel |
 | invite_hash | flags.1?string | The invitation hash from the invite link », if provided allows speaking in a livestream or muted group chat. |
+| public_key | flags.3?int256 | For conference calls, your public key. |
+| block | flags.3?bytes | The block containing an appropriate e2e.chain.changeSetGroupState event. |
 | params | DataJSON | WebRTC parameters |
 
 

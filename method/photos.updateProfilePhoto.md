@@ -23,6 +23,7 @@ photos.Photo
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 400 | ALBUM_PHOTOS_TOO_MANY | You have uploaded too many profile photos, delete some before retrying. |
+| 400 | BOT_FALLBACK_UNSUPPORTED | The fallback flag can't be set for bots. |
 | 400 | FILE_PARTS_INVALID | The number of file parts is invalid. |
 | 400 | IMAGE_PROCESS_FAILED | Failure while processing image. |
 | 400 | LOCATION_INVALID | The provided location is invalid. |

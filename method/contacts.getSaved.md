@@ -9,6 +9,7 @@ contacts.getSaved#82f1e39f = Vector<SavedContact>;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | TAKEOUT_INVALID | The specified takeout ID is invalid. |
 | 403 | TAKEOUT_REQUIRED | A takeout session needs to be initialized first, see here » for more info. |
 
 

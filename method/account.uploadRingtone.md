@@ -22,4 +22,5 @@ Document
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | RINGTONE_MIME_INVALID | The MIME type for the ringtone is invalid. |
 

@@ -2,7 +2,7 @@
 Message replies and thread information
 
 ```
-messageReplyHeader#afbc09db flags:# reply_to_scheduled:flags.2?true forum_topic:flags.3?true quote:flags.9?true reply_to_msg_id:flags.4?int reply_to_peer_id:flags.0?Peer reply_from:flags.5?MessageFwdHeader reply_media:flags.8?MessageMedia reply_to_top_id:flags.1?int quote_text:flags.6?string quote_entities:flags.7?Vector<MessageEntity> quote_offset:flags.10?int = MessageReplyHeader;
+messageReplyHeader#6917560b flags:# reply_to_scheduled:flags.2?true forum_topic:flags.3?true quote:flags.9?true reply_to_msg_id:flags.4?int reply_to_peer_id:flags.0?Peer reply_from:flags.5?MessageFwdHeader reply_media:flags.8?MessageMedia reply_to_top_id:flags.1?int quote_text:flags.6?string quote_entities:flags.7?Vector<MessageEntity> quote_offset:flags.10?int todo_item_id:flags.11?int = MessageReplyHeader;
 ```
 
 ## Parameters
@@ -20,6 +20,7 @@ messageReplyHeader#afbc09db flags:# reply_to_scheduled:flags.2?true forum_topic:
 | quote_text | flags.6?string | Used to quote-reply to only a certain section (specified here) of the original message. |
 | quote_entities | flags.7?Vector<MessageEntity> | Message entities for styled text from the quote_text field. |
 | quote_offset | flags.10?int | Offset of the message quote_text within the original message (in UTF-16 code units). |
+| todo_item_id | flags.11?int | Can be set to reply to the specified item of a todo list ». |
 
 
 ## Type

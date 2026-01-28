@@ -34,6 +34,10 @@ Open any background and tap the sharing button in the top right corner, then cop
 
 For Telegram Desktop, if you want to make the background tiled, add ?mode=tiled at the end of the link. For example:
 
+```
+wallpaper: t.me/bg/-jI7lnO3DFABAAAA1vXcFaZP_Vo?mode=tiled
+```
+
 ### Creating themes in-app
 
 If you prefer a more WYSIWYG approach, try creating themes using the in-app tools for customizing appearance. Telegram for Android and Telegram Desktop have advanced in-app theme editors. Telegram for iOS and MacOS allow choosing a custom accent color from the color wheel and a background, then saving the result as a custom theme.

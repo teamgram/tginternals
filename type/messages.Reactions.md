@@ -9,6 +9,7 @@ messages.reactions#eafdf716 hash:long reactions:Vector<Reaction> = messages.Reac
 
 messages.getTopReactions#bb8125ba limit:int hash:long = messages.Reactions;
 messages.getRecentReactions#39461db2 limit:int hash:long = messages.Reactions;
+messages.getDefaultTagReactions#bdf93428 hash:long = messages.Reactions;
 ```
 
 ## Constructors
@@ -23,5 +24,6 @@ messages.getRecentReactions#39461db2 limit:int hash:long = messages.Reactions;
 | ---- | ----------- |
 | messages.getTopReactions | Got popular message reactions |
 | messages.getRecentReactions | Get recently used message reactions |
+| messages.getDefaultTagReactions | Fetch a default recommended list of saved message tag reactions. |
 
 

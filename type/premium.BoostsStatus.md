@@ -18,6 +18,6 @@ premium.getBoostsStatus#42f1f61 peer:InputPeer = premium.BoostsStatus;
 ## Methods
 | Method | Description |
 | ---- | ----------- |
-| premium.getBoostsStatus | Gets the current number of boosts of a channel. |
+| premium.getBoostsStatus | Gets the current number of boosts of a channel/supergroup. |
 
 

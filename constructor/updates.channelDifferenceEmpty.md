@@ -11,7 +11,7 @@ updates.channelDifferenceEmpty#3e11affb flags:# final:flags.0?true pts:int timeo
 | flags | # | Flags, see TL conditional fields |
 | final | flags.0?true | Whether there are more updates that must be fetched (always false) |
 | pts | int | The latest PTS |
-| timeout | flags.1?int | Clients are supposed to refetch the channel difference after timeout seconds have elapsed |
+| timeout | flags.1?int | Clients are supposed to refetch the channel difference after timeout seconds have elapsed, if the user is currently viewing the chat, see here » for more info. |
 
 
 ## Type

@@ -12,7 +12,8 @@ auth.bindTempAuthKey#cdd42a05 perm_auth_key_id:long nonce:long expires_at:int en
 auth.cancelCode#1f040578 phone_number:string phone_code_hash:string = Bool;
 auth.dropTempAuthKeys#8e48a188 except_auth_keys:Vector<long> = Bool;
 auth.checkRecoveryPassword#d36bf79 code:string = Bool;
-auth.requestFirebaseSms#89464b50 flags:# phone_number:string phone_code_hash:string safety_net_token:flags.0?string ios_push_secret:flags.1?string = Bool;
+auth.requestFirebaseSms#8e39261e flags:# phone_number:string phone_code_hash:string safety_net_token:flags.0?string play_integrity_token:flags.2?string ios_push_secret:flags.1?string = Bool;
+auth.reportMissingCode#cb9deff6 phone_number:string phone_code_hash:string mnc:string = Bool;
 
 account.registerDevice#ec86017a flags:# no_muted:flags.0?true token_type:int token:string app_sandbox:Bool secret:bytes other_uids:Vector<long> = Bool;
 account.unregisterDevice#6a0d3206 token_type:int token:string other_uids:Vector<long> = Bool;
@@ -57,6 +58,20 @@ account.saveAutoSaveSettings#d69b8361 flags:# users:flags.0?true chats:flags.1?t
 account.deleteAutoSaveExceptions#53bc0020 = Bool;
 account.invalidateSignInCodes#ca8ae8ba codes:Vector<string> = Bool;
 account.updateColor#7cefa15d flags:# for_profile:flags.1?true color:flags.2?int background_emoji_id:flags.0?long = Bool;
+account.updateBusinessWorkHours#4b00e066 flags:# business_work_hours:flags.0?BusinessWorkHours = Bool;
+account.updateBusinessLocation#9e6b131a flags:# geo_point:flags.1?InputGeoPoint address:flags.0?string = Bool;
+account.updateBusinessGreetingMessage#66cdafc4 flags:# message:flags.0?InputBusinessGreetingMessage = Bool;
+account.updateBusinessAwayMessage#a26a7fa5 flags:# message:flags.0?InputBusinessAwayMessage = Bool;
+account.updateBusinessIntro#a614d034 flags:# intro:flags.0?InputBusinessIntro = Bool;
+account.toggleConnectedBotPaused#646e1097 peer:InputPeer paused:Bool = Bool;
+account.disablePeerConnectedBot#5e437ed9 peer:InputPeer = Bool;
+account.updateBirthday#cc6e0c11 flags:# birthday:flags.0?Birthday = Bool;
+account.deleteBusinessChatLink#60073674 slug:string = Bool;
+account.updatePersonalChannel#d94305e0 channel:InputChannel = Bool;
+account.toggleSponsoredMessages#b9d9a38d enabled:Bool = Bool;
+account.toggleNoPaidMessagesException#fe2eda76 flags:# refund_charged:flags.0?true require_payment:flags.2?true parent_peer:flags.1?InputPeer user_id:InputUser = Bool;
+account.setMainProfileTab#5dee78b0 tab:ProfileTab = Bool;
+account.saveMusic#b26732a9 flags:# unsave:flags.0?true id:InputDocument after_id:flags.1?InputDocument = Bool;
 
 contacts.deleteByPhones#1013fd9e phones:Vector<string> = Bool;
 contacts.block#2e2e8734 flags:# my_stories_from:flags.0?true id:InputPeer = Bool;
@@ -69,7 +84,6 @@ contacts.setBlocked#94c65c76 flags:# my_stories_from:flags.0?true id:Vector<Inpu
 
 messages.setTyping#58943ee2 flags:# peer:InputPeer top_msg_id:flags.0?int action:SendMessageAction = Bool;
 messages.reportSpam#cf1592db peer:InputPeer = Bool;
-messages.report#8953ab4e peer:InputPeer id:Vector<int> reason:ReportReason message:string = Bool;
 messages.discardEncryption#f393aea0 flags:# delete_history:flags.0?true chat_id:int = Bool;
 messages.setEncryptedTyping#791451ed peer:InputEncryptedChat typing:Bool = Bool;
 messages.readEncryptedHistory#7f4b690a peer:InputEncryptedChat max_date:int = Bool;
@@ -81,7 +95,7 @@ messages.saveGif#327a30cb id:InputDocument unsave:Bool = Bool;
 messages.setInlineBotResults#bb12a419 flags:# gallery:flags.0?true private:flags.1?true query_id:long results:Vector<InputBotInlineResult> cache_time:int next_offset:flags.2?string switch_pm:flags.3?InlineBotSwitchPM switch_webview:flags.4?InlineBotWebView = Bool;
 messages.editInlineBotMessage#83557dba flags:# no_webpage:flags.1?true invert_media:flags.16?true id:InputBotInlineMessageID message:flags.11?string media:flags.14?InputMedia reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> = Bool;
 messages.setBotCallbackAnswer#d58f130a flags:# alert:flags.1?true query_id:long message:flags.0?string url:flags.2?string cache_time:int = Bool;
-messages.saveDraft#7ff3b806 flags:# no_webpage:flags.1?true invert_media:flags.6?true reply_to:flags.4?InputReplyTo peer:InputPeer message:string entities:flags.3?Vector<MessageEntity> media:flags.5?InputMedia = Bool;
+messages.saveDraft#54ae308e flags:# no_webpage:flags.1?true invert_media:flags.6?true reply_to:flags.4?InputReplyTo peer:InputPeer message:string entities:flags.3?Vector<MessageEntity> media:flags.5?InputMedia effect:flags.7?long suggested_post:flags.8?SuggestedPost = Bool;
 messages.readFeaturedStickers#5b118126 id:Vector<long> = Bool;
 messages.saveRecentSticker#392718f8 flags:# attached:flags.0?true id:InputDocument unsave:Bool = Bool;
 messages.clearRecentStickers#8999602d flags:# attached:flags.0?true = Bool;
@@ -91,7 +105,7 @@ messages.reorderPinnedDialogs#3b1adf37 flags:# force:flags.0?true folder_id:int 
 messages.setBotShippingResults#e5f672fa flags:# query_id:long error:flags.0?string shipping_options:flags.1?Vector<ShippingOption> = Bool;
 messages.setBotPrecheckoutResults#9c2dd95 flags:# success:flags.1?true query_id:long error:flags.0?string = Bool;
 messages.faveSticker#b9ffc55b id:InputDocument unfave:Bool = Bool;
-messages.markDialogUnread#c286d98f flags:# unread:flags.0?true peer:InputDialogPeer = Bool;
+messages.markDialogUnread#8c5006f8 flags:# unread:flags.0?true parent_peer:flags.1?InputPeer peer:InputDialogPeer = Bool;
 messages.clearAllDrafts#7e58ee9c = Bool;
 messages.editChatAbout#def60797 peer:InputPeer about:string = Bool;
 messages.hidePeerSettingsBar#4facb138 peer:InputPeer = Bool;
@@ -114,6 +128,17 @@ messages.setDefaultHistoryTTL#9eb51445 period:int = Bool;
 messages.togglePeerTranslations#e47cb579 flags:# disabled:flags.0?true peer:InputPeer = Bool;
 messages.toggleSavedDialogPin#ac81bbde flags:# pinned:flags.0?true peer:InputDialogPeer = Bool;
 messages.reorderPinnedSavedDialogs#8b716587 flags:# force:flags.0?true order:Vector<InputDialogPeer> = Bool;
+messages.updateSavedReactionTag#60297dec flags:# reaction:Reaction title:flags.0?string = Bool;
+messages.reorderQuickReplies#60331907 order:Vector<int> = Bool;
+messages.checkQuickReplyShortcut#f1d0fbd3 shortcut:string = Bool;
+messages.editQuickReplyShortcut#5c003cef shortcut_id:int shortcut:string = Bool;
+messages.deleteQuickReplyShortcut#3cc04740 shortcut_id:int = Bool;
+messages.toggleDialogFilterTags#fd2dda49 enabled:Bool = Bool;
+messages.togglePaidReactionPrivacy#435885b5 peer:InputPeer msg_id:int private:PaidReactionPrivacy = Bool;
+messages.viewSponsoredMessage#269e3643 random_id:bytes = Bool;
+messages.clickSponsoredMessage#8235057e flags:# media:flags.0?true fullscreen:flags.1?true random_id:bytes = Bool;
+messages.reportMessagesDelivery#5a6d7395 flags:# push:flags.0?true peer:InputPeer id:Vector<int> = Bool;
+messages.readSavedHistory#ba4a3b5b parent_peer:InputPeer peer:InputPeer max_id:int = Bool;
 
 upload.saveFilePart#b304a621 file_id:long file_part:int bytes:bytes = Bool;
 upload.saveBigFilePart#de7b673d file_id:long file_part:int file_total_parts:int bytes:bytes = Bool;
@@ -126,12 +151,12 @@ channels.setStickers#ea8ca4f9 channel:InputChannel stickerset:InputStickerSet = 
 channels.readMessageContents#eab5dc38 channel:InputChannel id:Vector<int> = Bool;
 channels.setDiscussionGroup#40582bb2 broadcast:InputChannel group:InputChannel = Bool;
 channels.editLocation#58e63f6d channel:InputChannel geo_point:InputGeoPoint address:string = Bool;
-channels.viewSponsoredMessage#beaedb94 channel:InputChannel random_id:bytes = Bool;
 channels.reorderUsernames#b45ced1d channel:InputChannel order:Vector<string> = Bool;
 channels.toggleUsername#50f24105 channel:InputChannel username:string active:Bool = Bool;
 channels.deactivateAllUsernames#a245dd3 channel:InputChannel = Bool;
 channels.reportAntiSpamFalsePositive#a850a693 channel:InputChannel msg_id:int = Bool;
-channels.clickSponsoredMessage#18afbc93 channel:InputChannel random_id:bytes = Bool;
+channels.setEmojiStickers#3cd930b7 channel:InputChannel stickerset:InputStickerSet = Bool;
+channels.setMainProfileTab#3583fcb1 channel:InputChannel tab:ProfileTab = Bool;
 
 help.setBotUpdatesStatus#ec22cfcd pending_updates_count:int message:string = Bool;
 help.acceptTermsOfService#ee72f79a id:DataJSON = Bool;
@@ -149,9 +174,24 @@ bots.setBotInfo#10cf3123 flags:# bot:flags.2?InputUser lang_code:string name:fla
 bots.reorderUsernames#9709b1c2 bot:InputUser order:Vector<string> = Bool;
 bots.toggleUsername#53ca973 bot:InputUser username:string active:Bool = Bool;
 bots.canSendMessage#1359f4e6 bot:InputUser = Bool;
+bots.deletePreviewMedia#2d0135b3 bot:InputUser lang_code:string media:Vector<InputMedia> = Bool;
+bots.reorderPreviewMedias#b627f3aa bot:InputUser lang_code:string order:Vector<InputMedia> = Bool;
+bots.updateUserEmojiStatus#ed9f30c5 user_id:InputUser emoji_status:EmojiStatus = Bool;
+bots.toggleUserEmojiStatusPermission#6de6392 bot:InputUser enabled:Bool = Bool;
+bots.checkDownloadFileParams#50077589 bot:InputUser file_name:string url:string = Bool;
+bots.setCustomVerification#8b89dfbd flags:# enabled:flags.1?true bot:flags.0?InputUser peer:InputPeer custom_description:flags.2?string = Bool;
 
 payments.clearSavedInfo#d83d70c1 flags:# credentials:flags.0?true info:flags.1?true = Bool;
-payments.canPurchasePremium#9fc19eb6 purpose:InputStorePaymentPurpose = Bool;
+payments.changeStarsSubscription#c7770878 flags:# peer:InputPeer subscription_id:string canceled:flags.0?Bool = Bool;
+payments.fulfillStarsSubscription#cc5bebb3 peer:InputPeer subscription_id:string = Bool;
+payments.saveStarGift#2a2a697c flags:# unsave:flags.0?true stargift:InputSavedStarGift = Bool;
+payments.convertStarGift#74bf076b stargift:InputSavedStarGift = Bool;
+payments.botCancelStarsSubscription#6dfa0622 flags:# restore:flags.0?true user_id:InputUser charge_id:string = Bool;
+payments.toggleChatStarGiftNotifications#60eaefa1 flags:# enabled:flags.0?true peer:InputPeer = Bool;
+payments.toggleStarGiftsPinnedToTop#1513e7b0 peer:InputPeer stargift:Vector<InputSavedStarGift> = Bool;
+payments.canPurchaseStore#4fdc5ea7 purpose:InputStorePaymentPurpose = Bool;
+payments.reorderStarGiftCollections#c32af4cc peer:InputPeer order:Vector<int> = Bool;
+payments.deleteStarGiftCollection#ad5648e8 peer:InputPeer collection_id:int = Bool;
 
 phone.receivedCall#17d54f61 peer:InputPhoneCall = Bool;
 phone.saveCallDebug#277add7e peer:InputPhoneCall debug:DataJSON = Bool;
@@ -167,11 +207,17 @@ stickers.deleteStickerSet#87704394 stickerset:InputStickerSet = Bool;
 chatlists.deleteExportedInvite#719c5c5e chatlist:InputChatlist slug:string = Bool;
 chatlists.hideChatlistUpdates#66e486fb chatlist:InputChatlist = Bool;
 
-stories.canSendStory#c7dfdfdd peer:InputPeer = Bool;
 stories.toggleAllStoriesHidden#7c2557c4 hidden:Bool = Bool;
 stories.incrementStoryViews#b2028afb peer:InputPeer id:Vector<int> = Bool;
-stories.report#1923fa8c peer:InputPeer id:Vector<int> reason:ReportReason message:string = Bool;
 stories.togglePeerStoriesHidden#bd0415c4 peer:InputPeer hidden:Bool = Bool;
+stories.togglePinnedToTop#b297e9b peer:InputPeer id:Vector<int> = Bool;
+stories.reorderAlbums#8535fbd9 peer:InputPeer order:Vector<int> = Bool;
+stories.deleteAlbum#8d3456d0 peer:InputPeer album_id:int = Bool;
+
+smsjobs.join#a74ece2d = Bool;
+smsjobs.leave#9898ad73 = Bool;
+smsjobs.updateSettings#93fa0bf flags:# allow_international:flags.0?true = Bool;
+smsjobs.finishJob#4f1ebf24 flags:# job_id:string error:flags.0?string = Bool;
 ```
 
 ## Constructors
@@ -184,157 +230,5 @@ stories.togglePeerStoriesHidden#bd0415c4 peer:InputPeer hidden:Bool = Bool;
 ## Methods
 | Method | Description |
 | ---- | ----------- |
-| auth.resetAuthorizations | Terminates all user's authorized sessions except for the current one.After calling this method it is necessary to reregister the current device using the method account.registerDevice |
-| auth.bindTempAuthKey | Binds a temporary authorization key temp_auth_key_id to the permanent authorization key perm_auth_key_id. Each permanent key may only be bound to one temporary key at a time, binding a new temporary key overwrites the previous one.For more information, see Perfect Forward Secrecy. |
-| account.registerDevice | Register device to receive PUSH notifications |
-| account.unregisterDevice | Deletes a device by its token, stops sending PUSH-notifications to it. |
-| account.updateNotifySettings | Edits notification settings from a given user/group, from all users/all groups. |
-| account.resetNotifySettings | Resets all notification settings from users and groups. |
-| account.updateStatus | Updates online user status. |
-| account.reportPeer | Report a peer for violation of telegram's Terms of Service |
-| contacts.deleteByPhones | Delete contacts by phone number |
-| contacts.block | Adds a peer to a blocklist, see here » for more info. |
-| contacts.unblock | Deletes a peer from a blocklist, see here » for more info. |
-| messages.setTyping | Sends a current user typing event (see SendMessageAction for all event types) to a conversation partner or group. |
-| messages.reportSpam | Report a new incoming chat for spam, if the peer settings of the chat allow us to do that |
-| messages.report | Report a message in a chat for violation of telegram's Terms of Service |
-| upload.saveFilePart | Saves a part of file for further sending to one of the methods. |
-| messages.discardEncryption | Cancels a request for creation and/or delete info on secret chat. |
-| messages.setEncryptedTyping | Send typing event by the current user to a secret chat. |
-| messages.readEncryptedHistory | Marks message history within a secret chat as read. |
-| messages.reportEncryptedSpam | Report a secret chat for spam |
-| upload.saveBigFilePart | Saves a part of a large file (over 10 MB in size) to be later passed to one of the methods. |
-| account.checkUsername | Validates a username and checks availability. |
-| account.deleteAccount | Delete the user's account from the telegram servers.Can also be used to delete the account of a user that provided the login code, but forgot the 2FA password and no recovery method is configured, see here » for more info on password recovery, and here » for more info on account deletion. |
-| account.setAccountTTL | Set account self-destruction period |
-| account.updateDeviceLocked | When client-side passcode lock feature is enabled, will not show message texts in incoming PUSH notifications. |
-| account.resetAuthorization | Log out an active authorized session by its hash |
-| account.updatePasswordSettings | Set a new 2FA password |
-| messages.uninstallStickerSet | Uninstall a stickerset |
-| channels.readHistory | Mark channel/supergroup history as read |
-| channels.reportSpam | Reports some messages from a user in a supergroup as spam; requires administrator rights in the supergroup |
-| channels.checkUsername | Check if a username is free and can be assigned to a channel/supergroup |
-| channels.updateUsername | Change or remove the username of a supergroup/channel |
-| messages.editChatAdmin | Make a user admin in a basic group. |
-| messages.reorderStickerSets | Reorder installed stickersets |
-| messages.saveGif | Add GIF to saved gifs list |
-| messages.setInlineBotResults | Answer an inline query, for bots only |
-| auth.cancelCode | Cancel the login verification code |
-| messages.editInlineBotMessage | Edit an inline bot message |
-| messages.setBotCallbackAnswer | Set the callback answer to a user button press (bots only) |
-| contacts.resetTopPeerRating | Reset rating of top peer |
-| messages.saveDraft | Save a message draft associated to a chat. |
-| messages.readFeaturedStickers | Mark new featured stickers as read |
-| messages.saveRecentSticker | Add/remove sticker from recent stickers list |
-| messages.clearRecentStickers | Clear recent stickers |
-| account.confirmPhone | Confirm a phone number to cancel account deletion, for more info click here » |
-| auth.dropTempAuthKeys | Delete all temporary authorization keys except for the ones specified |
-| messages.setInlineGameScore | Use this method to set the score of the specified user in a game sent as an inline message (bots only). |
-| help.setBotUpdatesStatus | Informs the server about the number of pending bot updates if they haven't been processed for a long time; for bots only |
-| messages.toggleDialogPin | Pin/unpin a dialog |
-| messages.reorderPinnedDialogs | Reorder pinned dialogs |
-| bots.answerWebhookJSONQuery | Answers a custom query; for bots only |
-| payments.clearSavedInfo | Clear saved payment information |
-| messages.setBotShippingResults | If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the bot will receive an updateBotShippingQuery update. Use this method to reply to shipping queries. |
-| messages.setBotPrecheckoutResults | Once the user has confirmed their payment and shipping details, the bot receives an updateBotPrecheckoutQuery update.  Use this method to respond to such pre-checkout queries.  Note: Telegram must receive an answer within 10 seconds after the pre-checkout query was sent. |
-| phone.receivedCall | Optional: notify the server that the user is currently busy in a call: this will automatically refuse all incoming phone calls until the current phone call is ended. |
-| phone.saveCallDebug | Send phone call debug data to server |
-| channels.setStickers | Associate a stickerset to the supergroup |
-| messages.faveSticker | Mark or unmark a sticker as favorite |
-| channels.readMessageContents | Mark channel/supergroup message contents as read |
-| contacts.resetSaved | Removes all contacts without an associated Telegram account. |
-| account.resetWebAuthorization | Log out an active web telegram login session |
-| account.resetWebAuthorizations | Reset all active web telegram login sessions |
-| help.acceptTermsOfService | Accept the new terms of service |
-| account.deleteSecureValue | Delete stored Telegram Passport documents, for more info see the passport docs » |
-| users.setSecureValueErrors | Notify the user that the sent passport data contains some errors The user will not be able to re-submit their Passport data to you until the errors are fixed (the contents of the field for which you returned the error must change).Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the issues. |
-| account.acceptAuthorization | Sends a Telegram Passport authorization form, effectively sharing data with the service |
-| account.verifyPhone | Verify a phone number for telegram passport. |
-| account.finishTakeoutSession | Terminate a takeout session, see here » for more info. |
-| messages.markDialogUnread | Manually mark dialog as unread |
-| contacts.toggleTopPeers | Enable/disable top peers |
-| messages.clearAllDrafts | Clear all drafts. |
-| help.saveAppLog | Saves logs of application on the server. |
-| account.confirmPasswordEmail | Verify an email to use as 2FA recovery method. |
-| account.resendPasswordEmail | Resend the code to verify an email to use as 2FA recovery method. |
-| account.cancelPasswordEmail | Cancel the code that was sent to verify an email to use as 2FA recovery method. |
-| account.getContactSignUpNotification | Whether the user will receive notifications when contacts sign up |
-| account.setContactSignUpNotification | Toggle contact sign up notifications |
-| messages.editChatAbout | Edit the description of a group/supergroup/channel. |
-| account.saveWallPaper | Install/uninstall wallpaper |
-| account.installWallPaper | Install wallpaper |
-| account.resetWallPapers | Delete all installed wallpapers, reverting to the default wallpaper set. |
-| account.saveAutoDownloadSettings | Change media autodownload settings |
-| channels.setDiscussionGroup | Associate a group to a channel as discussion group for that channel |
-| messages.hidePeerSettingsBar | Should be called after the user hides the report spam/add as contact bar of a new chat, effectively prevents the user from executing the actions specified in the action bar ». |
-| channels.editLocation | Edit location of geogroup, see here » for more info on geogroups. |
-| account.saveTheme | Save a theme |
-| account.installTheme | Install a theme |
-| account.setContentSettings | Set sensitive content settings (for viewing or hiding NSFW content) |
-| messages.toggleStickerSets | Apply changes to multiple stickersets |
-| messages.updateDialogFilter | Update folder |
-| messages.updateDialogFiltersOrder | Reorder folders |
-| bots.setBotCommands | Set bot command list |
-| help.hidePromoData | Hide MTProxy/Public Service Announcement information |
-| phone.sendSignalingData | Send VoIP signaling data |
-| help.dismissSuggestion | Dismiss a suggestion, see here for more info ». |
-| messages.readDiscussion | Mark a thread as read |
-| messages.deleteChat | Delete a chat |
-| messages.startHistoryImport | Complete the history import process, importing all messages into the chat.  To be called only after initializing the import with messages.initHistoryImport and uploading all files using messages.uploadImportedMedia. |
-| messages.deleteRevokedExportedChatInvites | Delete all revoked chat invites |
-| messages.deleteExportedChatInvite | Delete a chat invite |
-| account.reportProfilePhoto | Report a profile photo of a dialog |
-| phone.saveDefaultGroupCallJoinAs | Set the default peer that will be used to join a group call in a specific dialog. |
-| stickers.checkShortName | Check whether the given short name is available |
-| bots.resetBotCommands | Clear bot commands for the specified bot scope and language code |
-| account.declinePasswordReset | Abort a pending 2FA password reset, see here for more info » |
-| auth.checkRecoveryPassword | Check if the 2FA recovery code sent using auth.requestPasswordRecovery is valid, before passing it to auth.recoverPassword. |
-| channels.viewSponsoredMessage | Mark a specific sponsored message as read |
-| messages.saveDefaultSendAs | Change the default peer that should be used when sending messages, reactions, poll votes to a specific group |
-| account.setAuthorizationTTL | Set time-to-live of current session |
-| account.changeAuthorizationSettings | Change settings related to a session. |
-| messages.setDefaultReaction | Change default emoji reaction to use in the quick reaction menu: the value is synced across devices and can be fetched using help.getConfig, reactions_default field. |
-| messages.toggleBotInAttachMenu | Enable or disable web bot attachment menu » |
-| messages.prolongWebView | Indicate to the server (from the user side) that the user is still using a web app.If the method returns a QUERY_ID_INVALID error, the webview must be closed. |
-| bots.setBotMenuButton | Sets the menu button action » for a given user or for all users |
-| bots.setBotBroadcastDefaultAdminRights | Set the default suggested admin rights for bots being added as admins to channels, see here for more info on how to handle them ». |
-| bots.setBotGroupDefaultAdminRights | Set the default suggested admin rights for bots being added as admins to groups, see here for more info on how to handle them ». |
-| phone.saveCallLog | Save phone call debug information |
-| messages.rateTranscribedAudio | Rate transcribed voice message |
-| payments.canPurchasePremium | Checks whether Telegram Premium purchase is possible. Must be called before in-store Premium purchase, official apps only. |
-| account.updateEmojiStatus | Set an emoji status |
-| account.clearRecentEmojiStatuses | Clears list of recently used emoji statuses |
-| messages.reportReaction | Report a message reaction |
-| messages.clearRecentReactions | Clear recently used message reactions |
-| account.reorderUsernames | Reorder usernames associated with the currently logged-in user. |
-| account.toggleUsername | Activate or deactivate a purchased fragment.com username associated to the currently logged-in user. |
-| channels.reorderUsernames | Reorder active usernames |
-| channels.toggleUsername | Activate or deactivate a purchased fragment.com username associated to a supergroup or channel we own. |
-| channels.deactivateAllUsernames | Disable all purchased usernames of a supergroup or channel |
-| channels.reportAntiSpamFalsePositive | Report a native antispam false positive |
-| messages.setDefaultHistoryTTL | Changes the default value of the Time-To-Live setting, applied to all new chats. |
-| auth.requestFirebaseSms | Request an SMS code via Firebase. |
-| messages.togglePeerTranslations | Show or hide the real-time chat translation popup for a certain chat |
-| account.saveAutoSaveSettings | Modify autosave settings |
-| account.deleteAutoSaveExceptions | Clear all peer-specific autosave settings. |
-| stickers.deleteStickerSet | Deletes a stickerset we created, bots only. |
-| bots.setBotInfo | Set localized name, about text and description of a bot (or of the current account, if called by a bot). |
-| chatlists.deleteExportedInvite | Delete a previously created chat folder deep link ». |
-| chatlists.hideChatlistUpdates | Dismiss new pending peers recently added to a chat folder deep link ». |
-| bots.reorderUsernames | Reorder usernames associated to a bot we own. |
-| bots.toggleUsername | Activate or deactivate a purchased fragment.com username associated to a bot we own. |
-| account.invalidateSignInCodes | Invalidate the specified login codes, see here » for more info. |
-| channels.clickSponsoredMessage | Informs the server that the user has either:- Clicked on a link in the sponsored message- Has opened a sponsored chat or a sponsored website via the associated button- Has opened the sponsored chat via the sponsored message name, the sponsored message photo, or a mention in the sponsored message |
-| contacts.editCloseFriends | Edit the close friends list, see here » for more info. |
-| stories.canSendStory | Check whether we can post stories as the specified peer. |
-| stories.toggleAllStoriesHidden | Hide the active stories of a specific peer, preventing them from being displayed on the action bar on the homescreen. |
-| stories.incrementStoryViews | Increment the view counter of one or more stories. |
-| stories.report | Report a story. |
-| contacts.setBlocked | Replace the contents of an entire blocklist, see here for more info ». |
-| bots.canSendMessage | Check whether the specified bot can send us messages |
-| stories.togglePeerStoriesHidden | Hide the active stories of a user, preventing them from being displayed on the action bar on the homescreen, see here » for more info. |
-| account.updateColor | Update the accent color and background custom emoji » of the current account. |
-| messages.toggleSavedDialogPin | Pin or unpin a saved message dialog ». |
-| messages.reorderPinnedSavedDialogs | Reorder pinned saved message dialogs ». |
 
 

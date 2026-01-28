@@ -1,16 +1,16 @@
 # updateMessageExtendedMedia
-Extended media update
+You bought a paid media »: this update contains the revealed media.
 
 ```
-updateMessageExtendedMedia#5a73a98c peer:Peer msg_id:int extended_media:MessageExtendedMedia = Update;
+updateMessageExtendedMedia#d5a41724 peer:Peer msg_id:int extended_media:Vector<MessageExtendedMedia> = Update;
 ```
 
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| peer | Peer | Peer |
-| msg_id | int | Message ID |
-| extended_media | MessageExtendedMedia | Extended media |
+| peer | Peer | Peer where the paid media was posted |
+| msg_id | int | ID of the message containing the paid media |
+| extended_media | Vector<MessageExtendedMedia> | Revealed media, contains only messageExtendedMedia constructors. |
 
 
 ## Type

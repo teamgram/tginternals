@@ -49,6 +49,10 @@ channelAdminLogEventActionChangePeerColor#5796e780 prev_value:PeerColor new_valu
 channelAdminLogEventActionChangeProfilePeerColor#5e477b25 prev_value:PeerColor new_value:PeerColor = ChannelAdminLogEventAction;
 channelAdminLogEventActionChangeWallpaper#31bb5d52 prev_value:WallPaper new_value:WallPaper = ChannelAdminLogEventAction;
 channelAdminLogEventActionChangeEmojiStatus#3ea9feb1 prev_value:EmojiStatus new_value:EmojiStatus = ChannelAdminLogEventAction;
+channelAdminLogEventActionChangeEmojiStickerSet#46d840ab prev_stickerset:InputStickerSet new_stickerset:InputStickerSet = ChannelAdminLogEventAction;
+channelAdminLogEventActionToggleSignatureProfiles#60a79c79 new_value:Bool = ChannelAdminLogEventAction;
+channelAdminLogEventActionParticipantSubExtend#64642db3 prev_participant:ChannelParticipant new_participant:ChannelParticipant = ChannelAdminLogEventAction;
+channelAdminLogEventActionToggleAutotranslation#c517f77e new_value:Bool = ChannelAdminLogEventAction;
 ```
 
 ## Constructors
@@ -101,6 +105,10 @@ channelAdminLogEventActionChangeEmojiStatus#3ea9feb1 prev_value:EmojiStatus new_
 | channelAdminLogEventActionChangeProfilePeerColor | The profile accent color was changed |
 | channelAdminLogEventActionChangeWallpaper | The wallpaper was changed |
 | channelAdminLogEventActionChangeEmojiStatus | The emoji status was changed |
+| channelAdminLogEventActionChangeEmojiStickerSet | The supergroup's custom emoji stickerset was changed. |
+| channelAdminLogEventActionToggleSignatureProfiles | Channel signature profiles were enabled/disabled. |
+| channelAdminLogEventActionParticipantSubExtend | A paid subscriber has extended their Telegram Star subscription ». |
+| channelAdminLogEventActionToggleAutotranslation | Channel autotranslation was toggled ». |
 
 
 ## Methods

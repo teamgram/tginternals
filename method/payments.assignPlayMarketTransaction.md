@@ -26,4 +26,5 @@ Updates
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | DATA_JSON_INVALID | The provided JSON data is invalid. |
 

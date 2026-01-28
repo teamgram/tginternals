@@ -14,7 +14,7 @@ messages.searchEmojiStickerSets#92b4494c flags:# exclude_featured:flags.0?true q
 | flags | # | Flags, see TL conditional fields |
 | exclude_featured | flags.0?true | Exclude featured stickersets from results |
 | q | string | Query string |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

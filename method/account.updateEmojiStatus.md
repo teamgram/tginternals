@@ -20,5 +20,6 @@ Bool
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | COLLECTIBLE_INVALID | The specified collectible is invalid. |
 | 400 | DOCUMENT_INVALID | The specified document is invalid. |
 

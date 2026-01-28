@@ -1,5 +1,5 @@
 # inputInvoicePremiumGiftCode
-Used if the user wishes to start a channel giveaway or send some giftcodes to members of a channel, in exchange for boosts.
+Used if the user wishes to start a channel/supergroup giveaway or send some giftcodes to members of a channel/supergroup, in exchange for boosts.
 
 ```
 inputInvoicePremiumGiftCode#98986c0d purpose:InputStorePaymentPurpose option:PremiumGiftCodeOption = InputInvoice;

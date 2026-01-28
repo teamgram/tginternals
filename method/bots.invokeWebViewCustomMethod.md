@@ -22,4 +22,6 @@ bots.invokeWebViewCustomMethod#87fc5e7 bot:InputUser custom_method:string params
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 400 | BOT_INVALID | This is not a valid bot. |
+| 400 | DATA_JSON_INVALID | The provided JSON data is invalid. |
+| 400 | METHOD_INVALID | The specified method is invalid. |
 

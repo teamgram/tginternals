@@ -191,17 +191,28 @@ To get the current recovery email, use account.getPasswordSettings.
 
 If the user has forgotten their 2FA password, the following recovery options are available:
 
-- Logged-in sessions only: password reset »
+- Logged-in sessions only: password reset »
 
-- Logged-in and not logged-in sessions: email recovery »
+- Logged-in and not logged-in sessions: email recovery »
 
-- Not logged-in sessions: account deletion »
+- Not logged-in sessions: account deletion »
 
 #### Password reset
 
 Password reset can be requested from logged-in sessions only.
 
 The following procedure can be used to reset the password without deleting the account:
+
+```
+account.resetPasswordFailedWait#e3779861 retry_date:int = account.ResetPasswordResult;
+account.resetPasswordRequestedWait#e9effc7d until_date:int = account.ResetPasswordResult;
+account.resetPasswordOk#e926d63e = account.ResetPasswordResult;
+
+---functions---
+
+account.resetPassword#9308ce1b = account.ResetPasswordResult;
+account.declinePasswordReset#4c9409f6 = Bool;
+```
 
 If the user is already logged in and has forgotten their 2FA password, account.resetPassword can be used to initiate a password reset.
 On success, the call will initially return a account.resetPasswordRequestedWait constructor and start a 7-day server-side timer, during which the user can abort the reset process using a button sent by the Telegram service account or directly in-UI using account.declinePasswordReset.
@@ -210,20 +221,44 @@ When the time comes, account.resetPassword is invoked once more, returning a acc
 
 If the user recently requested a password reset that was canceled, account.resetPasswordFailedWait will be returned by the initial account.resetPassword call, and they must wait until the specified date before requesting another reset.
 
-Note that if the user already knows their 2FA password and simply wants to disable 2FA, the same process used to enable the password must also be used to disable it ».
+Note that if the user already knows their 2FA password and simply wants to disable 2FA, the same process used to enable the password must also be used to disable it ».
 
 #### Email recovery
 
 Email recovery can be requested from logged in sessions, and from non-logged in sessions if the user has successfully provided the login code.
-In both cases, the account must have an associated recovery email ».
+In both cases, the account must have an associated recovery email ».
 
 In order to recover a forgotten 2FA password, an email must be sent to the previously specified address using the auth.requestPasswordRecovery method.
 Use auth.checkRecoveryPassword to make sure that the user provided a valid code.
-Then use auth.recoverPassword with the received code to delete the current 2FA password, to set a new one follow these instructions ».
+Then use auth.recoverPassword with the received code to delete the current 2FA password, to set a new one follow these instructions ».
 
 #### Account deletion
 
-If the user has successfully provided the login code, but they forgot their 2FA password and they don't have access to any other logged-in session, the account can be deleted following these instructions ».
+If the user has successfully provided the login code, but they forgot their 2FA password and they don't have access to any other logged-in session, the account can be deleted following these instructions ».
+
+### Using the 2FA password
+
+Multiple methods in the API such as those used to make payments, transfer channel ownership and others require the user to authenticate using the 2FA password passed as an InputCheckPasswordSRP constructor, generated as specified above.
+
+All such methods where a password verification is required after login may emit the following RPC errors:
+
+- PASSWORD_MISSING - No 2FA password is configured, but one is required in order to invoke the method. Set a 2FA password and then repeat the method call.
+
+- PASSWORD_TOO_FRESH_%d - The 2FA password was modified less than 24 hours ago, try again in %d seconds.
+
+- SESSION_TOO_FRESH_%d - This session was created less than 24 hours ago, try again in %d seconds.
+
+- PASSWORD_HASH_INVALID - The specified password is invalid (or an inputCheckPasswordEmpty was provided, but a 2FA password is required).
+
+The usual flow for invoking such methods is to first invoke the method passing an inputCheckPasswordEmpty (as if no password is configured, even if one is actually configured); then, according to the returned RPC error, proceed to:
+
+- PASSWORD_HASH_INVALID - The 2FA password insertion flow, the re-invoke the method with the user-provided password
+
+- PASSWORD_MISSING - The 2FA password setup flow, then re-invoke the method with the newly provided password
+
+- All other RPC errors - Show an error message with a description of the error
+
+This flow is useful to avoid race conditions with other currently logged-in sessions that may change the password.
 
 ### Related pages
 

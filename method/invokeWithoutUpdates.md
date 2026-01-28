@@ -13,7 +13,7 @@ invokeWithoutUpdates#bf9459b7 {X:Type} query:!X = X;
 
 
 ## Result
-The type returned by the invoked method.
+Returns the type returned by the invoked method.
 
 ## Possible errors
 | Code | Type | Description |

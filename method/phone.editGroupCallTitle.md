@@ -27,4 +27,5 @@ Updates
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 403 | GROUPCALL_FORBIDDEN | The group call has already ended. |
+| 400 | GROUPCALL_INVALID | The specified group call is invalid. |
 

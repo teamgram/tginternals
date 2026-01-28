@@ -11,7 +11,7 @@ messages.getFavedStickers#4f1aaa9 hash:long = messages.FavedStickers;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

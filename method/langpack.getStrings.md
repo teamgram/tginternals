@@ -9,8 +9,8 @@ langpack.getStrings#efea3803 lang_pack:string lang_code:string keys:Vector<strin
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| lang_pack | string | Language pack name, usually obtained from a language pack link |
-| lang_code | string | Language code |
+| lang_pack | string | Platform identifier (i.e. android, tdesktop, etc). |
+| lang_code | string | Either an ISO 639-1 language code or a language pack name obtained from a language pack link. |
 | keys | Vector<string> | Strings to get |
 
 

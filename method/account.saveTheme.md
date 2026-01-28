@@ -21,4 +21,5 @@ Bool
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | THEME_INVALID | Invalid theme provided. |
 

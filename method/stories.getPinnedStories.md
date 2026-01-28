@@ -2,7 +2,7 @@
 Fetch the stories pinned on a peer's profile.
 
 ```
-stories.stories#5dd8c3c8 count:int stories:Vector<StoryItem> chats:Vector<Chat> users:Vector<User> = stories.Stories;
+stories.stories#63c3dd0a flags:# count:int stories:Vector<StoryItem> pinned_to_top:flags.0?Vector<int> chats:Vector<Chat> users:Vector<User> = stories.Stories;
 ---functions---
 stories.getPinnedStories#5821a5dc peer:InputPeer offset_id:int limit:int = stories.Stories;
 ```
@@ -21,6 +21,7 @@ stories.Stories
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | CHANNEL_INVALID | The provided channel is invalid. |
 | 400 | PEER_ID_INVALID | The provided peer id is invalid. |
 | 400 | USER_ID_INVALID | The provided user ID is invalid. |
 

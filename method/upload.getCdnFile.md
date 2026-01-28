@@ -22,4 +22,6 @@ upload.CdnFile
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | FILE_TOKEN_INVALID | The master DC did not accept the file_token (e.g., the token has expired). Continue downloading the file from the master DC using upload.getFile. |
+| 404 | METHOD_INVALID | The specified method is invalid. |
 

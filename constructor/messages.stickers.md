@@ -8,7 +8,7 @@ messages.stickers#30a6ec7e hash:long stickers:Vector<Document> = messages.Sticke
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here |
 | stickers | Vector<Document> | Stickers |
 
 

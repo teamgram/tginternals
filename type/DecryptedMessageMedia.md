@@ -32,6 +32,16 @@ decryptedMessageMediaDocument#6abd9782 thumb:bytes thumb_w:int thumb_h:int mime_
 ## Constructors
 | Constructor | Description |
 | ---- | ----------- |
+| decryptedMessageMediaEmpty | Empty constructor, no media content. |
+| decryptedMessageMediaPhoto | Photo attached to an encrypted message. |
+| decryptedMessageMediaVideo | Video attached to an encrypted message. |
+| decryptedMessageMediaGeoPoint | GeoPoint attached to an encrypted message. |
+| decryptedMessageMediaContact | Contact attached to an encrypted message. |
+| decryptedMessageMediaDocument | Document attached to a message in a secret chat. |
+| decryptedMessageMediaAudio | Audio file attached to a secret chat message. |
+| decryptedMessageMediaExternalDocument | Non-e2e documented forwarded from non-secret chat |
+| decryptedMessageMediaVenue | Venue |
+| decryptedMessageMediaWebPage | Webpage preview |
 
 
 ## Methods

@@ -13,14 +13,15 @@ inputStickerSetEmojiGenericAnimations#4c4d4ce = InputStickerSet;
 inputStickerSetEmojiDefaultStatuses#29d0f5ee = InputStickerSet;
 inputStickerSetEmojiDefaultTopicIcons#44c1f8e9 = InputStickerSet;
 inputStickerSetEmojiChannelDefaultStatuses#49748553 = InputStickerSet;
+inputStickerSetTonGifts#1cf671a0 = InputStickerSet;
 ```
 
 ## Constructors
 | Constructor | Description |
 | ---- | ----------- |
+| inputStickerSetShortName | Stickerset by short name, from a stickerset deep link » |
 | inputStickerSetEmpty | Empty constructor |
 | inputStickerSetID | Stickerset by ID |
-| inputStickerSetShortName | Stickerset by short name, from a stickerset deep link » |
 | inputStickerSetAnimatedEmoji | Animated emojis stickerset |
 | inputStickerSetDice | Used for fetching animated dice stickers |
 | inputStickerSetAnimatedEmojiAnimations | Animated emoji reaction stickerset (contains animations to play when a user clicks on a given animated emoji) |
@@ -29,6 +30,7 @@ inputStickerSetEmojiChannelDefaultStatuses#49748553 = InputStickerSet;
 | inputStickerSetEmojiDefaultStatuses | Default custom emoji status stickerset |
 | inputStickerSetEmojiDefaultTopicIcons | Default custom emoji stickerset for forum topic icons |
 | inputStickerSetEmojiChannelDefaultStatuses | Default custom emoji status stickerset for channel statuses |
+| inputStickerSetTonGifts | TON gifts stickerset. |
 
 
 ## Methods

@@ -10,7 +10,7 @@ updatesCombined#725b04c3 updates:Vector<Update> users:Vector<User> chats:Vector<
 updates#74ae4240 updates:Vector<Update> users:Vector<User> chats:Vector<Chat> date:int seq:int = Updates;
 updateShortSentMessage#9015e101 flags:# out:flags.1?true id:int pts:int pts_count:int date:int media:flags.9?MessageMedia entities:flags.7?Vector<MessageEntity> ttl_period:flags.25?int = Updates;
 ---functions---
-channels.toggleForum#a4298b29 channel:InputChannel enabled:Bool = Updates;
+channels.toggleForum#3ff75734 channel:InputChannel enabled:Bool tabs:Bool = Updates;
 ```
 
 ## Parameters
@@ -18,6 +18,7 @@ channels.toggleForum#a4298b29 channel:InputChannel enabled:Bool = Updates;
 | ---- | :----: | ----------- |
 | channel | InputChannel | Supergroup ID |
 | enabled | Bool | Enable or disable forum functionality |
+| tabs | Bool | If true enables the tabbed forum UI, otherwise enables the list-based forum UI. |
 
 
 ## Result
@@ -26,6 +27,7 @@ Updates
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | CHANNEL_INVALID | The provided channel is invalid. |
 | 400 | CHAT_DISCUSSION_UNALLOWED | You can't enable forum topics in a discussion group linked to a channel. |
 | 400 | CHAT_NOT_MODIFIED | No changes were made to chat information because the new information you passed is identical to the current information. |
 

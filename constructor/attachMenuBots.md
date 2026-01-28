@@ -8,7 +8,7 @@ attachMenuBots#3c4301c0 hash:long bots:Vector<AttachMenuBot> users:Vector<User> 
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here |
 | bots | Vector<AttachMenuBot> | List of bot mini apps that can be launched from the attachment menu » |
 | users | Vector<User> | Info about related users/bots |
 

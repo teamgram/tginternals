@@ -13,7 +13,7 @@ messages.getRecentStickers#9da9403b flags:# attached:flags.0?true hash:long = me
 | ---- | :----: | ----------- |
 | flags | # | Flags, see TL conditional fields |
 | attached | flags.0?true | Get stickers recently attached to photo or video files |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

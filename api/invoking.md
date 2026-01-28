@@ -10,7 +10,15 @@ A layer is a collection of updated methods or constructors in a TL schema. Each 
 
 There is a helper method to let the API know that a client supports the Layer layer:
 
+```
+invokeWithLayer#da9b0d0d {X:Type} layer:int query:!X = X;
+```
+
 The helper method invokeWithLayer can be used only together with initConnection: the present layer will be saved with all other parameters of the client and any future requests will be using this saved value. See more below.
+
+Note: in some cases such as updates from big channels, the API may return constructors from older layers, different from the connection's current layer.
+
+Clients should treat this as a 500 server error, and handle it by closing and reopening the TCP socket, re-reinitializing the session with initConnection and invoking getDifference.
 
 #### List of Available Layers
 
@@ -25,6 +33,10 @@ initConnection must also be called after each auth.bindTempAuthKey.
 When calling this method, the current layer used by the client is also saved (the layer in which initConnection was wrapped is used). After a successful call to initConnection it is no longer necessary to wrap each API call in invokeWithLayerN.
 
 ### Disabling updates
+
+```
+invokeWithoutUpdates#bf9459b7 {X:Type} query:!X = X;
+```
 
 invokeWithoutUpdates can be used to invoke a request without subscribing the used connection for updates (this is enabled by default for file queries).
 

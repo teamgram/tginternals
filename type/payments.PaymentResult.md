@@ -8,6 +8,7 @@ payments.paymentVerificationNeeded#d8411139 url:string = payments.PaymentResult;
 ---functions---
 
 payments.sendPaymentForm#2d03522f flags:# form_id:long invoice:InputInvoice requested_info_id:flags.0?string shipping_option_id:flags.1?string credentials:InputPaymentCredentials tip_amount:flags.2?long = payments.PaymentResult;
+payments.sendStarsForm#7998c914 form_id:long invoice:InputInvoice = payments.PaymentResult;
 ```
 
 ## Constructors
@@ -21,5 +22,6 @@ payments.sendPaymentForm#2d03522f flags:# form_id:long invoice:InputInvoice requ
 | Method | Description |
 | ---- | ----------- |
 | payments.sendPaymentForm | Send compiled payment form |
+| payments.sendStarsForm | Make a payment using Telegram Stars, see here » for more info. |
 
 

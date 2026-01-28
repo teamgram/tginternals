@@ -2,7 +2,7 @@
 Indicates a possible answer to a poll.
 
 ```
-pollAnswer#6ca9c2e9 text:string option:bytes = PollAnswer;
+pollAnswer#ff16e2ca text:TextWithEntities option:bytes = PollAnswer;
 ```
 
 ## Constructors

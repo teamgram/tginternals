@@ -20,6 +20,19 @@ The passport secret must also be downloaded, re-encrypted and re-uploaded as des
 
 First of all, server-side passport parameters are fetched, schema:
 
+```
+account.password#957b50fb flags:# has_recovery:flags.0?true has_secure_values:flags.1?true has_password:flags.2?true current_algo:flags.2?PasswordKdfAlgo srp_B:flags.2?bytes srp_id:flags.2?long hint:flags.3?string email_unconfirmed_pattern:flags.4?string new_algo:PasswordKdfAlgo new_secure_algo:SecurePasswordKdfAlgo secure_random:bytes pending_reset_date:flags.5?int login_email_pattern:flags.6?string = account.Password;
+
+securePasswordKdfAlgoUnknown#4a8537 = SecurePasswordKdfAlgo;
+securePasswordKdfAlgoPBKDF2HMACSHA512iter100000#bbf2dda0 salt:bytes = SecurePasswordKdfAlgo;
+securePasswordKdfAlgoSHA512#86471d92 salt:bytes = SecurePasswordKdfAlgo;
+
+
+---functions---
+
+account.getPassword#548a30f5 = account.Password;
+```
+
 When Telegram Passport is first used, the client generates a passport_secret (a 32-byte number with the modulo 255 sum of bytes equal to 239), using a part of server-generated random secure_random from account.password as an additional source of entropy for OpenSSL (when re-encrypting the passport_secret with a more secure algorithm or after a 2FA password change, the previous passport_secret is used, instead). 
 Then passport_secret is then encrypted using the user's password and hashed using the schema and parameters specified in the new_algo field of account.password.
 
@@ -96,7 +109,7 @@ The other constructors may be used only when decrypting old passport parameters 
 
 - secure_secret_id is set to the new passport_secret_fingerprint
 
-Subsequently, the client receives the encrypted passport_secret from the server and decrypts it after the user enters their password ».
+Subsequently, the client receives the encrypted passport_secret from the server and decrypts it after the user enters their password ».
 
 In case the password is changed or a more secure algorithm is introduced in an update of the API, the client re-encrypts the passport_secret using the new password. 
 If the password is disabled, all Telegram Passport data is lost.
@@ -105,13 +118,36 @@ If the password is disabled, all Telegram Passport data is lost.
 
 Schema:
 
+```
+securePasswordKdfAlgoUnknown#4a8537 = SecurePasswordKdfAlgo;
+securePasswordKdfAlgoPBKDF2HMACSHA512iter100000#bbf2dda0 salt:bytes = SecurePasswordKdfAlgo;
+securePasswordKdfAlgoSHA512#86471d92 salt:bytes = SecurePasswordKdfAlgo;
+
+secureSecretSettings#1527bcac secure_algo:SecurePasswordKdfAlgo secure_secret:bytes secure_secret_id:long = SecureSecretSettings;
+
+account.passwordSettings#9a5c33e5 flags:# email:flags.0?string secure_settings:flags.1?SecureSecretSettings = account.PasswordSettings;
+
+---functions---
+
+account.getPasswordSettings#9cd4eaf9 password:InputCheckPasswordSRP = account.PasswordSettings;
+```
+
 The client requests the user's 2FA password and generates the SRP paramaters to be passed to account.getPasswordSettings.
 
 If the password is correct, an account.passwordSettings constructor with secureSecretSettings is returned.
 
 encrypted_passport_secret, passport_secret_fingerprint parameters are extracted from the secureSecretSettings constructor:
 
+```
+encrypted_passport_secret = secureSecretSettings.secure_secret
+passport_secret_fingerprint = secureSecretSettings.secure_id
+```
+
 The combined passport_secret_salt is extracted from the SecurePasswordKdfAlgo.
+
+```
+passport_secret_salt = SecurePasswordKdfAlgo.salt
+```
 
 Similar to passport secret encryption, the following process is used to decrypt and verify the encrypted_passport_secret:
 
@@ -243,6 +279,10 @@ To encrypt Telegram Passport data, the client generates a data_secret (a 32-byte
 
 ##### SecureData
 
+```
+secureData#8aeabec3 data:bytes data_hash:bytes secret:bytes = SecureData;
+```
+
 - data is an encrypted and padded (see Encryption) JSON-serialized object of one of the following types: PersonalDetails, IdDocumentData, ResidentialAddress, depending on the chosen type.
 
 - Data must be in JSON format and not TL, as it has to be passed directly to the service using E2E encryption, without the bot API middleman to convert TL objects.
@@ -255,7 +295,16 @@ Data is an encrypted and padded JSON-serialized object of one of the specified J
 
 ##### InputSecureFile
 
-Files (JPG format, max. 10 MB) are encrypted and padded (see Encryption), and then uploaded chunk by chunk as described in files », except that instead of generating an inputFile, an inputSecureFile should be generated, instead.
+```
+inputSecureFileUploaded#3334b0f0 id:long parts:int md5_checksum:string file_hash:bytes secret:bytes = InputSecureFile;
+inputSecureFile#5367e5be id:long access_hash:long = InputSecureFile;
+
+---functions---
+
+upload.saveFilePart#b304a621 file_id:long file_part:int bytes:bytes = Bool;
+```
+
+Files (JPG format, max. 10 MB) are encrypted and padded (see Encryption), and then uploaded chunk by chunk as described in files », except that instead of generating an inputFile, an inputSecureFile should be generated, instead.
 
 - As for secret chat files, the md5_checksum is to be set to the MD5 hash of the encrypted file, for a server-side integrity check.
 
@@ -264,6 +313,23 @@ Files (JPG format, max. 10 MB) are encrypted and padded (see Encryption), and th
 - The secret field is the encrypted_data_secret.
 
 ##### SecurePlainData
+
+```
+securePlainPhone#7d6099dd phone:string = SecurePlainData;
+securePlainEmail#21ec5a5f email:string = SecurePlainData;
+
+emailVerifyPurposePassport#bbf51685 = EmailVerifyPurpose;
+
+---functions---
+
+account.sendVerifyPhoneCode#a5a356f9 phone_number:string settings:CodeSettings = auth.SentCode;
+account.verifyPhone#4dd3a7f6 phone_number:string phone_code_hash:string phone_code:string = Bool;
+account.sendVerifyEmailCode#98e037bb purpose:EmailVerifyPurpose email:string = account.SentEmailCode;
+account.verifyEmail#32da4cf purpose:EmailVerifyPurpose verification:EmailVerification = account.EmailVerified;
+
+auth.resendCode#cae47523 flags:# phone_number:string phone_code_hash:string reason:flags.0?string = auth.SentCode;
+auth.cancelCode#1f040578 phone_number:string phone_code_hash:string = Bool;
+```
 
 The email/phone is passed in plaintext using the respective SecurePlainData constructor.
 To verify a phone number or email and use it in Telegram Passport, use the appropriate methods:
@@ -294,11 +360,45 @@ For more info, see the authorization docs.
 
 #### When to use each constructor.
 
+```
+inputSecureFileUploaded#3334b0f0 id:long parts:int md5_checksum:string file_hash:bytes secret:bytes = InputSecureFile;
+inputSecureFile#5367e5be id:long access_hash:long = InputSecureFile;
+
+secureValueTypePersonalDetails#9d2a81e3 = SecureValueType;
+secureValueTypePassport#3dac6a00 = SecureValueType;
+secureValueTypeDriverLicense#6e425c4 = SecureValueType;
+secureValueTypeIdentityCard#a0d0744b = SecureValueType;
+secureValueTypeInternalPassport#99a48f23 = SecureValueType;
+secureValueTypeAddress#cbe31e26 = SecureValueType;
+secureValueTypeUtilityBill#fc36954e = SecureValueType;
+secureValueTypeBankStatement#89137c0d = SecureValueType;
+secureValueTypeRentalAgreement#8b883488 = SecureValueType;
+secureValueTypePassportRegistration#99e3806a = SecureValueType;
+secureValueTypeTemporaryRegistration#ea02ec33 = SecureValueType;
+secureValueTypePhone#b320aadb = SecureValueType;
+secureValueTypeEmail#8e3ca7ee = SecureValueType;
+
+securePlainPhone#7d6099dd phone:string = SecurePlainData;
+securePlainEmail#21ec5a5f email:string = SecurePlainData;
+
+secureData#8aeabec3 data:bytes data_hash:bytes secret:bytes = SecureData;
+
+inputSecureValue#db21d0a7 flags:# type:SecureValueType data:flags.0?SecureData front_side:flags.1?InputSecureFile reverse_side:flags.2?InputSecureFile selfie:flags.3?InputSecureFile translation:flags.6?Vector<InputSecureFile> files:flags.4?Vector<InputSecureFile> plain_data:flags.5?SecurePlainData = InputSecureValue;
+```
+
 The schema for the inputSecureValue constructor defines the constructor to use for each field.
 
 Here's a list of possible SecureValueTypes, and the parameters that can be set/requested when using each type.
 
 #### Fetching and deleting stored passport data
+
+```
+---functions---
+
+account.getAllSecureValues#b288bc7d = Vector<SecureValue>;
+account.getSecureValue#73665bc2 types:Vector<SecureValueType> = Vector<SecureValue>;
+account.deleteSecureValue#b880bc4b types:Vector<SecureValueType> = Bool;
+```
 
 The above methods can be used to fetch or remove encrypted Telegram Passport files stored in the Telegram Cloud by document type.
 

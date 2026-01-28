@@ -6,6 +6,11 @@ There are some advantages of using a webhook over getUpdates. As soon as an upda
 
 This:
 
+```
+1. Avoids your bot having to ask for updates frequently.
+2. Avoids the need for some kind of polling mechanism in your code.
+```
+
 Other advantages may include saving some potential CPU cycles and an increase in response time, these things however depend heavily on the usage pattern of your bot.
 
 Setting a webhook means you supplying Telegram with a location in the form of a URL, on which your bot listens for updates. We need to be able to connect and post updates to that URL.
@@ -123,6 +128,12 @@ If you got stuck here, make a choice:
 
 - Go with a hosted service and let a bunch of professionals worry about things like registering a domain, setting up DNS, a web server, securing it and so on.
 
+```
+If you're going with a hosted service, make sure to look for a hosting provider that 
+not only supports your code’s needs, for example: support for your PHP version,
+but one that also handles SSL and allows you to create/deploy certificates.
+```
+
 - Go crazy, dive on the internet and start reading. Once you’re confident that you’ve got all the basic theories down, find yourself a nice hosted VPS or roll your own machine at home and get back to us here.
 
 ##### How do I check for open ports or limit access to my bot?
@@ -178,6 +189,13 @@ Explaining every firewall or web server solution in detail isn't possible for us
 - sudo ifconfig
 
 - Helps you find the interface with the public address you’re going to use.
+
+```
+If you use iptables, make sure to actually SAVE after changing the configuration.
+On a Debian based system the iptables-persistent package is be a good option.
+RHEL/CentOS offers a service iptables save -command.
+A quick online search for "YOUROPERATINGSYSTEM save iptables" also helps.
+```
 
 - If you’re just looking for some hints on how to limit incoming traffic:
 
@@ -275,15 +293,64 @@ You need a certificate, pick on of these types;
 
 - openssl req -newkey rsa:2048 -keyout yourprivatekey.key -out yoursigningrequest.csr
 
+```
+----
+Generating a 2048 bit RSA private keywriting new private key to yourprivatekey.key
+Enter PEM pass phrase: enter a password for your key here 
+Verifying - Enter PEM pass phrase: confirm the entered password
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,If you enter '.',
+the field will be left blank.-----
+Country Name (2 letter code) [AU]:
+State or Province Name (full name) [Some-State]:
+Locality Name (eg, city) []:
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []: yourbotdomainname
+Email Address []:
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+---
+```
+
 - Another example:
 
 - Using Java keytool:
 
 - keytool -genkey -alias yourbotdomainname -keyalg RSA -keystore yourkeystore.jks -keysize 2048
 
+```
+---
+Enter keystore password:  
+Re-enter new password: 
+What is your first and last name?  [Unknown]: yourbotdomainname
+What is the name of your organizational unit?  [Unknown]:  
+What is the name of your organization?  [Unknown]:  
+What is the name of your City or Locality?  [Unknown]:  
+What is the name of your State or Province?  [Unknown]:  
+What is the two-letter country code for this unit?  [Unknown]:  
+Is CN=test.telegram.org, OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown correct?  
+[no]:  yes
+Enter key password for yourbotdomainname   
+(RETURN if same as keystore password): 
+---
+```
+
 This generates the initial keystore, from which you can then create a CSR like this:
 
 keytool -certreq -alias yourbotdomainname -keystore yourkeystore.jks -file yourbotdomainname.csr
+
+```
+---
+Enter keystore password:
+---
+```
 
 To validate your certificate the Common Name (CN) has to match your webhook domain. Example, if you’re using https://www.example.com/example.php as a webhook address, the certificate CN has to be www.example.com. 
 So you need an exact match of the FQDN you’re setting for the webhook

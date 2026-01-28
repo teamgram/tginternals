@@ -28,7 +28,7 @@ This page describes individual bot elements and features in detail. See also:
 
 - Integration
 
-- Web Apps
+- Mini Apps
 
 - Bots for Business
 
@@ -39,6 +39,8 @@ This page describes individual bot elements and features in detail. See also:
 - HTML5 Games
 
 - Stickers
+
+- Monetization
 
 - Language Support
 
@@ -191,11 +193,27 @@ Each bot has a link that opens a conversation with it in Telegram – https://t.
 
 Private ChatsIn private chats, you can use the start parameter to automatically pass any value to your bot whenever a user presses the link. For example, you could use:
 
+```
+https://t.me/your_bot?start=airplane
+```
+
 When someone opens a chat with your bot via this link, you will receive:
+
+```
+/start airplane
+```
 
 GroupsIn groups, you can add the parameter startgroup to this link. For example:
 
+```
+https://t.me/your_bot?startgroup=spaceship
+```
+
 Following a link with this parameter prompts the user to select a group to add the bot to – the resulting update will contain text in the form:
+
+```
+/start@your_bot spaceship
+```
 
 > Web Apps also support deep linking, for more information check out our dedicated guide.
 
@@ -209,13 +227,13 @@ Certain bots can be added directly to a user’s attachment menu – giving them
 
 ### Integration
 
-There are various ways of futher integrating bots with Telegram and other services.
+There are various ways of further integrating bots with Telegram and other services.
 
 - Use Web Apps to replace any website.
 
 - Build tools and integrate business services.
 
-- Accept Payments via dozens of integrated third-party payment providers.
+- Accept Payments via third-party payment providers that support integration with Bots and Mini Apps.
 
 - Connect to Telegram using the Web Login functionality.
 
@@ -223,19 +241,109 @@ There are various ways of futher integrating bots with Telegram and other servic
 
 - Help users create and manage Telegram Stickers.
 
-### Web Apps
+### Monetization
 
-Bots can easily process complex inputs of any kind and dynamic interaction flows via Web Apps. With this unique feature, you can develop any number of flexible, streamlined interfaces in JavaScript.
+Telegram offers a robust ecosystem of monetization features, allowing any bot to support its development with multiple revenue streams.
 
-> Web Apps are covered in detail in our dedicated guide – you should read it carefully to learn the wide variety of features they can offer.
+#### Telegram Stars
 
-If you develop a Web App, be sure to follow our design guidelines – you'll want your custom interface to seamlessly integrate into the app to provide users the best possible experience.
+Telegram Stars power all digital transactions between bots and users. Users can acquire Stars through in-app purchases via Apple and Google or via @PremiumBot.
 
-#### Bots for Business
+Bots can use the Stars they receive to increase message limits, send gifts to users or accept rewards in Toncoin.
 
-Bots can enable Business Mode, allowing Telegram Business subscribers to connect them to their account – to streamline and automate private chat management and interactions with their clients.
+#### Digital Products
 
-The account owner can specify which chats your bot can access – within those chats, the bot will receive all updates normally supported by the Bot API, except service messages and messages sent by itself and other bots. Depending on the business connection settings, your bot may also be able to send messages and do other actions on behalf of the account owner in chats that were active in the last 24h.
+Services can use their bot to sell digital goods and services – like online courses, commissioned artwork and items in games.
+
+#### Paid Media
+
+Bots can post paid photos and videos – and users are only allowed to view the media after paying to unlock it. This functionality is available to all bots – including bot admins in channels and bots managing Telegram Business accounts.
+
+#### Subscription Plans
+
+Developers are able to offer paid subscriptions to their bot – adding multiple tiers of content and features tailored to their audience.
+
+#### Revenue Sharing from Telegram Ads
+
+Developers can participate in revenue sharing from Telegram Ads – receiving 50% of the revenue from ads that appear in the chat with their bot.
+
+### Mini Apps
+
+Mini Apps allow developers to create infinitely flexible interfaces that can be launched right inside Telegram – integrating seamlessly with the app and replacing any website.
+
+If your bot is a mini app, you can add a prominent Launch app button as well as demo videos and screenshots to the bot’s profile. To do this, go to @BotFather and set up your bot's Main Mini App.
+
+> Mini apps are covered in detail in our dedicated guide – you should read it carefully to learn the wide variety of features they can offer.
+
+If you develop a mini app, be sure to follow our design guidelines – you'll want your custom interface to seamlessly integrate into the app to provide users the best possible experience.
+
+#### Seamless Integration With Telegram
+
+Mini apps integrate seamlessly with Telegram – from receiving detailed theme settings to using native dialogs for reading QR codes, controlling biometrics, sharing media directly to stories and more.
+
+When opened from a direct link in a group, mini apps can also use the chat_instance parameter to track of the current context, supporting shared usage by multiple chat members – to create live whiteboards, group orders, multiplayer games and much more.
+
+#### Mini App Previews
+
+Developers can upload screenshots and video demos of their mini app right from the bot's profile page – giving users an overview of the app's features and functionality. These media previews will be shown to any user who views your app – like in the Mini App Store or via Search.
+
+> Previews support multiple languages – so you can upload translated versions of your previews that will be shown to users based on their app language.
+
+#### Mini App Store
+
+More than 500 million out of Telegram's 950 million users interact with mini apps every month. Successful mini apps have the chance to be highlighted in the Telegram Mini App Store – appearing for all users in the 'Apps' tab of Search.
+
+Featured mini apps are chosen based on how they enrich the Telegram ecosystem. To increase the chances of being featured, you must enable the Main Mini App in @BotFather, upload high-quality media demos showcasing your app to your bot's profile and accept payments in Telegram Stars.
+
+> Check out our documentation to learn more about enabling Main Mini Apps and accepting payments in Stars.
+
+#### Home Screen Shortcuts
+
+Users can place direct shortcuts to specific mini apps on the home screen of their devices – accessing their favorite games and services in one tap.
+
+#### Customizable Loading Screens
+
+The loading screen of mini apps can be customized in @Botfather – where developers can add their own icon and set specific colors for both light and dark themes.
+
+> To customize your loading screen, go to @Botfather > /mybots > Select bot > Bot Settings > Configure Mini App > Configure Splash Screen. You can tap on Open Splash Screen Preview to see the final result.
+
+#### Full-Screen Mode
+
+Mini apps are able to use the entire screen in portrait or landscape orientation – allowing for immersive games and media with expanded gestures and interfaces.
+
+#### Setting Emoji Status
+
+Users can set an emoji status inside mini apps or give an app permission to update it automatically.
+
+Developers can also integrate APIs from other services or request geolocation access – instantly changing a user's status when they start a game  or leave the office .
+
+#### Sharing Media
+
+Media generated in mini apps can be shared in any chat – letting users effortlessly send referral codes and custom images to contacts, groups and channels. Alternatively, users can download it with a native popup.
+
+#### Sharing from Mini Apps to Stories
+
+Any media created by the mini app, like whiteboard snapshots, leaderboards and AI-generated videos can be opened with the native story editor via the shareToStory method – for users to share as a Telegram Story right from the mini app.
+
+> Mini apps also receive a number of events, allowing them to instantly react to actions by the user. You can learn more about which events are available here.
+
+#### Geolocation Access
+
+Mini apps are able to receive location permissions from users – giving developers the ability to make location-based games and interactive maps for events.
+
+#### Device Motion Tracking
+
+Mini Apps can request acceleration, orientation and rotation data from devices in real time – unlocking support for motion controls and VR experiences.
+
+#### Device Hardware Info
+
+A user's device can send basic hardware info to mini apps, such as its processing power and memory capacity. Mini apps can then use this to optimize graphics and automatically adjust settings for the smoothest experience.
+
+### Bots for Business
+
+Bots can enable Business Mode, allowing Telegram Business subscribers to connect them to their account – streamlining and automating private chat management and interactions with their clients.
+
+The account owner can specify which chats your bot can access – within those chats, the bot will receive all updates normally supported by the Bot API, except messages sent by itself and other bots. Depending on the business connection settings, your bot may also be able to send messages and do other actions on behalf of the account owner in chats that were active in the last 24h.
 
 Here is a quick start guide to integrate your bot with Telegram Business:
 
@@ -255,7 +363,9 @@ Users who connect your bot to their account will see a quick action bar at the t
 
 ### Payments
 
-Telegram bots can accept payments with a sleek, streamlined interface that collects all necessary data from the user. Telegram doesn't collect any payment data – like the user's credit card information – and sends it directly to one of the supported payment providers.
+> If your bot or mini app sells digital goods and services, be sure to carry out the payment in Telegram Stars by specifying XTR as currency. In compliance with third-party store policies, Telegram does not support the sale of digital goods and services using other currencies.
+
+Telegram bots can accept payments with a sleek, streamlined interface that collects all necessary data from the user. Telegram doesn't collect any payment data – like the user's credit card information – and sends it directly to one of the supported third-party payment providers.
 
 Here is a quick start guide to implement payments:
 
@@ -275,9 +385,13 @@ Then, to issue an invoice and process the order flow:
 
 - Ship the goods or provide the services.
 
-A full and exhaustive guide, including live checklist, parameters and in-depth method descriptions is available here. We strongly recommend that you read the full guide before going live.
+For more details, feel free to check out our full exhaustive guides for selling goods and services on Telegram – they include live checklists, parameters and in-depth method descriptions:
 
-> Telegram does not directly process the payments, does not store data about orders and does not collect any fees. Invoices are forwarded directly to the payment provider.For this reason, disputes must be solved between the user, the bot developer and the payment provider. You can read more about this in the Privacy Policy.
+- Guide for digital goods and services
+
+- Guide for physical goods and services
+
+> Telegram does not directly process the payments, does not store data about orders and does not collect any fees. Invoices are forwarded directly to the third-party payment provider.For this reason, disputes must be solved between the user, the bot developer and the payment provider. You can read more about this in the Privacy Policy.
 
 ### Web Login
 
@@ -420,6 +534,10 @@ To create an account and log in, use either of the following:
 - macOS: click the Settings icon 10 times to open the Debug Menu, ⌘ + click 'Add Account' and log in via phone number.
 
 After logging in, simply create a new bot following the standard procedure and send your requests to the Test Bot API in this format:
+
+```
+https://api.telegram.org/bot<token>/test/METHOD_NAME
+```
 
 > When working with the test environment, you may use HTTP links without TLS in the url field of both LoginUrl and WebAppInfo.
 

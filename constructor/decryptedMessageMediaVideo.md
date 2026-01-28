@@ -19,12 +19,12 @@ decryptedMessageMediaVideo#970c8c0e thumb:bytes thumb_w:int thumb_h:int duration
 | thumb_w | int | Thumbnail width |
 | thumb_h | int | Thumbnail height |
 | duration | int | Duration of video in seconds |
-| mime_type | string | MIME-type of the video fileParameter added in Layer 17. |
 | w | int | Image width |
 | h | int | Image height |
 | size | int | File size |
 | key | bytes | Key to decrypt the attached video file |
 | iv | bytes | Initialization vector |
+| mime_type | string | MIME-type of the video fileParameter added in Layer 17. |
 | caption | string | Caption |
 
 

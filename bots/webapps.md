@@ -2,13 +2,159 @@
 
 With Mini Apps developers can use JavaScript to create infinitely flexible interfaces that can be launched right inside Telegram — and can completely replace any website.
 
-Like bots, Mini Apps support seamless authorization, integrated payments via 20 payment providers (with Google Pay and Apple Pay out of the box), delivering tailored push notifications to users, and much more.
+Like bots, Mini Apps support seamless authorization, payments via third-party payment providers (with Google Pay and Apple Pay out of the box), delivering tailored push notifications to users, and much more.
 
 > To see a Mini App in action, try our sample @DurgerKingBot.
 
 ---
 
 ### Recent changes
+
+#### July 3, 2025
+
+Bot API 9.1
+
+- Added the method hideKeyboard to the class WebApp.
+
+#### April 11, 2025
+
+Bot API 9.0
+
+- Added the field DeviceStorage, allowing Mini Apps to use persistent local storage on the user's device.
+
+- Added the field SecureStorage, allowing Mini Apps to use a secure local storage on the user's device for sensitive data.
+
+#### November 17, 2024
+
+Bot API 8.0
+
+> This is the largest update in the history of Telegram mini apps – adding more than 10 new features and monetization options for developers. To read more about all these changes, check out this dedicated blog post.
+
+Full-screen Mode
+
+- Mini Apps are now able to become full-screen in both portrait and landscape mode – allowing them to host more games, play widescreen media and support immersive user experiences.
+
+- Added the methods requestFullscreen and exitFullscreen to toggle full-screen mode.
+
+- Added the fields safeAreaInset and contentSafeAreaInset, allowing Mini Apps to ensure that their content properly respects the device's safe area margins.
+
+- Further added the fields isActive and isFullscreen to the class WebApp.
+
+- Added the events activated, deactivated, safeAreaChanged, contentSafeAreaChanged, fullscreenChanged and fullscreenFailed.
+
+Homescreen Shortcuts
+
+- Mini Apps can now be accessed via direct shortcuts added to the home screen of mobile devices.
+
+- Added the method addToHomeScreen to create a shortcut for users to add to their home screens.
+
+- Added the method checkHomeScreenStatus to determine the status and support of the home screen shortcut for the Mini App on the current device.
+
+- Added the events homeScreenAdded and homeScreenChecked.
+
+Emoji Status
+
+- Mini Apps can now prompt users to set their emoji status – or request access to later sync it automatically with in-game badges, third-party APIs and more.
+
+- Added the method setEmojiStatus to let users manually confirm a custom emoji as their new status via a native dialog.
+
+- Added the method requestEmojiStatusAccess for obtaining permission to later update a user's emoji status via the Bot API method setUserEmojiStatus.
+
+- Added the events emojiStatusSet, emojiStatusFailed and emojiStatusAccessRequested.
+
+Media Sharing and File Downloads
+
+- Users can now share media directly from Mini Apps – sending referral codes, custom memes, artwork and more to any chat or posting them as a story.
+
+- Added the method shareMessage to share media from Mini Apps to Telegram chats. Also see PreparedInlineMessage.
+
+- Added the method downloadFile, introducing support for a native popup that prompts users to download files from the Mini App.
+
+- Added the events shareMessageSent, shareMessageFailed and fileDownloadRequested.
+
+Geolocation Access
+
+- Mini Apps can now request geolocation access to users, allowing them to build virtually any location-based service, from games with dynamic points of interest to interactive maps for events.
+
+- Added the field LocationManager to the class WebApp.
+
+- Added the events locationManagerUpdated and locationRequested.
+
+Device Motion Tracking
+
+- Mini Apps can now track detailed device motion data, allowing them to implement better productivity tools, immersive VR experiences and more.
+
+- Added the fields isOrientationLocked, Accelerometer, DeviceOrientation and Gyroscope to the class WebApp.
+
+- Added the methods lockOrientation and unlockOrientation to control the screen orientation.
+
+- Added the events accelerometerStarted, accelerometerStopped, accelerometerChanged, accelerometerFailed, deviceOrientationStarted, deviceOrientationStopped, deviceOrientationChanged, deviceOrientationFailed, gyroscopeStarted, gyroscopeStopped, gyroscopeChanged, gyroscopeFailed.
+
+Subscription Plans and Gifts for Telegram Stars
+
+- Mini Apps now support paid subscriptions powered by Telegram Stars – monetizing their efforts with multiple tiers of content and features.
+
+- Mini Apps can use their balance of Telegram Stars to send gifts to their users.
+
+- You can read more on implementing Paid Subscriptions and Gifts in our Bot API documentation.
+
+Loading Screen Customization
+
+- Mini Apps can customize their loading screen, adding their own icon and specific colors for light and dark themes.
+
+- You can access these customization settings in @BotFather via /mybots > Select Bot > Bot Settings > Configure Mini App > Enable Mini App
+
+Hardware-specific Optimizations
+
+- Mini Apps running on Android can now receive basic information about a device's processing hardware, allowing them to optimize user experience based on the device's capabilities.
+
+- This information includes the OS, App and SDK's respective versions as well as the device's model and performance class.
+
+General
+
+- The field photo_url in the class WebAppUser is now available to all Mini Apps, allowing them to access a user's profile photo if their privacy settings allow for it.
+
+- Third parties (e.g., Mini App builders, external SDKs etc.) that receive or process data on behalf of Mini Apps are now able to validate it without knowing the App's bot token.
+
+- Debugging options have been expanded to include full support for iOS devices. You can use these tools to find app-specific issues in your Mini App.
+
+#### September 6, 2024
+
+Bot API 7.10
+
+- Added the field SecondaryButton to the class WebApp.
+
+- Added the event secondaryButtonClicked.
+
+- Renamed the class MainButton to the class BottomButton.
+
+- Added the field bottomBarColor and the method setBottomBarColor to the class WebApp.
+
+- Added the field bottom_bar_bg_color to the class ThemeParams.
+
+#### July 31, 2024
+
+Bot API 7.8
+
+- Added the option for bots to set a Main Mini App, which can be previewed and launched directly from a button in the bot's profile or a link.
+
+- Added the method shareToStory to the class WebApp.
+
+#### July 7, 2024
+
+Bot API 7.7
+
+- Added the field isVerticalSwipesEnabled and the methods enableVerticalSwipes, disableVerticalSwipes to the class WebApp.
+
+- Added the event scanQrPopupClosed.
+
+#### July 1, 2024
+
+Bot API 7.6
+
+- Added the field section_separator_color to the class ThemeParams.
+
+- Changed the default opening mode for Direct Link Mini Apps.
 
 #### March 31, 2024
 
@@ -100,7 +246,7 @@ Telegram apps are known for being snappy, smooth and following a consistent cros
 
 - All elements should be responsive and designed with a mobile-first approach.
 
-- Interactive elements should mimic the style, behavior and intent of UI components that already exist.
+- Interactive elements should mimic the style, behavior, and intent of UI components that already exist.
 
 - All included animations should be smooth, ideally 60fps.
 
@@ -108,11 +254,15 @@ Telegram apps are known for being snappy, smooth and following a consistent cros
 
 - The app should deliver a seamless experience by monitoring the dynamic theme-based colors provided by the API and using them accordingly.
 
+- Ensure that the app’s interface respects the safe area and content safe area to avoid overlapping with control elements, especially when using fullscreen mode.
+
+- For Android devices, consider the additional information in the User-Agent (see User-Agent details) and adjust for the device’s performance class, minimizing animations and visual effects on low-performance devices to ensure smooth performance.
+
 ---
 
 ### Implementing Mini Apps
 
-Telegram currently supports six different ways of launching Mini Apps: from a keyboard button, from an inline button, from the bot menu button, via inline mode, from a direct link – and even from the attachment menu.
+Telegram currently supports seven different ways of launching Mini Apps: the main Mini App from a profile button, from a keyboard button, from an inline button, from the bot menu button, via inline mode, from a direct link – and even from the attachment menu.
 
 #### Keyboard Button Mini Apps
 
@@ -162,6 +312,36 @@ Apart from this, Mini Apps opened via the menu button work in the exact same way
 
 > @DurgerKingBot allows launching its Mini App both from an inline button and from the menu button.
 
+#### Launching the main Mini App
+
+> TL;DR: If your bot is a mini app, you can add a prominent Launch app button as well as high-quality demo videos and screenshots to the bot’s profile. To do this, go to @BotFather and set up your bot's Main Mini App.
+
+If your bot is a mini app, you can unlock a number of features that streamline and simplify the way in which users view and interact with it. To do this, go to @BotFather and set up your bot's Main Mini App.
+
+After setting a main mini app, you'll be able to upload detailed media preview demos to publicly highlight your app's key features on its profile. A Launch app button will also appear, allowing users to open your app directly from its profile. Bots that enabled a main mini app will be displayed in the Apps tab of the search for users who have launched them.
+
+> Media previews support multiple languages – so you can upload translated versions of your previews that will be shown to users based on their app language.
+
+A bot's main Mini App can also be opened in the current chat by direct link in the format https://t.me/botusername?startapp. If a non-empty startapp parameter is included in the link, it will be passed to the Mini App in the start_param field and in the GET parameter tgWebAppStartParam.
+
+Examples
+
+https://t.me/botusername?startapphttps://t.me/botusername?startapp=commandhttps://t.me/botusername?startapp=command&mode=compact
+
+In this mode, Mini Apps can use the chat_type and chat_instance parameters to keep track of the current chat context. This introduces support for concurrent and shared usage by multiple chat members – to create live whiteboards, group orders, multiplayer games and similar apps.
+
+By default, the main Mini App opens to full-screen height, and users cannot reduce them to half-height. However, you can change this behavior via @BotFather or by including the parameter mode=compact in the link to the Mini App, in which case it will open to half-screen height by default.
+
+Good for:
+
+- Fully-fledged web services and integrations that any user can open in one tap.
+
+- Cooperative, multiplayer or teamwork-oriented services within a chat context.
+
+- The use cases are effectively unlimited.
+
+> Successful bots which enable a main Mini App and accept payments in Telegram Stars may be featured in the Telegram Mini App Store. To increase the chances of being featured, we recommend uploading high-quality media showcasing your app on your bot's profile and following our design guidelines.
+
 #### Inline Mode Mini Apps
 
 > TL;DR: Mini Apps launched via web_app type InlineQueryResultsButton can be used anywhere in inline mode. Users can create content in a web interface and then seamlessly send it to the current chat via inline mode.
@@ -184,9 +364,11 @@ In this mode, Mini Apps can use the chat_type and chat_instance parameters to ke
 
 Mini Apps opened from a direct link have no access to the chat – they can't read messages or send new ones on behalf of the user. To send messages, the user must be redirected to inline mode and actively pick a result.
 
+Starting from Bot API 7.6, by default, Mini Apps of this type open to full-screen height, and users cannot reduce them to half-height. However, you can change this behavior by including the parameter mode=compact in the link to the Mini App, in which case it will open to half-screen height by default.
+
 Examples
 
-https://t.me/botusername/appnamehttps://t.me/botusername/appname?startapp=command
+https://t.me/botusername/appnamehttps://t.me/botusername/appname?startapp=commandhttps://t.me/botusername/appname?startapp=command&mode=compact
 
 Good for:
 
@@ -220,23 +402,53 @@ The bot can call the Bot API method answerWebAppQuery, which sends an inline mes
 
 To connect your Mini App to the Telegram client, place the script telegram-web-app.js in the <head> tag before any other scripts, using this code:
 
+```
+<script src="https://telegram.org/js/telegram-web-app.js?59"></script>
+```
+
 Once the script is connected, a window.Telegram.WebApp object will become available with the following fields:
 
 #### ThemeParams
 
 Mini Apps can adjust the appearance of the interface to match the Telegram user's app in real time. This object contains the user's current theme settings:
 
-#### PopupParams
+#### StoryShareParams
 
-This object describes the native popup.
+This object describes additional sharing settings for the native story editor.
+
+#### StoryWidgetLink
+
+This object describes a widget link to be included in the story.
 
 #### ScanQrPopupParams
 
 This object describes the native popup for scanning QR codes.
 
+#### PopupParams
+
+This object describes the native popup.
+
 #### PopupButton
 
 This object describes the native popup button.
+
+#### EmojiStatusParams
+
+This object describes additional settings for setting an emoji status.
+
+#### DownloadFileParams
+
+This object describes the parameters for the file download request.
+
+> Note: To ensure consistent file download behavior across platforms, include the HTTP headers Content-Disposition: attachment; filename="<file_name>" and Access-Control-Allow-Origin: https://web.telegram.org in the server response. Without these headers, the download may not work as expected, especially on web platforms.
+
+#### SafeAreaInset
+
+This object represents the system-defined safe area insets, providing padding values to ensure content remains within visible boundaries, avoiding overlap with system UI elements like notches or navigation bars.
+
+#### ContentSafeAreaInset
+
+This object represents the content-defined safe area insets, providing padding values to ensure content remains within visible boundaries, avoiding overlap with Telegram UI elements.
 
 #### BackButton
 
@@ -244,11 +456,11 @@ This object controls the back button, which can be displayed in the header of th
 
 All these methods return the BackButton object so they can be chained.
 
-#### MainButton
+#### BottomButton
 
-This object controls the main button, which is displayed at the bottom of the Mini App in the Telegram interface.
+This object controls the button that is displayed at the bottom of the Mini App in the Telegram interface.
 
-All these methods return the MainButton object so they can be chained.
+All these methods return the BottomButton object so they can be chained.
 
 #### SettingsButton
 
@@ -270,7 +482,7 @@ All these methods return the CloudStorage object, so they can be chained.
 
 #### BiometricManager
 
-NEW This object controls biometrics on the device. Before the first use of this object, it needs to be initialized using the init method.
+This object controls biometrics on the device. Before the first use of this object, it needs to be initialized using the init method.
 
 All these methods return the BiometricManager object so they can be chained.
 
@@ -281,6 +493,60 @@ This object describes the native popup for requesting permission to use biometri
 #### BiometricAuthenticateParams
 
 This object describes the native popup for authenticating the user using biometrics.
+
+#### Accelerometer
+
+This object provides access to accelerometer data on the device.
+
+All these methods return the Accelerometer object so they can be chained.
+
+#### AccelerometerStartParams
+
+This object defines the parameters for starting accelerometer tracking.
+
+#### DeviceOrientation
+
+This object provides access to orientation data on the device.
+
+All these methods return the DeviceOrientation object so they can be chained.
+
+#### DeviceOrientationStartParams
+
+This object defines the parameters for starting device orientation tracking.
+
+#### Gyroscope
+
+This object provides access to gyroscope data on the device.
+
+All these methods return the Gyroscope object so they can be chained.
+
+#### GyroscopeStartParams
+
+This object defines the parameters for starting gyroscope tracking.
+
+#### LocationManager
+
+This object controls location access on the device. Before the first use of this object, it needs to be initialized using the init method.
+
+All these methods return the LocationManager object so they can be chained.
+
+#### LocationData
+
+This object contains data about the current location.
+
+#### DeviceStorage
+
+This object provides access to persistent local storage on the user’s device. It is conceptually similar to the browser's localStorage API, but integrated within the Telegram client. All data is stored locally and is available only to the bot that created it. Each bot can store up to 5 MB per user using this storage.
+
+All these methods return the DeviceStorage object, so they can be chained.
+
+#### SecureStorage
+
+This object provides access to a secure storage on the user’s device for sensitive data. On iOS, it uses the system Keychain; on Android, it uses the Keystore. This ensures that all stored values are encrypted at rest and inaccessible to unauthorized applications.
+
+Secure storage is suitable for storing tokens, secrets, authentication state, and other sensitive user-specific information. Each bot can store up to 10 items per user.
+
+All these methods return the SecureStorage object, so they can be chained.
 
 #### WebAppInitData
 
@@ -304,9 +570,44 @@ Data-check-string is a chain of all received fields, sorted alphabetically, in t
 
 The full check might look like:
 
+```
+data_check_string = ...
+secret_key = HMAC_SHA256(<bot_token>, "WebAppData")
+if (hex(HMAC_SHA256(data_check_string, secret_key)) == hash) {
+  // data is from Telegram
+}
+```
+
 To prevent the use of outdated data, you can additionally check the auth_date field, which contains a Unix timestamp of when it was received by the Mini App.
 
 Once validated, the data may be used on your server. Complex data types are represented as JSON-serialized objects.
+
+#### Validating data for Third-Party Use
+
+NEW If you need to share the data with a third party, they can validate the data without requiring access to your bot's token. Simply provide them with the data from the Telegram.WebApp.initData field and your bot_id.
+
+The integrity of the data can be verified by validating the received signature parameter, which is the base64url-encoded representation of the Ed25519 signature of the data-check-string. The verification is performed using the public key provided by Telegram.
+
+Data-check-string is constructed as follows:1. Prepend the bot_id, followed by : and the constant string WebAppData.2. Add a line feed character ('\n', 0x0A).3. Append all received fields (except hash and signature), sorted alphabetically, in the format key=<value>.4. Separate each key-value pair with a line feed character ('\n', 0x0A).
+
+Example:'12345678:WebAppData\nauth_date=<auth_date>\nquery_id=<query_id>\nuser=<user>'
+
+The verification process might look like this:
+
+```
+data_check_string = ...
+public_key = "<Telegram_public_key>"
+if (Ed25519_verify(public_key, data_check_string, signature)) {
+  // data is valid and originated from Telegram
+}
+```
+
+> Telegram provides the following Ed25519 public keys for signature verification:
+Test environment: 40055058a4ee38156a06562e52eece92a771bcd8346a8c4615cb7376eddf72ec (hex)Production: e7bf03a2fa4602af4580703d88dda5bb59f32ed8b02a56c187fe7d34caed242d (hex)
+
+To prevent the use of outdated data, the third party should additionally validate the auth_date field. This field contains a Unix timestamp indicating when the data was received by the Mini App.
+
+Once validated, the data may be used. Complex data types are represented as JSON-serialized objects.
 
 #### Events Available for Mini Apps
 
@@ -336,6 +637,30 @@ https://t.me/botusername?startattach&choose=users+botshttps://t.me/botusername?s
 
 Opening such a link prompts the user to choose a specific chat and opens the attachment menu in that chat. If the bot wasn't already added to the attachment menu, the user will be prompted to do so. You can specify which types of chats the user will be able to choose  from. It can be one or more of the following types: users, bots, groups, channels separated by a + sign. If a non-empty startattach parameter was included in the link, it will be passed to the Mini App in the start_param field and in the GET parameter tgWebAppStartParam.
 
+#### Additional Data in User-Agent
+
+When the Mini App is running on Android, additional information is appended to the User-Agent string to provide more context about the app environment. This information includes the app version, device model, Android version, SDK version, and device performance class, formatted as follows:
+
+```
+Telegram-Android/{app_version} ({manufacturer} {model}; Android {android_version}; SDK {sdk_version}; {performance_class})
+```
+
+where:
+
+- {app_version} is the version of the Telegram app (e.g., 11.3.3),
+
+- {manufacturer} {model} represents the device’s manufacturer and model (e.g., Google sdk_gphone64_arm64),
+
+- {android_version} is the Android OS version running on the device (e.g., 14),
+
+- {sdk_version} indicates the Android SDK version (e.g., 34),
+
+- {performance_class} specifies the device performance class as LOW, AVERAGE, or HIGH, indicating the device's performance capacity.
+
+> ExampleMozilla/5.0 (Linux; Android 14; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.136 Mobile Safari/537.36 Telegram-Android/11.3.3 (Google sdk_gphone64_arm64; Android 14; SDK 34; LOW)
+
+We recommend using this information to optimize your Mini App based on the device's capabilities. For instance, you can adjust animations and visual effects in games on low-performance devices to ensure a smooth experience for all users, regardless of device specifications.
+
 ### Testing Mini Apps
 
 #### Using bots in the test environment
@@ -352,11 +677,25 @@ The test environment is completely separate from the main environment, so you wi
 
 After receiving your bot token, you can send requests to the Bot API in this format:
 
+```
+https://api.telegram.org/bot<token>/test/METHOD_NAME
+```
+
 > Note: When working with the test environment, you may use HTTP links without TLS to test your Mini App.
 
 #### Debug Mode for Mini Apps
 
 Use these tools to find app-specific issues in your Mini App:
+
+iOS
+
+- In Telegram tap 10 times on the Settings icon and toggle on Allow Web View Inspection.
+
+- Connect your phone to your computer using a USB cable.
+
+- Open Safari on your Mac, then go to Develop > [Your Device Name] in the menu bar.
+
+- Launch your Mini App on the iOS device – it will appear in the Develop menu under your device.
 
 Android
 

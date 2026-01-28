@@ -2,7 +2,7 @@
 Fetch the story archive » of a peer we control.
 
 ```
-stories.stories#5dd8c3c8 count:int stories:Vector<StoryItem> chats:Vector<Chat> users:Vector<User> = stories.Stories;
+stories.stories#63c3dd0a flags:# count:int stories:Vector<StoryItem> pinned_to_top:flags.0?Vector<int> chats:Vector<Chat> users:Vector<User> = stories.Stories;
 ---functions---
 stories.getStoriesArchive#b4352016 peer:InputPeer offset_id:int limit:int = stories.Stories;
 ```

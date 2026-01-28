@@ -1,5 +1,5 @@
 # InputCheckPasswordSRP
-Constructors for checking the validity of a 2FA SRP password
+Constructors for checking the validity of a 2FA SRP password.
 
 ```
 inputCheckPasswordEmpty#9880f658 = InputCheckPasswordSRP;

@@ -31,6 +31,6 @@ Updates
 | 400 | CHAT_INVALID | Invalid chat. |
 | 400 | MSG_ID_INVALID | Invalid message ID provided. |
 | 400 | USER_BANNED_IN_CHANNEL | You're banned from sending messages in supergroups/channels. |
-| 400 | USER_CREATOR | You can't leave this channel, because you're its creator. |
+| 400 | USER_CREATOR | For channels.editAdmin: you've tried to edit the admin rights of the owner, but you're not the owner; for channels.leaveChannel: you can't leave this channel, because you're its creator. |
 | 400 | USER_NOT_PARTICIPANT | You're not a member of this supergroup/channel. |
 

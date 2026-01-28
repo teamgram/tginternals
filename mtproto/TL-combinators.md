@@ -74,11 +74,30 @@ In what follows, a constructor's fields, variables, and arguments mean the same 
 
 Example:
 
+```
+matrix {m n : #} a : m* [ n* [ double ] ] = Matrix m n;
+```
+
 is functionally equivalent to
+
+```
+aux_type {n : #} (_ : %Tuple double n) = AuxType n;
+matrix {m : #} {n : #} (a : %Tuple %(AuxType n) m) = Matrix m n;
+```
 
 Moreover, the built-in types Tuple and Vector could be defined as:
 
+```
+tnil {X : Type} = Tuple X 0;
+tcons {X : Type} {n : #} hd:X tl:%(Tuple X n) = Tuple X (S n);
+vector {X : Type} (n : #) (v : %(Tuple X n)) = Vector X;
+```
+
 Actually, the following equivalent entry is considered the definition of Vector (i.e. it is specifically this entry that is used to compute the name of the vector constructor and its partial applications):
+
+```
+vector {t : Type} # [ t ] = Vector t;
+```
 
 If we expand it using Tuple, we obtain the previous definition exactly.
 

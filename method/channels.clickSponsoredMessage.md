@@ -2,24 +2,19 @@
 Informs the server that the user has either:
 
 ```
-boolFalse#bc799737 = Bool;
-boolTrue#997275b5 = Bool;
----functions---
-channels.clickSponsoredMessage#18afbc93 channel:InputChannel random_id:bytes = Bool;
+Method schema is available as of layer 188. Switch »
 ```
 
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| channel | InputChannel | Channel where the sponsored message was posted |
-| random_id | bytes | Message ID |
+| 400 | CHANNEL_INVALID | The provided channel is invalid. |
 
 
 ## Result
-Bool
+This constructor does not require any parameters.
 
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
-| 400 | CHANNEL_INVALID | The provided channel is invalid. |
 

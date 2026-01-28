@@ -25,4 +25,5 @@ messages.getSearchResultsCalendar#6aa3f6bd flags:# peer:InputPeer saved_peer_id:
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 400 | FILTER_NOT_SUPPORTED | The specified filter cannot be used in this context. |
+| 400 | PEER_ID_INVALID | The provided peer id is invalid. |
 

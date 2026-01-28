@@ -97,6 +97,10 @@ There are currently two ways of getting updates. You can either use long polling
 
 The getUpdates method returns the earliest 100 unconfirmed updates. To confirm an update, use the offset parameter when calling getUpdates like this:
 
+```
+offset = update_id of last processed update + 1
+```
+
 All updates with update_id less than or equal to offset will be marked as confirmed on the server and will no longer be returned.
 
 #### I'm having problems with Webhooks.
@@ -155,19 +159,21 @@ Yes, file_ids can be treated as persistent.
 
 #### My bot is hitting limits, how do I avoid this?
 
-When sending messages inside a particular chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors.
+By default, bots are able to message their users at no cost – but have limitations on the number of messages they can broadcast in a single interval:
 
-If you're sending bulk notifications to multiple users, the API will not allow more than 30 messages per second or so. Consider spreading out notifications over large intervals of 8—12 hours for best results.
+- In a single chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors.
 
-Also note that your bot will not be able to send more than 20 messages per minute to the same group.
+- In a group, bots are not be able to send more than 20 messages per minute.
+
+- For bulk notifications, bots are not able to broadcast more than about 30 messages per second, unless they enable paid broadcasts to increase the limit.
 
 #### How can I message all of my bot's subscribers at once?
 
-Unfortunately, at this moment we don't have methods for sending bulk messages, e.g. notifications. We may add something along these lines in the future.
+Enabling paid broadcasts in @BotFather allows a bot to broadcast up to 1000 messages per second. Each message broadcasted over the free amount of 30 per second incurs a cost of 0.1 Stars per message, paid with Telegram Stars from the bot's balance. In order to enable this feature, a bot must have at least 100,000 Stars on its balance and at least 100,000 monthly active users.
 
-In order to avoid hitting our limits when sending out mass notifications, consider spreading them over longer intervals, e.g. 8-12 hours. The API will not allow bulk notifications to more than ~30 users per second, if you go over that, you'll start getting 429 errors.
+> Bots with increased limits are only charged for messages that are broadcasted successfully.
 
-See also: How to avoid hitting limits?
+If you do not wish to enable paid broadcasts, consider spreading them over longer intervals (e.g. 8-12 hours) to avoid hitting the limit. The API will not allow bulk notifications to more than ~30 users per second – if you go over that, you'll start getting 429 errors.
 
 ---
 

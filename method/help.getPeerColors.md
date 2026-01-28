@@ -11,7 +11,7 @@ help.getPeerColors#da80f42f hash:int = help.PeerColors;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | int | Hash for pagination, for more info click here |
+| hash | int | Hash used for caching, for more info click here. |
 
 
 ## Result

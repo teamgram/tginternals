@@ -21,4 +21,5 @@ Bool
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 400 | ORDER_INVALID | The specified username order is invalid. |
+| 400 | USERNAME_NOT_MODIFIED | The username was not modified. |
 

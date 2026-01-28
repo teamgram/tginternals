@@ -2,1835 +2,2271 @@
 
 Below you will find information on schema changes. For more details on the use of layers, see Invoking API methods.
 
-### Layer 170
+### Layer 214
 
-To view all the changes since the last update, start reading the changelog @ Layer 159.
+To view all changes since the last documentation refresh, start reading at layer 196.
 
-Most importantly, the following detailed articles were added:
+This documentation refresh also brings the following changes:
 
-- Working with stories »
+- A brand new new file reference database map file »: can be used to automatically codegen a fully functional file reference database, see here » for more info.
 
-- Working with boosts »
+- The map file generator is open source, and is specifically designed to be easy to run on newer, even experimental layers, see here for more info ».
 
-- Working with giveaways »
+- Layer diffs will now list changes to the file reference map file as well.
 
-- Working with accent colors »
+- The RPC error database was updated », and it now has the following extra fields:
 
-- Working with the recommendation system »
+- business_supported - Contains the full list of methods that can be used by bots over a business connection with invokeWithBusinessConnection.
 
-- Working with the action bar »
+- unauthed_allowed - Contains the full list of methods that can be used by not yet logged in connections.
 
-- Working with contacts »
+- All methods in the documentation now explicitly state if they can be used by bots, users or both, and if they can be used over a business connection or over an unauthorized connection.
 
-- Working with the blocklist »
+- Updated the list of methods that can be used over a business connection
 
-- Working with geochats »
+- stories.sendStory and stories.editStory can also be used to post and edit stories on behalf of a connected business account: in this case, simply pass the business account's peer in peer, without wrapping the request in an invokeWithBusinessConnection » query.
 
-- Working with privacy settings »
+- Note that stories.editStory can only be used to edit stories posted by the same business bot on behalf of the user.
 
-- Working with the takeout API »
+- Updated the list of methods that can be used over an unauthed connection
 
-- Working with saved messages »
+- The documentation for the profile page was also reorganized, to include the full list of profile tabs to show, along with instructions on how to populate them ».
 
-Also added documentation for streamed uploads and improved the docs for method queue, quick ACKs and content-related messages.
+- Corrected hash generation instructions for messages.getScheduledHistory, the correct order is id, edit_date, date; not id, date, edit_date »
 
-The RPC error database » was also updated.
+- Added documentation on frozen accounts »
+
+- Added a new client configuration key for the maximum number of allowed quiz poll answers
+
+- Added a new client configuration key for the maximum amount of Telegram Stars that can be withdrawn from a channel or bot's balance »
+
+- Added support for age verification, if required by the current country's legislation ».
+
+- Added device storage and secure storage APIs for mini apps, using the following events:
+
+- web_app_device_storage_save_key - Save or remove a value from the device's local storage associated with this user and mini app
+
+- web_app_device_storage_get_key - Get a value from the device's local storage associated with this user and mini app
+
+- web_app_device_storage_clear - Clear the device's local storage associated with this user and mini app
+
+- web_app_secure_storage_save_key - Save or remove a value from the device's secure storage associated with this user and mini app
+
+- web_app_secure_storage_get_key - Get a value from the device's secure storage associated with this user and mini app
+
+- web_app_secure_storage_restore_key - Restore a value to the device's secure storage associated with this user and mini app
+
+- web_app_secure_storage_clear - Clear the device's secure storage associated with this user and mini app
+
+- Add support for the new manage_direct_messages admin right in group/channel bot links.
+
+- Updated the documentation for bot API dialog IDs to include support for the new monoforum ID range, see here » for more info.
+
+- Specifically, the bot API dialog ID new ranges from -4000000000000 to 1099511627775 (previously the range was -2002147483648 to 1099511627775).
+
+- The transformed range for bot API monoforum dialog IDs is -2002147483649 to -4000000000000 inclusively.
+
+- Push notifications can now have a custom report_delivery_until_date parameter for Telegram Gateway verification messages: if set, the message is a telegram gateway verification code, and messages.reportMessagesDelivery should be invoked with the push flag set.
+
+- Added a correction to the paid reactions documentation »: the random_id argument of messages.sendPaidReaction must be composed of a 64-bit integer where the lower 32 bits are random, and the higher 32 bits are equal to the current unixtime, i.e. uint64_t random_id = (time() << 32) | ((uint64_t)random_uint32_t()): this differs from the random_id format of all other methods in the API, which just take 64 random bits.
+
+- Clarified that adding a new recent reaction should trigger modification of the cached list and regeneration of the hash with a custom algorithm, see here » for more info.
+
+- Clarified that modifying saved message tags should trigger modification of the cached list and regeneration of the hash with a custom algorithm, see here » for more info.
+
+- The webpage type list » was updated.
+
+- Clarified that in some cases such as updates from big channels, the API may return constructors from older layers, different from the connection's current layer.
+
+- Clients should treat this as a 500 server error, and handle it by closing and reopening the TCP socket, re-reinitializing the session with initConnection and invoking getDifference.
+
+- A whole bunch of new features and articles, start reading at layer 196 to view them all.
+
+And here are the changes in this layer:
+
+- Set a collectible gift as chat theme »
+
+- Allow sending an email to telegram's support team when getting auth.sentCodePaymentRequired during login (official clients only).
+
+#### Schema changes
+
+##### New Methods
+
+- Added account.getUniqueGiftChatThemes - Obtain all chat themes » associated to owned collectible gifts ».
+
+##### Changed Methods
+
+- Added theme parameter, removed emoticon parameter in messages.setChatTheme
+
+##### New Constructors
+
+- Added chatTheme - A chat theme
+
+- Added chatThemeUniqueGift - A chat theme based on a collectible gift ».
+
+- Added account.chatThemesNotModified - The available chat themes were not modified
+
+- Added account.chatThemes - Available chat themes
+
+- Added inputChatThemeEmpty - Remove any currently configured theme.
+
+- Added inputChatTheme - Set an emoji-based chat theme, returned by account.getChatThemes.
+
+- Added inputChatThemeUniqueGift - Set a theme based on an owned collectible gift », returned by account.getUniqueGiftChatThemes.
+
+##### Changed Constructors
+
+- Added theme parameter, removed emoticon parameter in messageActionSetChatTheme
+
+- Added support_email_address, support_email_subject parameters in auth.sentCodePaymentRequired
+
+- Added theme parameter, removed theme_emoticon parameter in userFull
+
+- Added theme_available, theme_peer parameters in starGiftUnique
+
+#### Schema
+
+#### File reference map file schema » changes
+
+##### New Constructors
+
+- Added boolFalse - Constructor may be interpreted as a booleanfalse value.
+
+- Added boolTrue - The constructor can be interpreted as a booleantrue value.
+
+- Added true - See predefined identifiers.
+
+- Added vector - A universal vector constructor.
+
+- Added fileReferenceOrigins
+
+- Added locationIncoming
+
+- Added locationOutgoing
+
+- Added origin
+
+- Added skippedOrigin
+
+- Added action
+
+- Added paramNotFlag
+
+- Added paramIsFlagAbortIfEmpty
+
+- Added paramIsFlagFallback
+
+- Added paramIsFlagPassthrough
+
+- Added pathPart
+
+- Added path
+
+- Added pathParent
+
+- Added extractAndStore
+
+- Added extractInputStickerSetFromDocumentAttributesAndStore
+
+- Added extractInputStickerSetFromStickerSetAndStore
+
+- Added extractPeerIdFromPeerAndStore
+
+- Added extractPeerIdFromInputPeerAndStore
+
+- Added extractChannelIdFromChannelAndStore
+
+- Added extractChannelIdFromInputChannelAndStore
+
+- Added extractUserIdFromUserAndStore
+
+- Added extractUserIdFromInputUserAndStore
+
+- Added callOp
+
+- Added getMessageOp
+
+- Added typedOpArg
+
+- Added typedOp
+
+- Added copyOp
+
+- Added getInputChannelByIdOp
+
+- Added getInputUserByIdOp
+
+- Added getInputPeerByIdOp
+
+- Added constructorOp
+
+- Added vectorOp
+
+- Added intLiteralOp
+
+- Added longLiteralOp
+
+- Added stringLiteralOp
+
+- Added bytesLiteralOp
+
+- Added boolLiteralOp
+
+- Added doubleLiteralOp
+
+- Added themeFormatLiteralOp
+
+#### File reference map file schema »
+
+#### File reference database schema » changes
+
+##### New Constructors
+
+- Added boolFalse - Constructor may be interpreted as a booleanfalse value.
+
+- Added boolTrue - The constructor can be interpreted as a booleantrue value.
+
+- Added true - See predefined identifiers.
+
+- Added vector - A universal vector constructor.
+
+- Added fileIdPhoto
+
+- Added fileIdDocument
+
+- Added fileSourceMessage
+
+- Added fileSourceStarsTransaction
+
+- Added fileSourceStory
+
+- Added fileSourceWebPage
+
+- Added fileSourceBotApp
+
+- Added fileSourceUserFull
+
+- Added fileSourceAdminLog
+
+- Added fileSourceStoryAlbum
+
+- Added fileSourceBotPreviewMedia
+
+- Added fileSourceBotPreviewInfo
+
+- Added fileSourcePaidMedia
+
+- Added fileSourceSavedMusic
+
+- Added fileSourceChatFull
+
+- Added fileSourceChannelFull
+
+- Added fileSourcePremiumPromo
+
+- Added fileSourceAttachMenuBot
+
+- Added fileSourceTheme
+
+- Added fileSourceWallPaper
+
+- Added fileSourceStickerSet
+
+- Added fileSourceSavedGifs
+
+- Added fileSourceSavedRingtones
+
+- Added fileSourceAvailableEffects
+
+- Added fileSourceAvailableReactions
+
+- Added fileSourceUserProfilePhoto
+
+- Added fileSourceDocumentByHash
+
+#### File reference database schema »
+
+#### Changes in the file reference database map file »
+
+##### New Locations
+
+- Added inputPhoto - fileIdPhoto (outgoing)
+
+- Added inputDocument - fileIdDocument (outgoing)
+
+- Added inputDocumentFileLocation - fileIdDocument (outgoing)
+
+- Added inputPhotoFileLocation - fileIdPhoto (outgoing)
+
+- Added document - fileIdDocument (incoming)
+
+- Added photo - fileIdPhoto (incoming)
+
+##### New Origins
+
+- Added message - fileSourceMessage{from_scheduled: message.from_scheduled?passthrough, quick_reply_shortcut_id: message.quick_reply_shortcut_id?passthrough, peer: extractPeerIdFromPeerAndStore(message.peer_id), id: message.id}
+
+- Added messageService - fileSourceMessage{peer: extractPeerIdFromPeerAndStore(messageService.peer_id), id: messageService.id, from_scheduled: false, quick_reply_shortcut_id: false}
+
+- Added (1) storyItem - (needs stories.getPinnedStories) fileSourceStory{id: storyItem.id, peer: extractPeerIdFromInputPeerAndStore(stories.getPinnedStories.peer)}
+
+- Added (2) storyItem - (needs stories.getStoriesArchive) fileSourceStory{id: storyItem.id, peer: extractPeerIdFromInputPeerAndStore(stories.getStoriesArchive.peer)}
+
+- Added (3) storyItem - (needs stories.getStoriesByID) fileSourceStory{id: storyItem.id, peer: extractPeerIdFromInputPeerAndStore(stories.getStoriesByID.peer)}
+
+- Added (4) storyItem - (needs stories.getAlbumStories) fileSourceStory{id: storyItem.id, peer: extractPeerIdFromInputPeerAndStore(stories.getAlbumStories.peer)}
+
+- Added (5) storyItem - (needs peerStories) fileSourceStory{id: storyItem.id, peer: extractPeerIdFromPeerAndStore(peerStories.peer)}
+
+- Added (6) storyItem - fileSourceStory{id: storyItem.id, peer: extractPeerIdFromPeerAndStore(storyItem.from_id?abort_if_empty)}
+
+- Added storyViewPublicRepost - fileSourceStory{id: storyViewPublicRepost.story.storyItem.id, peer: extractPeerIdFromPeerAndStore(storyViewPublicRepost.peer_id)}
+
+- Added storyReactionPublicRepost - fileSourceStory{id: storyReactionPublicRepost.story.storyItem.id, peer: extractPeerIdFromPeerAndStore(storyReactionPublicRepost.peer_id)}
+
+- Added foundStory - fileSourceStory{id: foundStory.story.storyItem.id, peer: extractPeerIdFromPeerAndStore(foundStory.peer)}
+
+- Added publicForwardStory - fileSourceStory{id: publicForwardStory.story.storyItem.id, peer: extractPeerIdFromPeerAndStore(publicForwardStory.peer)}
+
+- Added webPageAttributeStory - fileSourceStory{id: webPageAttributeStory.story?abort_if_empty.storyItem.id, peer: extractPeerIdFromPeerAndStore(webPageAttributeStory.peer)}
+
+- Added messageMediaStory - fileSourceStory{id: messageMediaStory.story?abort_if_empty.storyItem.id, peer: extractPeerIdFromPeerAndStore(messageMediaStory.peer)}
+
+- Added webPage - fileSourceWebPage{url: webPage.url}
+
+- Added botApp - fileSourceBotApp{id: botApp.id, access_hash: botApp.access_hash}
+
+- Added botInfo - fileSourceUserFull{id: botInfo.user_id?abort_if_empty}
+
+- Added channelAdminLogEvent - (needs channels.getAdminLog) fileSourceAdminLog{channel: extractChannelIdFromInputChannelAndStore(channels.getAdminLog.channel), max_id: channelAdminLogEvent.id}
+
+- Added stories.createAlbum - fileSourceStoryAlbum{peer: extractPeerIdFromInputPeerAndStore(stories.createAlbum.peer)}
+
+- Added stories.getAlbums - fileSourceStoryAlbum{peer: extractPeerIdFromInputPeerAndStore(stories.getAlbums.peer)}
+
+- Added stories.updateAlbum - fileSourceStoryAlbum{peer: extractPeerIdFromInputPeerAndStore(stories.updateAlbum.peer)}
+
+- Added bots.getPreviewMedias - fileSourceBotPreviewMedia{bot: extractUserIdFromInputUserAndStore(bots.getPreviewMedias.bot)}
+
+- Added bots.getPreviewInfo - fileSourceBotPreviewInfo{bot: extractUserIdFromInputUserAndStore(bots.getPreviewInfo.bot), lang_code: bots.getPreviewInfo.lang_code}
+
+- Added bots.addPreviewMedia - fileSourceBotPreviewInfo{bot: extractUserIdFromInputUserAndStore(bots.addPreviewMedia.bot), lang_code: bots.addPreviewMedia.lang_code}
+
+- Added bots.editPreviewMedia - fileSourceBotPreviewInfo{bot: extractUserIdFromInputUserAndStore(bots.editPreviewMedia.bot), lang_code: bots.editPreviewMedia.lang_code}
+
+- Added updateMessageExtendedMedia - fileSourcePaidMedia{id: updateMessageExtendedMedia.msg_id, peer: extractPeerIdFromPeerAndStore(updateMessageExtendedMedia.peer)}
+
+- Added (1) userFull - fileSourceUserFull{id: userFull.id}
+
+- Added (2) userFull - fileSourceSavedMusic{user_id: userFull.id, id: userFull.saved_music?abort_if_empty.document.id, access_hash: userFull.saved_music?abort_if_empty.document.access_hash}
+
+- Added chatFull - fileSourceChatFull{chat_id: chatFull.id}
+
+- Added channelFull - fileSourceChannelFull{channel: channelFull.id}
+
+- Added help.getPremiumPromo - fileSourcePremiumPromo{}
+
+- Added (1) starsTransaction - (needs payments.getStarsStatus) fileSourceStarsTransaction{peer: extractPeerIdFromInputPeerAndStore(payments.getStarsStatus.peer), ton: payments.getStarsStatus.ton?passthrough, id: starsTransaction.id, refund: starsTransaction.refund?passthrough}
+
+- Added (2) starsTransaction - (needs payments.getStarsTransactions) fileSourceStarsTransaction{peer: extractPeerIdFromInputPeerAndStore(payments.getStarsTransactions.peer), ton: payments.getStarsTransactions.ton?passthrough, id: starsTransaction.id, refund: starsTransaction.refund?passthrough}
+
+- Added (3) starsTransaction - (needs payments.getStarsTransactionsByID) fileSourceStarsTransaction{peer: extractPeerIdFromInputPeerAndStore(payments.getStarsTransactionsByID.peer), ton: payments.getStarsTransactionsByID.ton?passthrough, id: starsTransaction.id, refund: starsTransaction.refund?passthrough}
+
+- Added (4) starsTransaction - (needs payments.getStarsSubscriptions) fileSourceStarsTransaction{peer: extractPeerIdFromInputPeerAndStore(payments.getStarsSubscriptions.peer), id: starsTransaction.id, refund: starsTransaction.refund?passthrough, ton: false}
+
+- Added attachMenuBot - fileSourceAttachMenuBot{bot: attachMenuBot.bot_id}
+
+- Added theme - fileSourceTheme{id: theme.id, access_hash: theme.access_hash}
+
+- Added wallPaper - fileSourceWallPaper{id: wallPaper.id, access_hash: wallPaper.access_hash}
+
+- Added stickerSetMultiCovered - fileSourceStickerSet{stickerset: extractInputStickerSetFromStickerSetAndStore(stickerSetMultiCovered.set)}
+
+- Added stickerSetFullCovered - fileSourceStickerSet{stickerset: extractInputStickerSetFromStickerSetAndStore(stickerSetFullCovered.set)}
+
+- Added messages.stickerSet - fileSourceStickerSet{stickerset: extractInputStickerSetFromStickerSetAndStore(messages.stickerSet.set)}
+
+- Added messages.savedGifs - fileSourceSavedGifs{}
+
+- Added account.savedRingtones - fileSourceSavedRingtones{}
+
+- Added account.savedRingtoneConverted - fileSourceSavedRingtones{}
+
+- Added account.uploadRingtone - fileSourceSavedRingtones{}
+
+- Added messages.availableEffects - fileSourceAvailableEffects{}
+
+- Added messages.availableReactions - fileSourceAvailableReactions{}
+
+- Added photo - (needs photos.getUserPhotos) fileSourceUserProfilePhoto{user_id: extractUserIdFromInputUserAndStore(photos.getUserPhotos.user_id), max_id: photo.id}
+
+- Added photos.updateProfilePhoto - fileSourceUserProfilePhoto{user_id: extractUserIdFromInputUserAndStore(photos.updateProfilePhoto.bot?fallback(inputUserSelf{})), max_id: photos.updateProfilePhoto.(return value).photos.photo.photo.photo.id}
+
+- Added photos.uploadProfilePhoto - fileSourceUserProfilePhoto{user_id: extractUserIdFromInputUserAndStore(photos.uploadProfilePhoto.bot?fallback(inputUserSelf{})), max_id: photos.uploadProfilePhoto.(return value).photos.photo.photo.photo.id}
+
+- Added photos.uploadContactProfilePhoto - fileSourceUserProfilePhoto{user_id: extractUserIdFromInputUserAndStore(photos.uploadContactProfilePhoto.user_id), max_id: photos.uploadContactProfilePhoto.(return value).photos.photo.photo.photo.id}
+
+- Added (1) document - fileSourceStickerSet{stickerset: extractInputStickerSetFromDocumentAttributesAndStore(document.attributes)}
+
+- Added (2) document - (needs users.getSavedMusic) fileSourceSavedMusic{user_id: extractUserIdFromInputUserAndStore(users.getSavedMusic.id), id: document.id, access_hash: document.access_hash}
+
+- Added (3) document - (needs users.getSavedMusicByID) fileSourceSavedMusic{user_id: extractUserIdFromInputUserAndStore(users.getSavedMusicByID.id), id: document.id, access_hash: document.access_hash}
+
+- Added messages.getDocumentByHash - fileSourceDocumentByHash{sha256: messages.getDocumentByHash.sha256, size: messages.getDocumentByHash.size, mime_type: messages.getDocumentByHash.mime_type}
+
+##### New Skipped
+
+- Added messages.getSponsoredMessages - Do not store file references from sponsored messages
+
+- Added help.getAppUpdate - Don't handle file references from ephemeral app update info
+
+- Added help.getRecentMeUrls - Don't handle file references from recent t.me URLs
+
+- Added recentMeUrlChatInvite - Do not store references based on chat invite links
+
+- Added messages.checkChatInvite - Do not store references based on chat invite links
+
+- Added messages.getInlineBotResults - Inline bot results are ephemeral
+
+- Added messages.getPreparedInlineMessage - Inline bot results are ephemeral
+
+- Added messages.uploadMedia - A freshly uploaded media file will obtain a context only once it is sent to a chat
+
+- Added messages.uploadImportedMedia - A freshly uploaded media file will obtain a context only once it is sent to a chat
+
+- Added updateServiceNotification - Cannot refetch service notifications
+
+- Added messages.getWebPagePreview - No locations are added for the method call, as it doesn't use persistent IDs as input; the location is instead extracted from the persistent IDs in the returned WebPage object
+
+- Added payments.resaleStarGifts - Contexts for star gifts are not yet implemented
+
+- Added payments.starGiftUpgradePreview - Contexts for star gifts are not yet implemented
+
+- Added starGift - Contexts for star gifts are not yet implemented
+
+- Added starGiftUnique - Contexts for star gifts are not yet implemented
+
+- Added starGiftCollection - Contexts for star gifts are not yet implemented
+
+- Added payments.starGiftCollections - Contexts for star gifts are not yet implemented
+
+- Added messages.getCustomEmojiDocuments - Do not store file references in this context
+
+- Added account.uploadTheme - A freshly uploaded theme file will obtain a context only once it is created via account.createTheme
+
+##### New Actions
+
+- Added fileSourceMessage - getMessageOp(peer: getInputPeerByIdOp(peer), id: copyOp(id), from_scheduled: copyOp(from_scheduled)quick_reply_shortcut_id: copyOp(quick_reply_shortcut_id))
+
+- Added fileSourceStory - stories.getStoriesByID(id: [copyOp(id)], peer: getInputPeerByIdOp(peer))
+
+- Added fileSourceWebPage - messages.getWebPage(url: copyOp(url), hash: 0)
+
+- Added fileSourceBotApp - messages.getBotApp(app: inputBotAppID{id: copyOp(id), access_hash: copyOp(access_hash)}, hash: 0)
+
+- Added fileSourceUserFull - users.getFullUser(id: getInputUserByIdOp(id))
+
+- Added fileSourceAdminLog - channels.getAdminLog(channel: getInputChannelByIdOp(channel), max_id: copyOp(max_id), min_id: copyOp(max_id), limit: 1, q: "")
+
+- Added fileSourceStoryAlbum - stories.getAlbums(peer: getInputPeerByIdOp(peer), hash: 0)
+
+- Added fileSourceBotPreviewMedia - bots.getPreviewMedias(bot: getInputUserByIdOp(bot))
+
+- Added fileSourceBotPreviewInfo - bots.getPreviewInfo(bot: getInputUserByIdOp(bot), lang_code: copyOp(lang_code))
+
+- Added fileSourcePaidMedia - messages.getExtendedMedia(id: [copyOp(id)], peer: getInputPeerByIdOp(peer))
+
+- Added fileSourceSavedMusic - users.getSavedMusicByID(id: getInputUserByIdOp(user_id), documents: [inputDocument{id: copyOp(id), access_hash: copyOp(access_hash), file_reference: base64_decode("")}])
+
+- Added fileSourceChatFull - messages.getFullChat(chat_id: copyOp(chat_id))
+
+- Added fileSourceChannelFull - channels.getFullChannel(channel: getInputChannelByIdOp(channel))
+
+- Added fileSourcePremiumPromo - help.getPremiumPromo()
+
+- Added fileSourceStarsTransaction - payments.getStarsTransactionsByID(peer: getInputPeerByIdOp(peer), ton: copyOp(ton), id: [inputStarsTransaction{id: copyOp(id), refund: copyOp(refund)}])
+
+- Added fileSourceAttachMenuBot - messages.getAttachMenuBot(bot: getInputUserByIdOp(bot))
+
+- Added fileSourceTheme - account.getTheme(theme: inputTheme{id: copyOp(id), access_hash: copyOp(access_hash)}, format: $themeFormat)
+
+- Added fileSourceWallPaper - account.getWallPaper(wallpaper: inputWallPaper{id: copyOp(id), access_hash: copyOp(access_hash)})
+
+- Added fileSourceStickerSet - messages.getStickerSet(stickerset: copyOp(stickerset), hash: 0)
+
+- Added fileSourceSavedGifs - messages.getSavedGifs(hash: 0)
+
+- Added fileSourceSavedRingtones - account.getSavedRingtones(hash: 0)
+
+- Added fileSourceAvailableEffects - messages.getAvailableEffects(hash: 0)
+
+- Added fileSourceAvailableReactions - messages.getAvailableReactions(hash: 0)
+
+- Added fileSourceUserProfilePhoto - photos.getUserPhotos(user_id: getInputUserByIdOp(user_id), offset: -1, max_id: copyOp(max_id), limit: 1)
+
+- Added fileSourceDocumentByHash - messages.getDocumentByHash(sha256: copyOp(sha256), size: copyOp(size), mime_type: copyOp(mime_type))
+
+### Layer 213
+
+This layer introduces the following new features:
+
+- Changing the default profile tab »
+
+- Saving music to the profile »
+
+- Added a locked_until_date flag to starGift, for locked gifts that cannot be sent until the specified date.
+
+- Added the payments.checkCanSendGift method, to check if a non-locked gift can't be sent yet for other reasons.
+
+- Added an optional spend_purpose_peer flag to inputStorePaymentStarsTopup, that should be populated with the peer where the topup process was initiated due to low funds (i.e. a bot for bot payments, a channel for paid media/reactions, etc) »
+
+Documentation for the profile page was also reorganized, to include the full list of tabs to show, along with instructions on how to populate them ».
+
+#### Schema changes
+
+##### New Methods
+
+- Added account.setMainProfileTab - Changes the main profile tab of the current user, see here » for more info.
+
+- Added account.saveMusic - Adds or removes a song from the current user's profile see here » for more info on the music tab of the profile page.
+
+- Added account.getSavedMusicIds - Fetch the full list of only the IDs of songs currently added to the profile, see here » for more info.
+
+- Added users.getSavedMusic - Get songs pinned to the user's profile, see here » for more info.
+
+- Added users.getSavedMusicByID - Check if the passed songs are still pinned to the user's profile, or refresh the file references of songs pinned on a user's profile see here » for more info.
+
+- Added channels.setMainProfileTab - Changes the main profile tab of a channel, see here » for more info.
+
+- Added payments.checkCanSendGift - Check if the specified gift » can be sent.
+
+##### New Constructors
+
+- Added profileTabPosts - Represents the stories tab of a profile page.
+
+- Added profileTabGifts - Represents the gifts tab of a profile page.
+
+- Added profileTabMedia - Represents the media tab of a profile page.
+
+- Added profileTabFiles - Represents the shared files tab of a profile.
+
+- Added profileTabMusic - Represents the music tab of a profile page.
+
+- Added profileTabVoice - Represents the voice messages tab of a profile page.
+
+- Added profileTabLinks - Represents the shared links tab of a profile page.
+
+- Added profileTabGifs - Represents the gifs tab of a profile page.
+
+- Added users.savedMusicNotModified - This subset of the songs currently pinned on a user's profile hasn't changed, see here » for more info.
+
+- Added users.savedMusic - List of songs currently pinned on a user's profile, see here » for more info.
+
+- Added account.savedMusicIdsNotModified - The list of IDs of songs (document.ids) currently pinned on our profile hasn't changed.
+
+- Added account.savedMusicIds - List of IDs of songs (document.ids) currently pinned on our profile, see here » for more info.
+
+- Added payments.checkCanSendGiftResultOk - The specified gift can be sent.
+
+- Added payments.checkCanSendGiftResultFail - The specified gift cannot be sent yet for the specified reason.
+
+##### Changed Constructors
+
+- Added main_tab parameter in channelFull
+
+- Added upgrade_separate parameter in messageActionStarGift
+
+- Added main_tab, saved_music parameters in userFull
+
+- Added flags, spend_purpose_peer parameters in inputStorePaymentStarsTopup
+
+- Added locked_until_date parameter in starGift
+
+- Added chats parameter in payments.uniqueStarGift
+
+- Added chats parameter in messages.webPagePreview
+
+- Added upgrade_separate parameter in savedStarGift
+
+#### Schema
+
+### Layer 212
+
+This layer introduces the following features:
+
+- Separately prepay for the upgrade of a gift ».
+
+- Get info about the value of a collectible gift »
+
+#### Schema changes
+
+##### New Methods
+
+- Added payments.getUniqueStarGiftValueInfo - Get information about the value of a collectible gift ».
+
+##### Changed Methods
+
+- Added exclude_upgradable, exclude_unupgradable parameters, removed exclude_limited parameter in payments.getSavedStarGifts
+
+##### New Constructors
+
+- Added inputInvoiceStarGiftPrepaidUpgrade - Separately prepay for the upgrade of a gift ».
+
+- Added payments.uniqueStarGiftValueInfo - Information about the value of a collectible gift ».
+
+##### Changed Constructors
+
+- Added prepaid_upgrade, prepaid_upgrade_hash, gift_msg_id parameters in messageActionStarGift
+
+- Added prepaid_upgrade parameter in messageActionStarGiftUnique
+
+- Added posts_search, stargift_prepaid_upgrade parameters in starsTransaction
+
+- Added gift_id, value_amount, value_currency parameters in starGiftUnique
+
+- Added prepaid_upgrade_hash parameter in savedStarGift
+
+#### Schema
+
+### Layer 211
+
+This layer introduces:
+
+- Story albums »
+
+- Star gift collection link previews »
+
+- Full text global channel post search »
+
+- Allow specification of the resale price of a collectible gift in TON »
+
+- Pending star ratings »
+
+#### Schema changes
+
+##### New Methods
+
+- Added channels.checkSearchPostsFlood - Check if the specified global post search » requires payment.
+
+- Added stories.createAlbum - Creates a story album.
+
+- Added stories.updateAlbum - Rename a story albums », or add, delete or reorder stories in it.
+
+- Added stories.reorderAlbums - Reorder story albums on a profile ».
+
+- Added stories.deleteAlbum - Delete a story album.
+
+- Added stories.getAlbums - Get story albums created by a peer.
+
+- Added stories.getAlbumStories - Get stories in a story album ».
+
+##### Changed Methods
+
+- Added flags, query, allow_paid_stars parameters, changed type of hashtag from string to flags.0?string in channels.searchPosts
+
+- Added resell_amount parameter, removed resell_stars parameter in payments.updateStarGiftPrice
+
+- Added albums parameter in stories.sendStory
+
+##### New Constructors
+
+- Added webPageAttributeStarGiftCollection - Contains info about a gift collection » for a webPage preview of a gift collection » (the webPage will have a type of telegram_collection).
+
+- Added storyAlbum - Represents a story album ».
+
+- Added stories.albumsNotModified - The story album list » hasn't changed.
+
+- Added stories.albums - Story albums ».
+
+- Added searchPostsFlood - Indicates if the specified global post search » requires payment.
+
+##### Changed Constructors
+
+- Added resale_amount parameter, removed resale_stars parameter in messageActionStarGiftUnique
+
+- Added stars_my_pending_rating, stars_my_pending_rating_date parameters in userFull
+
+- Added search_flood parameter in messages.messagesSlice
+
+- Added flags, ton parameters in inputInvoiceStarGiftResale
+
+- Added albums parameter in storyItem
+
+- Added resale_ton_only, resell_amount parameters, removed resell_stars parameter in starGiftUnique
+
+#### Schema
+
+### Layer 210
+
+This layer introduces:
+
+- Star gift collections »
+
+- Premium-only gifts (require_premium) and per-user gift limits for certain gift types (per_user_total, per_user_remains).
+
+- Star ratings »
+
+#### Schema changes
+
+##### New Methods
+
+- Added payments.createStarGiftCollection - Create a star gift collection ».
+
+- Added payments.updateStarGiftCollection - Add or remove gifts from a star gift collection », or rename the collection.
+
+- Added payments.reorderStarGiftCollections - Reorder the star gift collections » on an owned peer's profile.
+
+- Added payments.deleteStarGiftCollection - Delete a star gift collection ».
+
+- Added payments.getStarGiftCollections - Fetches all star gift collections » of a peer.
+
+##### Changed Methods
+
+- Added collection_id parameter in payments.getSavedStarGifts
+
+##### New Constructors
+
+- Added starsRating - Represents the profile's star rating, see here » for more info.
+
+- Added starGiftCollection - Represents a star gift collection ».
+
+- Added payments.starGiftCollectionsNotModified - The list of star gift collections » hasn't changed.
+
+- Added payments.starGiftCollections - Represents a list of star gift collections ».
+
+##### Changed Constructors
+
+- Added stars_rating parameter in userFull
+
+- Added require_premium, limited_per_user, per_user_total, per_user_remains parameters in starGift
+
+- Added require_premium parameter in starGiftUnique
+
+- Added collection_id parameter in savedStarGift
+
+#### Schema
+
+### Layer 208
+
+This layer introduces:
+
+- Suggested channel posts »
+
+- Add a new manage_direct_messages admin right
+
+- Add support for the new manage_direct_messages admin right in group/channel bot links
+
+- Allow replying to specific todo tasks »
+
+- Unify channel revenue statistics and withdrawal methods with the equivalent ones used for stars, by simply adding a ton flag and the missing parameters:
+
+- Balance and transaction history »
+
+- Revenue statistics »
+
+- Withdrawing revenue »
+
+- In some places in the API, it's possible to use toncoins instead of Stars, see here » for more info.
+
+#### Schema changes
+
+##### New Methods
+
+- Added messages.toggleSuggestedPostApproval - Approve or reject a suggested post ».
+
+##### Changed Methods
+
+- Added suggested_post parameter in messages.sendMessage
+
+- Added suggested_post parameter in messages.sendMedia
+
+- Added suggested_post parameter in messages.forwardMessages
+
+- Added suggested_post parameter in messages.saveDraft
+
+- Added flags, ton parameters in payments.getStarsStatus
+
+- Added ton parameter in payments.getStarsTransactions
+
+- Added ton parameter in payments.getStarsRevenueStats
+
+- Added flags, ton, amount parameters, removed stars parameter in payments.getStarsRevenueWithdrawalUrl
+
+- Added flags, ton parameters in payments.getStarsTransactionsByID
+
+##### Deleted Methods
+
+- Removed stats.getBroadcastRevenueStats
+
+- Removed stats.getBroadcastRevenueWithdrawalUrl
+
+- Removed stats.getBroadcastRevenueTransactions
+
+##### New Constructors
+
+- Added suggestedPost - Contains info about a suggested post ».
+
+- Added messageActionSuggestedPostApproval - A suggested post » was approved or rejected.
+
+- Added messageActionSuggestedPostSuccess - A suggested post » was successfully posted, and payment for it was successfully received.
+
+- Added messageActionSuggestedPostRefund - A suggested post » was accepted and posted or scheduled, but either the channel deleted the posted/scheduled post before stars_suggested_post_age_min seconds have elapsed, or the user refunded the payment for the stars used to pay for the suggested post.
+
+- Added starsTonAmount - Describes an amount of toncoin in nanotons (i.e. 1/1_000_000_000 of a toncoin).
+
+- Added messageActionGiftTon - You were gifted some toncoins.
+
+- Added inputStickerSetTonGifts - TON gifts stickerset.
+
+##### Changed Constructors
+
+- Added paid_suggested_post_stars, paid_suggested_post_ton, suggested_post parameters in message
+
+- Added suggested_post parameter in draftMessage
+
+- Added manage_direct_messages parameter in chatAdminRights
+
+- Added todo_item_id parameter in messageReplyHeader
+
+- Added todo_item_id parameter in inputReplyToMessage
+
+- Added amount, ads_proceeds_from_date, ads_proceeds_to_date parameters, removed stars parameter in starsTransaction
+
+- Added flags, top_hours_graph parameters in payments.starsRevenueStats
+
+- Added released_by parameter in starGift
+
+- Added chats, users parameters in payments.starGifts
+
+- Added released_by parameter in starGiftUnique
+
+##### Deleted Constructors
+
+- Removed stats.broadcastRevenueStats
+
+- Removed stats.broadcastRevenueWithdrawalUrl
+
+- Removed broadcastRevenueTransactionProceeds
+
+- Removed broadcastRevenueTransactionWithdrawal
+
+- Removed broadcastRevenueTransactionRefund
+
+- Removed stats.broadcastRevenueTransactions
+
+- Removed broadcastRevenueBalances
+
+- Removed updateBroadcastRevenueTransactions
+
+#### Schema
+
+### Layer 205
+
+This layer introduces:
+
+- Sponsored messages to show on channel videos »
+
+- To-do lists »
+
+- Rename account.addNoPaidMessagesException to account.toggleNoPaidMessagesException, and add a require_payment flag to refund all Stars transferred to us by a peer with paid messages »
+
+- Allow invoking account.toggleNoPaidMessagesException for monoforum topics, and add a new updateMonoForumNoPaidException to signal changes to monoForumDialog.nopaid_messages_exception to other admins and to other currently logged in sessions of the current monoforum admin.
+
+#### Schema changes
+
+##### New Methods
+
+- Added messages.toggleTodoCompleted - Mark one or more items of a todo list » as completed or not completed.
+
+- Added messages.appendTodoList - Appends one or more items to a todo list ».
+
+- Added account.toggleNoPaidMessagesException - Allow a user to send us messages without paying if paid messages » are enabled.
+
+##### Changed Methods
+
+- Added flags, msg_id parameters in messages.getSponsoredMessages
+
+- Added flags, parent_peer parameters in account.getPaidMessagesRevenue
+
+##### Deleted Methods
+
+- Removed account.addNoPaidMessagesException
+
+##### New Constructors
+
+- Added todoItem - An item of a todo list ».
+
+- Added todoList - Represents a todo list ».
+
+- Added todoCompletion - A completed todo list » item.
+
+- Added inputMediaTodo - Creates a todo list ».
+
+- Added messageMediaToDo - Represents a todo list ».
+
+- Added messageActionTodoCompletions - Items were marked as completed or not completed in a todo list ».
+
+- Added messageActionTodoAppendTasks - Items were appended to the todo list ».
+
+- Added updateMonoForumNoPaidException - An admin has (un)exempted this monoforum topic » from payment to send messages using account.toggleNoPaidMessagesException.
+
+##### Changed Constructors
+
+- Added saved_peer_id parameter in messageService
+
+- Added send_paid_messages_stars parameter in channelFull
+
+- Added min_display_duration, max_display_duration parameters in sponsoredMessage
+
+- Added start_delay, between_delay parameters in messages.sponsoredMessages
+
+- Added nopaid_messages_exception parameter in monoForumDialog
+
+#### PUSH notification changes
+
+##### New PUSH notifications
+
+- Added CHANNEL_MESSAGE_TODO - {1} posted a checklist {2}
+
+- Added CHANNEL_MESSAGE_TODO_APPEND - {1} added {2} tasks
+
+- Added CHANNEL_MESSAGE_TODO_DONE - {1} toggled {2} tasks
+
+- Added CHAT_MESSAGE_TODO - {1} sent a checklist {3} to the group {2}
+
+- Added CHAT_MESSAGE_TODO_APPEND - {1} added {3} tasks in the group {2}
+
+- Added CHAT_MESSAGE_TODO_DONE - {1} toggled {3} tasks in the group {2}
+
+- Added CHAT_REACT_TODO - {1}: {3} to your checklist {4} in {2}
+
+- Added MESSAGE_TODO - {1} sent you a checklist {2}
+
+- Added PINNED_TODO - {1} pinned a checklist {2}
+
+- Added REACT_TODO - {1}: {2} to your checklist {3}
+
+#### Schema
+
+### Layer 204
+
+This layer introduces:
+
+- Monoforums »
+
+- Bot API monoforum IDs »
+
+- Tabbed forum UI »
+
+- All flags added to channel (listed below) are valid min flags, meaning they will must be applied over the locally stored version even if the min flag of the incoming channel is set.
+
+#### Schema changes
+
+##### New Methods
+
+- Added messages.getSavedDialogsByID - Obtain information about specific saved message dialogs » or monoforum topics ».
+
+- Added messages.readSavedHistory - Mark messages as read in a monoforum topic ».
+
+- Added channels.getMessageAuthor - Can only be invoked by non-bot admins of a monoforum », obtains the original sender of a message sent by other monoforum admins to the monoforum, on behalf of the channel associated to the monoforum.
+
+##### Changed Methods
+
+- Added reply_to parameter in messages.forwardMessages
+
+- Added parent_peer parameter in messages.markDialogUnread
+
+- Added flags, parent_peer parameters in messages.getDialogUnreadMarks
+
+- Added saved_peer_id parameter in messages.unpinAllMessages
+
+- Added saved_peer_id parameter in messages.getUnreadReactions
+
+- Added saved_peer_id parameter in messages.readReactions
+
+- Added tabs parameter in channels.toggleForum
+
+- Added parent_peer parameter in messages.getSavedDialogs
+
+- Added flags, parent_peer parameters in messages.getSavedHistory
+
+- Added parent_peer parameter in messages.deleteSavedHistory
+
+- Added flags, broadcast_messages_allowed parameters in channels.updatePaidMessagesPrice
+
+##### New Constructors
+
+- Added inputReplyToMonoForum - Used to send messages to a monoforum topic.
+
+- Added monoForumDialog - Represents a monoforum topic ».
+
+- Added updateReadMonoForumInbox - Incoming messages in a monoforum topic were read
+
+- Added updateReadMonoForumOutbox - Outgoing messages in a monoforum were read.
+
+##### Changed Constructors
+
+- Added broadcast_messages_allowed, monoforum, forum_tabs, linked_monoforum_id parameters in channel
+
+- Added saved_peer_id parameter in updateDraftMessage
+
+- Added saved_peer_id parameter in updateChannelReadMessagesContents
+
+- Added saved_peer_id parameter in updateDialogUnreadMark
+
+- Added saved_peer_id parameter in updateMessageReactions
+
+- Added monoforum_peer_id parameter in inputReplyToMessage
+
+- Added flags, broadcast_messages_allowed parameters in messageActionPaidMessagesPrice
+
+#### Schema
+
+### Layer 203
+
+This layer introduces:
+
+- Methods to resell collectible gifts »
+
+- Autotranslation for all users of a channel »
+
+- stories.canSendStory now returns the number of available active story slots »
+
+- Collectible gift links »
+
+- Custom suggestions »
+
+- All suggestion fields were moved from the client configuration object to help.getPromoData »
+
+- All flags added to channel (listed below) are valid min flags, meaning they will must be applied over the locally stored version even if the min flag of the incoming channel is set.
+
+#### Schema changes
+
+##### New Methods
+
+- Added payments.getResaleStarGifts - Get collectible gifts of a specific type currently on resale, see here » for more info.
+
+- Added payments.updateStarGiftPrice - A collectible gift we own » can be put up for sale on the gift marketplace » with this method, see here » for more info.
+
+- Added channels.toggleAutotranslation - Toggle autotranslation in a channel, for all users: see here » for more info.
+
+##### Changed Methods
+
+- Changed type of stories.canSendStory from Bool to stories.CanSendStoryCount
+
+##### New Constructors
+
+- Added inputSavedStarGiftSlug - Points to a collectible gift obtained from a collectible gift link ».
+
+- Added starGiftAttributeIdModel - The ID of a model of a collectible gift ».
+
+- Added starGiftAttributeIdPattern - The ID of a pattern of a collectible gift ».
+
+- Added starGiftAttributeIdBackdrop - The ID of a backdrop of a collectible gift ».
+
+- Added starGiftAttributeCounter - Indicates the total number of gifts that have the specified attribute.
+
+- Added payments.resaleStarGifts - List of gifts currently on resale ».
+
+- Added inputInvoiceStarGiftResale - Used to buy a collectible gift currently up on resale, see here for more info on the full flow.
+
+- Added channelAdminLogEventActionToggleAutotranslation - Channel autotranslation was toggled ».
+
+- Added stories.canSendStoryCount - Contains the number of available active story slots (equal to the value of the story_expiring_limit_* client configuration parameter minus the number of currently active stories).
+
+- Added pendingSuggestion - Represents a custom pending suggestion ».
+
+##### Changed Constructors
+
+- Added autotranslation parameter in channel
+
+- Added pending_suggestions, dismissed_suggestions, custom_pending_suggestion parameters, changed type of peer from Peer to flags.3?Peer in help.promoData
+
+- Added availability_resale, resell_min_stars, title parameters in starGift
+
+- Added backdrop_id parameter in starGiftAttributeBackdrop
+
+- Added resell_stars parameter in starGiftUnique
+
+- Added resale_stars, can_transfer_at, can_resell_at parameters in messageActionStarGiftUnique
+
+- Added can_transfer_at, can_resell_at parameters in savedStarGift
+
+#### Schema
+
+### Layer 202
+
+This layer introduces:
+
+- End-to-end group calls »
+
+- Conference deep links »
+
+- Service messages for paid message refunds »
+
+- Service messages for paid message price changes »
+
+- Gift privacy settings:
+
+- globalPrivacySettings.disallowed_gifts/userFull.disallowed_gifts: Disallow the reception of specific gift types »
+
+- globalPrivacySettings.display_gifts_button/userFull.display_gifts_button: show or hide the gift button in the text field of private chats.
+
+- Transferring stars from a business account to the business bot »
+
+- Sponsored peer search results »
+
+- Business bot rights »
+
+- Sponsored message methods now don't require specification of the peer where the sponsored message is visible »
+
+- Renamed the method used by official apps to check whether an in-store purchase is possible »
+
+- Paid auth codes for official apps
+
+#### Schema changes
+
+##### New Methods
+
+- Added payments.canPurchaseStore - Checks whether a purchase is possible. Must be called before in-store purchase, official apps only.
+
+- Added contacts.getSponsoredPeers - Obtain a list of sponsored peer search results for a given query
+
+- Added phone.deleteConferenceCallParticipants - Remove participants from a conference call.
+
+- Added phone.sendConferenceCallBroadcast - Broadcast a blockchain block to all members of a conference call, see here » for more info.
+
+- Added phone.inviteConferenceCallParticipant - Invite a user to a conference call.
+
+- Added phone.declineConferenceCallInvite - Declines a conference call invite.
+
+- Added phone.getGroupCallChainBlocks - Fetch the blocks of a conference blockchain ».
+
+##### Changed Methods
+
+- Removed conference_call parameter in phone.requestCall
+
+- Added public_key, block parameters, removed key_fingerprint parameter in phone.joinGroupCall
+
+- Added rights parameter, removed can_reply parameter in account.updateConnectedBot
+
+- Removed peer parameter in messages.viewSponsoredMessage
+
+- Removed peer parameter in messages.clickSponsoredMessage
+
+- Removed peer parameter in messages.reportSponsoredMessage
+
+- Changed type of phone.createConferenceCall from phone.PhoneCall to Updates
+
+- Added flags, muted, video_stopped, join, random_id, public_key, block, params parameters, removed peer, key_fingerprint parameters in phone.createConferenceCall
+
+##### Deleted Methods
+
+- Removed payments.canPurchasePremium
+
+##### New Constructors
+
+- Added auth.sentCodePaymentRequired - Official apps may receive this constructor, indicating that due to the high cost of SMS verification codes for the user's country/provider, the user must purchase a Telegram Premium subscription in order to proceed with the login/signup.
+
+- Added inputStorePaymentAuthCode - Indicates payment for a login code.
+
+- Added updateSentPhoneCode - A paid login SMS code was successfully sent.
+
+- Added businessBotRights - Business bot rights.
+
+- Added messageActionPaidMessagesRefunded - Sent from peer A to B, indicates that A refunded all stars B previously paid to send messages to A, see here » for more info on paid messages.
+
+- Added messageActionPaidMessagesPrice - The price of paid messages » in this chat was changed.
+
+- Added disallowedGiftsSettings - Disallow the reception of specific gift types.
+
+- Added sponsoredPeer - A sponsored peer.
+
+- Added contacts.sponsoredPeersEmpty - There are no sponsored peers for this query.
+
+- Added contacts.sponsoredPeers - Sponsored peers.
+
+- Added inputInvoiceBusinessBotTransferStars - Transfer stars from the balance of a user account connected to a business bot, to the balance of the business bot, see here » for more info on the full flow.
+
+- Added inputGroupCallSlug - Join a conference call through an invitation link ».
+
+- Added inputGroupCallInviteMessage - Join a group call through a messageActionConferenceCall invitation message.
+
+- Added updateGroupCallChainBlocks - Contains updates to the blockchain of a conference call, see here » for more info.
+
+- Added messageActionConferenceCall - Represents a conference call (or an invitation to a conference call, if neither the missed nor active flags are set).
+
+- Added phoneCallDiscardReasonMigrateConferenceCall - This phone call was migrated to a conference call.
+
+##### Changed Constructors
+
+- Added display_gifts_button, disallowed_gifts parameters in userFull
+
+- Removed conference_call parameter in phoneCallWaiting
+
+- Removed conference_call parameter in phoneCallRequested
+
+- Removed conference_call parameter in phoneCallAccepted
+
+- Added conference_supported parameter, removed conference_call parameter in phoneCall
+
+- Removed conference_call parameter in phoneCallDiscarded
+
+- Added display_gifts_button, disallowed_gifts parameters in globalPrivacySettings
+
+- Added conference, creator, invite_link parameters, removed conference_from_call parameter in groupCall
+
+- Added rights parameter, removed can_reply parameter in connectedBot
+
+- Added rights parameter, removed can_reply parameter in botBusinessConnection
+
+#### PUSH notification changes
+
+##### New PUSH notifications
+
+- Added CONF_CALL_MISSED - You missed a call from {1}
+
+#### Schema
+
+### Layer 200
+
+This layer introduces:
+
+- Detailed account information for new private chats »
+
+- Paid messages »
+
+- Pinning a specific received gift to the profile »
+
+- Sending paid reactions as a channel »
+
+- Added a paid_messages_available flag to channelFull, indicating whether paid messages can be enabled in this supergroup
+
+- Gift a Telegram Premium subscription, paying with Telegram Stars »
+
+- This change also simplifies the Telegram Premium gift flow, fully replacing the userFull.premium_gifts flag with payments.getPremiumGiftCodeOptions.
+
+- Blockchain addresses for collectible gifts moved to the TON blockchain as NFTs »
+
+- All flags added to channel (listed below) are valid min flags, meaning they will must be applied over the locally stored version even if the min flag of the incoming channel is set.
+
+- All flags added to user (listed below) are valid min flags, meaning they will must be applied over the locally stored version even if the min flag of the incoming user is set.
+
+#### Schema changes
+
+##### New Methods
+
+- Added invokeWithReCaptcha - Official clients only: re-execute a method call that required reCAPTCHA verification via a RECAPTCHA_CHECK_%s__%s, where the first placeholder is the action, and the second one is the reCAPTCHA key ID.
+
+- Added account.addNoPaidMessagesException
+
+- Added account.getPaidMessagesRevenue - Get the number of stars we have received from the specified user thanks to paid messages »; the received amount will be equal to the sent amount multiplied by stars_paid_message_commission_permille divided by 1000.
+
+- Added channels.updatePaidMessagesPrice - Enable or disable paid messages » in this supergroup or monoforum.
+
+- Added users.getRequirementsToContact - Check whether we can write to the specified users, used to implement bulk checks for Premium-only messages » and paid messages ».
+
+- Added payments.toggleStarGiftsPinnedToTop - Pins a received gift on top of the profile of the user or owned channels by using payments.toggleStarGiftsPinnedToTop.
+
+##### Changed Methods
+
+- Added allow_paid_stars parameter in messages.sendMessage
+
+- Added allow_paid_stars parameter in messages.sendMedia
+
+- Added allow_paid_stars parameter in messages.forwardMessages
+
+- Added allow_paid_stars parameter in messages.sendInlineBotResult
+
+- Added allow_paid_stars parameter in messages.sendMultiMedia
+
+- Added flags, for_paid_reactions parameters in channels.getSendAs
+
+- Changed type of private from flags.0?Bool to flags.0?PaidReactionPrivacy in messages.sendPaidReaction
+
+- Changed type of private from Bool to PaidReactionPrivacy in messages.togglePaidReactionPrivacy
+
+##### Deleted Methods
+
+- Removed users.getIsPremiumRequiredToContact
+
+##### New Constructors
+
+- Added paidReactionPrivacyDefault - Uses the default reaction privacy, set using messages.togglePaidReactionPrivacy.
+
+- Added paidReactionPrivacyAnonymous - Send paid reactions anonymously.
+
+- Added paidReactionPrivacyPeer - Send paid reactions as the specified peer, fetched using channels.getSendAs.
+
+- Added inputPrivacyKeyNoPaidMessages - Who can send you messages without paying, if paid messages » are enabled.
+
+- Added privacyKeyNoPaidMessages - Who can send you messages without paying, if paid messages » are enabled.
+
+- Added account.paidMessagesRevenue - Total number of non-refunded Telegram Stars a user has spent on sending us messages either directly or through a channel, see here » for more info on paid messages.
+
+- Added requirementToContactEmpty - This user can be freely contacted.
+
+- Added requirementToContactPremium - This user requires us to buy a Premium subscription in order to contact them.
+
+- Added requirementToContactPaidMessages - This user requires us to pay the specified amount of Telegram Stars to send them a message, see here » for the full flow.
+
+- Added inputInvoicePremiumGiftStars - Used to gift a Telegram Premium subscription to another user, paying with Telegram Stars.
+
+##### Changed Constructors
+
+- Added paid_message_stars parameter in message
+
+- Added charge_paid_message_stars, registration_month, phone_country, name_change_date, photo_change_date parameters in peerSettings
+
+- Added send_paid_messages_stars parameter, removed premium_gifts parameter in userFull
+
+- Added send_paid_messages_stars parameter in user
+
+- Added send_paid_messages_stars parameter in channel
+
+- Added paid_messages_available parameter in channelFull
+
+- Added noncontact_peers_paid_stars parameter in globalPrivacySettings
+
+- Added business_transfer, stargift_resale, paid_messages, premium_gift_months parameters in starsTransaction
+
+- Changed type of private from Bool to PaidReactionPrivacy in updatePaidReactionPrivacy
+
+- Added gift_address parameter in starGiftUnique
+
+##### Deleted Constructors
+
+- Removed premiumGiftOption
+
+#### Schema
+
+### Layer 198
+
+This layer introduces:
+
+- Collectibles as emoji statuses (and minor tweaks to the emoji status API) »
+
+- Send gifts to channels
+
+- Notifications for gifts received by channels »
+
+- Get all gifts received by a peer »
+
+- Fetch info about specific gifts owned by a peer we control »
+
+- Withdraw a collectible gift to the TON blockchain »
+
+- Custom video covers »
+
+- Custom starting timestamps for videos »
+
+#### Schema changes
+
+##### New Methods
+
+- Added account.getCollectibleEmojiStatuses - Obtain a list of emoji statuses » for owned collectible gifts.
+
+- Added payments.getSavedStarGifts - Fetch the full list of gifts owned by a peer.
+
+- Added payments.getSavedStarGift - Fetch info about specific gifts owned by a peer we control.
+
+- Added payments.getStarGiftWithdrawalUrl - Convert a collectible gift » to an NFT on the TON blockchain.
+
+- Added payments.toggleChatStarGiftNotifications - Enables or disables the reception of notifications every time a gift » is received by the specified channel, can only be invoked by admins with post_messages admin rights.
+
+##### Changed Methods
+
+- Added video_timestamp parameter in messages.forwardMessages
+
+- Added stargift parameter, removed msg_id parameter in payments.saveStarGift
+
+- Added stargift parameter, removed msg_id parameter in payments.convertStarGift
+
+- Added stargift parameter, removed msg_id parameter in payments.upgradeStarGift
+
+- Added stargift parameter, removed msg_id parameter, changed type of to_id from InputUser to InputPeer in payments.transferStarGift
+
+##### Deleted Methods
+
+- Removed payments.getUserStarGifts
+
+- Removed payments.getUserStarGift
+
+##### New Constructors
+
+- Added emojiStatusCollectible - An owned collectible gift » as emoji status.
+
+- Added inputEmojiStatusCollectible - An owned collectible gift » as emoji status: can only be used in account.updateEmojiStatus, is never returned by the API.
+
+- Added savedStarGift - Represents a gift owned by a peer.
+
+- Added payments.savedStarGifts - Represents a list of gifts.
+
+- Added inputSavedStarGiftUser - A gift received in a private chat with another user.
+
+- Added inputSavedStarGiftChat - A gift received by a channel we own.
+
+- Added payments.starGiftWithdrawalUrl - A URL that can be used to import the exported NFT on Fragment.
+
+##### Changed Constructors
+
+- Added video_cover, video_timestamp parameters in inputMediaUploadedDocument
+
+- Added video_cover, video_timestamp parameters in inputMediaDocument
+
+- Added video_cover, video_timestamp parameters in messageMediaDocument
+
+- Added stargifts_available, stargifts_count parameters in channelFull
+
+- Added video_cover, video_timestamp parameters in inputMediaDocumentExternal
+
+- Added flags, until parameters in emojiStatus
+
+- Added peer parameter, removed user_id parameter in inputInvoiceStarGift
+
+- Added from_id, peer, saved_id parameters in messageActionStarGift
+
+- Changed type of sender_id from flags.0?long to flags.0?Peer, recipient_id from long to Peer in starGiftAttributeOriginalDetails
+
+- Added owner_address parameter, changed type of owner_id from flags.0?long to flags.0?Peer in starGiftUnique
+
+- Added from_id, peer, saved_id parameters in messageActionStarGiftUnique
+
+- Added stargift parameter, removed msg_id parameter in inputInvoiceStarGiftUpgrade
+
+- Added stargift parameter, removed msg_id parameter, changed type of to_id from InputUser to InputPeer in inputInvoiceStarGiftTransfer
+
+##### Deleted Constructors
+
+- Removed emojiStatusUntil
+
+- Removed userStarGift
+
+- Removed payments.userStarGifts
+
+#### Schema
+
+### Layer 197
+
+This layer introduces:
+
+- Collectible gift links »
+
+- Collectible gift story media areas »
+
+- Collectible webpage previews »
+
+- Similar bot recommendations »
+
+#### Schema changes
+
+##### New Methods
+
+- Added bots.getBotRecommendations - Obtain a list of similarly themed bots, selected based on similarities in their subscriber bases, see here » for more info.
+
+- Added payments.getUniqueStarGift - Obtain info about a collectible gift » using a slug obtained from a collectible gift link ».
+
+##### Changed Methods
+
+- Changed type of messages.getWebPagePreview from MessageMedia to messages.WebPagePreview
+
+##### New Constructors
+
+- Added users.users - Describes a list of users (or bots).
+
+- Added users.usersSlice - Describes a partial list of users.
+
+- Added payments.uniqueStarGift - Represents a collectible gift ».
+
+- Added webPageAttributeUniqueStarGift - Contains info about collectible gift » for a webPage preview of a collectible gift » (the webPage will have a type of telegram_nft).
+
+- Added mediaAreaStarGift - Represents a collectible gift ».
+
+- Added messages.webPagePreview - Represents a webpage preview.
+
+##### Changed Constructors
+
+- Added flags, slug, owner_name parameters, changed type of owner_id from long to flags.0?long in starGiftUnique
+
+#### Schema
+
+### Layer 196
+
+This layer introduces:
+
+- Extra secure group calls »
+
+- Explicit delivery acknowledgement for Telegram Gateway verification messages ».
+
+- Third-party verification »
+
+- Reactions for service messages »
+
+- Collectible gifts »
+
+- Add support for entities in folder titles, and a new title_noanimate flag to optionally freeze animated emoji entities in the title.
+
+- All flags added to channel (listed below) are valid min flags, meaning they will must be applied over the locally stored version even if the min flag of the incoming channel is set.
+
+- All flags added to user (listed below) are valid min flags, meaning they will must be applied over the locally stored version even if the min flag of the incoming user is set.
+
+#### Schema changes
+
+##### New Methods
+
+- Added phone.createConferenceCall - Create and optionally join a new conference call.
+
+- Added messages.reportMessagesDelivery - Used for Telegram Gateway verification messages »: indicate to the server that one or more messages were received by the client, if requested by the message.report_delivery_until_date flag or the equivalent flag in push notifications.
+
+- Added bots.setCustomVerification - Verify a user or chat on behalf of an organization ».
+
+- Added payments.getStarGiftUpgradePreview - Obtain a preview of the possible attributes (chosen randomly) a gift » can receive after upgrading it to a collectible gift », see here » for more info.
+
+- Added payments.upgradeStarGift - Upgrade a gift to a collectible gift: can only be used if the upgrade was already paid by the gift sender; see here » for more info on the full flow (including the different flow to use in case the upgrade was not paid by the gift sender).
+
+- Added payments.transferStarGift - Transfer a collectible gift to another user or channel: can only be used if transfer is free (i.e. messageActionStarGiftUnique.transfer_stars is not set); see here » for more info on the full flow (including the different flow to use in case the transfer isn't free).
+
+- Added payments.getUserStarGift
+
+##### Changed Methods
+
+- Added conference_call parameter in phone.requestCall
+
+- Added key_fingerprint parameter in phone.joinGroupCall
+
+- Removed user_id parameter in payments.saveStarGift
+
+- Removed user_id parameter in payments.convertStarGift
+
+##### New Constructors
+
+- Added botVerifierSettings - Info about the current verifier bot ».
+
+- Added botVerification - Describes a bot verification icon ».
+
+- Added starGiftAttributeModel - The model of a collectible gift ».
+
+- Added starGiftAttributePattern - A sticker applied on the backdrop of a collectible gift » using a repeating pattern.
+
+- Added starGiftAttributeBackdrop - The backdrop of a collectible gift ».
+
+- Added starGiftAttributeOriginalDetails - Info about the sender, receiver and message attached to the original gift », before it was upgraded to a collectible gift ».
+
+- Added starGiftUnique - Represents a collectible star gift, see here » for more info.
+
+- Added messageActionStarGiftUnique - A gift » was upgraded to a collectible gift ».
+
+- Added inputInvoiceStarGiftUpgrade - Used to pay to upgrade a Gift to a collectible gift, see the collectible gifts » documentation for more info on the full flow.
+
+- Added inputInvoiceStarGiftTransfer - Used to pay to transfer a collectible gift to another peer, see the gifts » documentation for more info.
+
+- Added payments.starGiftUpgradePreview - A preview of the possible attributes (chosen randomly) a gift » can receive after upgrading it to a collectible gift », see here » for more info.
+
+##### Changed Constructors
+
+- Added report_delivery_until_date parameter in message
+
+- Added reactions_are_possible, reactions parameters in messageService
+
+- Added bot_verification parameter in userFull
+
+- Added video_cover_photo parameter in webPage
+
+- Added bot_verification parameter in chatInvite
+
+- Added bot_verification_icon parameter in user
+
+- Added verifier_settings parameter in botInfo
+
+- Added bot_verification_icon parameter in channel
+
+- Added bot_verification parameter in channelFull
+
+- Added conference_call parameter in phoneCallWaiting
+
+- Added conference_call parameter in phoneCallRequested
+
+- Added conference_call parameter in phoneCallAccepted
+
+- Added conference_call parameter in phoneCall
+
+- Added conference_call parameter in phoneCallDiscarded
+
+- Added title_noanimate parameter, changed type of title from string to TextWithEntities in dialogFilter
+
+- Added conference_from_call parameter in groupCall
+
+- Added flags parameter, changed type of chat_id from long to flags.0?long in updateGroupCall
+
+- Added title_noanimate parameter, changed type of title from string to TextWithEntities in dialogFilterChatlist
+
+- Added title_noanimate parameter, changed type of title from string to TextWithEntities in chatlists.chatlistInvite
+
+- Changed type of unclaimed from flags.2?true to flags.5?true in messageActionGiftCode
+
+- Added stargift_upgrade parameter in starsTransaction
+
+- Added upgrade_stars parameter in starGift
+
+- Added include_upgrade parameter in inputInvoiceStarGift
+
+- Added upgraded, refunded, can_upgrade, upgrade_msg_id, upgrade_stars parameters in messageActionStarGift
+
+- Added refunded, can_upgrade, upgrade_stars, can_export_at, transfer_stars parameters in userStarGift
+
+#### PUSH notification changes
+
+##### New PUSH notifications
+
+- Added MESSAGE_STARGIFT_UPGRADE - {1} upgraded your Gift
+
+- Added MESSAGE_UNIQUE_STARGIFT - {1} transferred you a Gift!
+
+#### Schema
+
+### Layer 195
+
+Start reading the changelog at layer 186 to view all changes since the last refresh of the documentation.
+
+This layer introduces the following new features:
+
+- Affiliate programs for bots »
+
+- This includes the following new client configuration keys »
+
+- starref_start_param_prefixes »
+
+- starref_program_allowed »
+
+- starref_connect_allowed »
+
+- starref_min_commission_permille »
+
+- starref_max_commission_permille »
+
+- And the following new deep links:
+
+- Referral links »
+
+- AI-powered sticker search »
+
+- A new USERPIC_SETUP suggestion » was added.
+
+- The RPC error database was updated »
+
+The following documentation was added for pre-existing features:
+
+- Documentation was added for the following pre-existing client configuration keys »:
+
+- inapp_update_check_delay »
+
+- premium_manage_subscription_url »
+
+- ignore_restriction_reasons »
+
+- restriction_add_platforms »
+
+- new_noncontact_peers_require_premium_without_ownpremium »
+
+- The client configuration page » now contains the exact and full list of defaults for all configuration keys in JSON format (previously, the JSON dump only contained example values that couldn't all be used as valid defaults).
+
+- Added documentation about Telegram Premium story feature identifiers »
+
+- Added documentation about Telegram Premium limit feature identifiers »
+
+- Updated the list of webPage types »
+
+- Added info on how to handle ENCRYPTED_MESSAGE_INVALID errors while binding the auth key.
+
+#### Schema changes
+
+##### New Methods
+
+- Added bots.getAdminedBots - Get a list of bots owned by the current user
+
+- Added bots.updateStarRefProgram - Create, edit or delete the affiliate program of a bot we own
+
+- Added payments.getConnectedStarRefBots - Fetch all affiliations we have created for a certain peer
+
+- Added payments.getConnectedStarRefBot - Fetch info about a specific bot affiliation »
+
+- Added payments.getSuggestedStarRefBots - Obtain a list of suggested mini apps with available affiliate programs
+
+- Added payments.connectStarRefBot - Join a bot's affiliate program, becoming an affiliate »
+
+- Added payments.editConnectedStarRefBot - Leave a bot's affiliate program »
+
+- Added messages.searchStickers - Search for stickers using AI-powered keyword search
+
+##### Changed Methods
+
+- Added flags, referer parameters in contacts.resolveUsername
+
+##### New Constructors
+
+- Added starRefProgram - Indo about an affiliate program offered by a bot
+
+- Added connectedBotStarRef - Info about an active affiliate program we have with a Mini App
+
+- Added payments.connectedStarRefBots - Active affiliations
+
+- Added payments.suggestedStarRefBots - A list of suggested mini apps with available affiliate programs
+
+- Added starsAmount - Describes a real (i.e. possibly decimal) amount of Telegram Stars.
+
+- Added messages.foundStickersNotModified - No new stickers were found for the specified query
+
+- Added messages.foundStickers - Found stickers
+
+##### Changed Constructors
+
+- Added starref_program parameter in userFull
+
+- Added starref_commission_permille, starref_peer, starref_amount parameters, changed type of stars from long to StarsAmount in starsTransaction
+
+- Changed type of balance from long to StarsAmount in payments.starsStatus
+
+- Changed type of balance from long to StarsAmount in updateStarsBalance
+
+- Changed type of current_balance from long to StarsAmount, available_balance from long to StarsAmount, overall_revenue from long to StarsAmount in starsRevenueStatus
+
+#### Schema
+
+### Layer 194
+
+- Bot subscription improvements »
+
+- Search improvements »
+
+#### Schema changes
+
+##### Changed Methods
+
+- Added groups_only, users_only parameters in messages.searchGlobal
+
+- Removed invoice_slug parameter, changed type of charge_id from flags.2?string to string in payments.botCancelStarsSubscription
+
+##### Changed Constructors
+
+- Added subscription_until_date parameter in messageActionPaymentSentMe
+
+- Added subscription_until_date parameter in messageActionPaymentSent
+
+#### Schema
+
+### Layer 193
+
+This layer introduces the following new features, mainly related to Mini Apps 2.0:
+
+- Prepared inline messages from mini apps »
+
+- Setting a user's emoji status from a bot/mini app
+
+- Mini app file downloads »
+
+- Share stories from a mini app »
+
+- Bot subscriptions »
+
+- payments.exportInvoice can now be invoked over a business connection to generate subscription invoice links for business bots
+
+- Fullscreen mini apps
+
+- Added the fullscreen parameter to webViewResultUrl to allow opening apps in fullscreen mode by default (editable via botfather, can also be enabled by setting the fullscreen flag in the requestWebView methods)
+
+- The mode parameter of main mini app links and direct mini app links now supports fullscreen mode, which forces setting the fullscreen flag in the requestWebView methods
+
+- Added a web_app_request_fullscreen » method to request fullscreen mode in mini apps
+
+- Gifts from bots, gift privacy settings and birthday-themed gifts »
+
+- Customization for the mini app loading screen »
+
+- Accelerometer tracking for mini apps »
+
+- Gyroscope tracking for mini apps »
+
+- Device orientation tracking for mini apps »
+
+- Orientation lock for mini apps »
+
+- Geolocation support for mini apps »
+
+- Visibility tracking for mini apps »
+
+- Add mini apps to the homescreen »
+
+- Methods usable by mini apps to obtain the current content-defined » and system-defined » safe areas
+
+- Allow customizing the vertical swipe behavior in mini apps »
+
+- A secondary button for mini apps »
+
+- Shine effect support for the main button of mini apps with a new has_shine_effect flag »
+
+- Even more theming options for mini apps with a custom bottom bar color »
+
+- Added a force_request parameter to the web_app_open_tg_link method »: if set and true, the client must ignore any locally cached information for the deep link (mainly used to refresh the cache information for stickerset links »).
+
+- Additionally, now the method must not close the web app when invoked (regardless of the value of force_request).
+
+The following new web events » were added:
+
+- web_app_setup_swipe_behavior »
+
+- web_app_set_bottom_bar_color »
+
+- web_app_setup_secondary_button »
+
+- web_app_share_to_story »
+
+- web_app_request_fullscreen »
+
+- web_app_exit_fullscreen »
+
+- web_app_start_gyroscope »
+
+- web_app_stop_gyroscope »
+
+- web_app_start_device_orientation »
+
+- web_app_stop_device_orientation »
+
+- web_app_add_to_home_screen »
+
+- web_app_check_home_screen »
+
+- web_app_set_emoji_status »
+
+- web_app_request_emoji_status_access »
+
+- web_app_request_safe_area »
+
+- web_app_request_content_safe_area »
+
+- web_app_check_location »
+
+- web_app_request_location »
+
+- web_app_open_location_settings »
+
+- web_app_request_file_download »
+
+- web_app_send_prepared_message »
+
+- web_app_toggle_orientation_lock »
+
+The following new mini app events » were added:
+
+- visibility_changed »
+
+- secondary_button_pressed »
+
+- fullscreen_changed »
+
+- fullscreen_failed »
+
+- accelerometer_started »
+
+- accelerometer_failed »
+
+- accelerometer_stopped »
+
+- accelerometer_changed »
+
+- gyroscope_started »
+
+- gyroscope_failed »
+
+- gyroscope_stopped »
+
+- gyroscope_changed »
+
+- device_orientation_started »
+
+- device_orientation_failed »
+
+- device_orientation_stopped »
+
+- device_orientation_changed »
+
+- home_screen_added »
+
+- home_screen_failed »
+
+- home_screen_checked »
+
+- emoji_status_failed »
+
+- emoji_status_set »
+
+- emoji_status_access_requested »
+
+- file_download_requested »
+
+- prepared_message_failed »
+
+- prepared_message_sent »
+
+- safe_area_changed »
+
+- content_safe_area_changed »
+
+- location_requested »
+
+- location_checked »
+
+#### Schema changes
+
+##### New Methods
+
+- Added messages.savePreparedInlineMessage - Save a prepared inline message, to be shared by the user of the mini app using a web_app_send_prepared_message event
+
+- Added messages.getPreparedInlineMessage - Obtain a prepared inline message generated by a mini app: invoked when handling web_app_send_prepared_message events
+
+- Added bots.updateUserEmojiStatus - Change the emoji status of a user (invoked by bots, see here » for more info on the full flow)
+
+- Added bots.toggleUserEmojiStatusPermission - Allow or prevent a bot from changing our emoji status »
+
+- Added bots.checkDownloadFileParams - Check if a mini app can request the download of a specific file: called when handling web_app_request_file_download events »
+
+- Added payments.botCancelStarsSubscription - Cancel a bot subscription
+
+##### Changed Methods
+
+- Added fullscreen parameter in messages.requestWebView
+
+- Added fullscreen parameter in messages.requestSimpleWebView
+
+- Added fullscreen parameter in messages.requestAppWebView
+
+- Added fullscreen parameter in messages.requestMainWebView
+
+##### New Constructors
+
+- Added inputPrivacyKeyStarGiftsAutoSave - Whether received gifts will be automatically displayed on our profile
+
+- Added privacyKeyStarGiftsAutoSave - Whether received gifts will be automatically displayed on our profile
+
+- Added inputPrivacyValueAllowBots - Allow bots and mini apps
+
+- Added inputPrivacyValueDisallowBots - Disallow bots and mini apps
+
+- Added privacyValueAllowBots - Allow bots and mini apps
+
+- Added privacyValueDisallowBots - Disallow bots and mini apps
+
+- Added messages.botPreparedInlineMessage - Represents a prepared inline message saved by a bot, to be sent to the user via a web app »
+
+- Added messages.preparedInlineMessage - Represents a prepared inline message received via a bot's mini app, that can be sent to some chats »
+
+- Added botAppSettings - Mini app » settings
+
+##### Changed Constructors
+
+- Changed type of convert_stars from long to flags.4?long in messageActionStarGift
+
+- Added bot_can_manage_emoji_status parameter in userFull
+
+- Added app_settings parameter in botInfo
+
+- Added subscription_period parameter in invoice
+
+- Added fullscreen parameter in webViewResultUrl
+
+- Added bot_canceled, title, photo, invoice_slug parameters in starsSubscription
+
+- Added birthday parameter in starGift
+
+#### Schema
+
+### Layer 192
+
+This layer introduces the following new features:
+
+- Support for paid broadcasts for bots, through the new allow_paid_floodskip flag.
+
+- Ads for bots
+
+- Allow filtering out stories only sent by a certain peer when using stories.searchPosts
+
+- Messages attached to gifts and other gift improvements
+
+- Updates for sent scheduled messages (including videos sent from the conversion queue), thanks to the sent_messages flag of updateDeleteScheduledMessages
+
+#### Schema changes
+
+##### New Methods
+
+- Added messages.viewSponsoredMessage - Mark a specific sponsored message » as read
+
+- Added messages.clickSponsoredMessage - Informs the server that the user has interacted with a sponsored message in one of the ways listed here ».
+
+- Added messages.reportSponsoredMessage - Report a sponsored message », see here » for more info on the full flow.
+
+- Added messages.getSponsoredMessages - Get a list of sponsored messages for a peer, see here » for more info.
+
+##### Changed Methods
+
+- Added allow_paid_floodskip parameter in messages.sendMessage
+
+- Added allow_paid_floodskip parameter in messages.sendMedia
+
+- Added allow_paid_floodskip parameter in messages.forwardMessages
+
+- Added allow_paid_floodskip parameter in messages.sendMultiMedia
+
+- Added peer parameter, removed channel parameter in stats.getBroadcastRevenueStats
+
+- Added peer parameter, removed channel parameter in stats.getBroadcastRevenueWithdrawalUrl
+
+- Added peer parameter, removed channel parameter in stats.getBroadcastRevenueTransactions
+
+- Added peer parameter in stories.searchPosts
+
+##### Deleted Methods
+
+- Removed channels.viewSponsoredMessage
+
+- Removed channels.getSponsoredMessages
+
+- Removed channels.clickSponsoredMessage
+
+- Removed channels.reportSponsoredMessage
+
+##### New Constructors
+
+- Added starsTransactionPeerAPI - Describes a Telegram Star transaction used to pay for paid API usage, such as paid bot broadcasts.
+
+##### Changed Constructors
+
+- Added can_view_revenue parameter in userFull
+
+- Added flags, sent_messages parameters in updateDeleteScheduledMessages
+
+- Added message parameter in messageActionGiftPremium
+
+- Added message parameter in inputStorePaymentPremiumGiftCode
+
+- Added message parameter in messageActionGiftCode
+
+- Added floodskip_number parameter in starsTransaction
+
+- Added sold_out, first_sale_date, last_sale_date parameters in starGift
+
+#### Schema
+
+### Layer 189
+
+This layer adds support for the following features:
+
+- Automatic conversion of uploaded videos »
+
+- Gifts »
+
+- Clipboard button »
+
+- Sponsored message improvements »
+
+- Improvements to the reporting flow »
+
+The following new config keys were added:
+
+- stargifts_message_length_max »
+
+- stargifts_blocked »
+
+- stargifts_convert_period_max »
+
+- video_ignore_alt_documents »
+
+- sponsored_links_inapp_allow »
+
+#### Schema changes
+
+##### New Methods
+
+- Added payments.getStarGifts - Get a list of available gifts, see here » for more info.
+
+- Added payments.getUserStarGifts
+
+- Added payments.saveStarGift - Display or remove a received gift » from our profile.
+
+- Added payments.convertStarGift - Convert a received gift » into Telegram Stars: this will permanently destroy the gift, converting it into starGift.convert_stars Telegram Stars, added to the user's balance.
+
+##### Changed Methods
+
+- Changed type of messages.report from Bool to ReportResult
+
+- Added option parameter, removed reason parameter in messages.report
+
+- Added flags, media, fullscreen parameters in channels.clickSponsoredMessage
+
+- Changed type of stories.report from Bool to ReportResult
+
+- Added option parameter, removed reason parameter in stories.report
+
+- Removed flags parameter in payments.sendStarsForm
+
+##### New Constructors
+
+- Added keyboardButtonCopy - Clipboard button: when clicked, the attached text must be copied to the clipboard.
+
+- Added starGift - Represents a star gift, see here » for more info.
+
+- Added payments.starGiftsNotModified - The list of available gifts » hasn't changed.
+
+- Added payments.starGifts - Available gifts ».
+
+- Added inputInvoiceStarGift - Used to buy a Telegram Star Gift, see here » for more info.
+
+- Added payments.paymentFormStarGift - Represents a payment form for a gift, see here » for more info.
+
+- Added messageActionStarGift - You received a gift, see here » for more info.
+
+- Added userStarGift
+
+- Added payments.userStarGifts
+
+- Added messageReportOption - Report menu option
+
+- Added reportResultChooseOption - The user must choose one of the following options, and then messages.report must be re-invoked, passing the option's option identifier to messages.report.option.
+
+- Added reportResultAddComment - The user should enter an additional comment for the moderators, and then messages.report must be re-invoked, passing the comment to messages.report.message.
+
+- Added reportResultReported - The report was sent successfully, no further actions are required.
+
+##### Changed Constructors
+
+- Added video_processing_pending parameter in message
+
+- Added stargifts_count parameter in userFull
+
+- Added alt_documents parameter, removed alt_document parameter in messageMediaDocument
+
+- Added video_codec parameter in documentAttributeVideo
+
+- Added stargift parameter in starsTransaction
+
+#### PUSH notification changes
+
+##### New PUSH notifications
+
+- Added MESSAGE_STARGIFT - {1} sent you a Gift worth {2} Stars
+
+#### Schema
+
+### Layer 187
+
+This layer adds support for the following features:
+
+- Star giveaways »
+
+- Paid reaction privacy settings »
+
+- Paid media for bots »
+
+- Improvements to star subscriptions »
+
+#### Schema changes
+
+##### New Methods
+
+- Added payments.getStarsGiveawayOptions - Fetch a list of star giveaway options ».
+
+- Added messages.getPaidReactionPrivacy - Fetches an updatePaidReactionPrivacy update with the current default paid reaction privacy, see here » for more info.
+
+##### Changed Methods
+
+- Changed type of private from flags.0?true to flags.0?Bool in messages.sendPaidReaction
+
+##### New Constructors
+
+- Added updateBotPurchasedPaidMedia - Bots only: a user has purchased a paid media.
+
+- Added channelAdminLogEventActionParticipantSubExtend - A paid subscriber has extended their Telegram Star subscription ».
+
+- Added inputStorePaymentStarsGiveaway - Used to pay for a star giveaway, see here » for more info.
+
+- Added messageActionPrizeStars - You won some Telegram Stars in a Telegram Star giveaway ».
+
+- Added updatePaidReactionPrivacy - Contains the current default paid reaction privacy, see here » for more info.
+
+- Added starsGiveawayOption - Contains info about a Telegram Star giveaway option.
+
+- Added starsGiveawayWinnersOption - Allowed options for the number of giveaway winners.
+
+- Added prepaidStarsGiveaway - Contains info about a prepaid Telegram Star giveaway ».
+
+##### Changed Constructors
+
+- Added sub_extend parameter in channelAdminLogEventsFilter
+
+- Added stars parameter, changed type of months from int to flags.4?int in messageMediaGiveaway
+
+- Added flags, stars parameters in messageActionGiveawayLaunch
+
+- Added stars_prize parameter, changed type of gift_code_slug from flags.0?string to flags.3?string, activated_count from int to flags.2?int in payments.giveawayInfoResults
+
+- Added stars parameter in boost
+
+- Added flags, stars parameters in messageActionGiveawayResults
+
+- Added stars parameter, changed type of months from int to flags.4?int in messageMediaGiveawayResults
+
+- Added flags, withdrawal_enabled parameters in broadcastRevenueBalances
+
+- Added giveaway_post_id parameter in starsTransaction
+
+- Added flags, payload parameters in inputMediaPaidMedia
+
+#### PUSH notification changes
+
+##### New PUSH notifications
+
+- Added CHANNEL_MESSAGE_GIVEAWAY_STARS - {1} posted a giveaway of {3} stars {2}
+
+- Added CHAT_MESSAGE_GIVEAWAY_STARS - {1} sent a giveaway of {4} stars {3} to the group {2}
+
+- Added MESSAGE_GIVEAWAY_STARS - {1} sent you a giveaway of {3} stars {2}
+
+#### Schema
+
+### Layer 186
+
+This layer adds support for the following features:
+
+- Telegram Star subscriptions »
+
+- Paid reactions »
+
+- Super channels »
+
+- You can now send channel messages that look exactly like group messages, with full information about the sender (and the same UI used for messages in groups): to toggle this feature, invoke channels.toggleSignatures with signatures_enabled and profiles_enabled set.
+
+- Enabling this mode will allow admins to post messages to the channel as any of the profiles they control (including other channels, and the channel itself for anonymous messages like the default mode) with the send_as flag of messages.sendMessage and other message sending methods.
+
+- The new channel.signature_profiles flag is a valid min field.
+
+- Media in sponsored messages
+
+- Privacy policies for bots through the botInfo.privacy_policy_url parameter.
+
+The following new suggestions were added:
+
+- STARS_SUBSCRIPTION_LOW_BALANCE »
+
+The following new config keys were added:
+
+- stars_subscription_amount_max »
+
+- stars_usd_sell_rate_x1000 »
+
+- stars_usd_withdraw_rate_x1000 »
+
+- stars_paid_reaction_amount_max »
 
 The following new deep links were added:
 
-- Story links »
-
-- Boost links »
-
-- Direct mini app links »
-
-- Premium giftcode links »
-
-- Premium multigift links »
-
-This layer introduces the saved messages dialog list and several other saved messages improvements »!
-
-#### Schema changes
-
-##### New Methods
-
-- Added messages.getSavedDialogs - Returns the current saved dialog list, see here » for more info.
-
-- Added messages.getSavedHistory - Returns saved messages » forwarded from a specific peer
-
-- Added messages.deleteSavedHistory - Deletes messages forwarded from a specific peer to saved messages ».
-
-- Added messages.getPinnedSavedDialogs - Get pinned saved dialogs, see here » for more info.
-
-- Added messages.toggleSavedDialogPin - Pin or unpin a saved message dialog ».
-
-- Added messages.reorderPinnedSavedDialogs - Reorder pinned saved message dialogs ».
-
-##### Changed Methods
-
-- Added saved_peer_id parameter in messages.search
-
-- Added saved_peer_id parameter in messages.getSearchCounters
-
-- Added flags, saved_peer_id parameters in messages.getSearchResultsCalendar
-
-- Added flags, saved_peer_id parameters in messages.getSearchResultsPositions
-
-##### New Constructors
-
-- Added savedDialog - Represents a saved dialog ».
-
-- Added updateSavedDialogPinned - A saved message dialog was pinned/unpinned
-
-- Added updatePinnedSavedDialogs - Pinned saved dialogs » were updated
-
-- Added messages.savedDialogs - Represents some saved message dialogs ».
-
-- Added messages.savedDialogsSlice - Incomplete list of saved message dialogs » with messages and auxiliary data.
-
-- Added messages.savedDialogsNotModified - The saved dialogs haven't changed
-
-##### Changed Constructors
-
-- Added saved_peer_id parameter in message
-
-- Added saved_out, saved_from_id, saved_from_name, saved_date parameters in messageFwdHeader
-
-#### Schema
-
-### Layer 169
-
-Allow requesting and sending more than one peer using keyboardButtonRequestPeer.
-
-#### Schema changes
-
-##### Changed Methods
-
-- Added requested_peers parameter, removed requested_peer parameter in messages.sendBotRequestedPeer
-
-##### Changed Constructors
-
-- Added peers parameter, removed peer parameter in messageActionRequestedPeer
-
-- Added max_quantity parameter in keyboardButtonRequestPeer
-
-#### Schema
-
-### Layer 168
-
-Added support for emoji statuses, wallpapers and profile color palettes in channels, added support for custom prizes and public winners in giveaways through prize_description and winners_are_visible+messageMediaGiveawayResults, channel post embedding in stories and a new stories.getStoryReactionsList method to fetch reaction and interactions for channel stories and improved pagination in stats.getMessagePublicForwards.
-
-Also, bots now receive events about reactions.
-
-#### Schema changes
-
-##### New Methods
-
-- Added stories.getStoryReactionsList - Get the reaction and interaction list of a story posted to a channel, along with the sender of each reaction.
-
-- Added channels.updateEmojiStatus - Set an emoji status for a channel.
-
-- Added account.getChannelDefaultEmojiStatuses - Get a list of default suggested channel emoji statuses.
-
-- Added account.getChannelRestrictedStatusEmojis - Returns fetch the full list of custom emoji IDs » that cannot be used in channel emoji statuses ».
-
-##### Changed Methods
-
-- Changed type of stats.getMessagePublicForwards from messages.Messages to stats.PublicForwards
-
-- Added offset parameter, removed offset_rate, offset_peer, offset_id parameters in stats.getMessagePublicForwards
-
-- Added forwards_first parameter in stories.getStoryViewsList
-
-- Added for_profile parameter, changed type of color from int to flags.2?int in channels.updateColor
-
-##### Deleted Methods
-
-- Removed help.getAppChangelog
-
-##### New Constructors
-
-- Added messageMediaGiveawayResults - A giveaway with public winners has finished, this constructor contains info about the winners.
-
-- Added storyReaction - How a certain peer reacted to a story
-
-- Added storyReactionPublicForward - A certain peer has forwarded the story as a message to a public chat or channel.
-
-- Added storyReactionPublicRepost - A certain peer has reposted the story.
-
-- Added stories.storyReactionsList - List of peers that reacted to or intercated with a specific story
-
-- Added storyViewPublicForward - A certain peer has forwarded the story as a message to a public chat or channel.
-
-- Added storyViewPublicRepost - A certain peer has reposted the story.
-
-- Added channelAdminLogEventActionChangePeerColor - The message accent color was changed
-
-- Added channelAdminLogEventActionChangeProfilePeerColor - The profile accent color was changed
-
-- Added channelAdminLogEventActionChangeWallpaper - The wallpaper was changed
-
-- Added channelAdminLogEventActionChangeEmojiStatus - The emoji status was changed
-
-- Added inputStickerSetEmojiChannelDefaultStatuses - Default custom emoji status stickerset for channel statuses
-
-- Added mediaAreaChannelPost - Represents a channel post.
-
-- Added inputMediaAreaChannelPost - Represents a channel post
-
-- Added updateBotMessageReaction - Bots only: a user has changed their reactions on a message with public reactions.
-
-- Added updateBotMessageReactions - Bots only: the number of reactions on a message with anonymous reactions has changed.
-
-##### Changed Constructors
-
-- Added video, round, voice parameters in messageMediaDocument
-
-- Added channel_emoji_status parameter in stickerSet
-
-- Added profile_color, emoji_status, level parameters in channel
-
-- Added wallpaper parameter in channelFull
-
-- Added emoticon parameter in wallPaperSettings
-
-- Added views_count, forwards_count, chats parameters in stories.storyViewsList
-
-- Added winners_are_visible, prize_description parameters in inputStorePaymentPremiumGiveaway
-
-- Changed type of from_id from Peer to flags.4?Peer in payments.checkedGiftCode
-
-- Added winners_are_visible, prize_description parameters in messageMediaGiveaway
-
-- Added currency, amount, crypto_currency, crypto_amount parameters in messageActionGiftCode
-
-- Added channel_min_level parameter in help.peerColorOption
-
-##### Deleted Constructors
-
-- Removed channelAdminLogEventActionChangeColor
-
-- Removed channelAdminLogEventActionChangeBackgroundEmoji
-
-#### Schema
-
-### Layer 167
-
-Added support for reposting stories, profile colors, story statistics, channel recommendations, setting a wallpaper on both sides of a chat, syncing the "View as messages" setting for forums, audio transcription for non-Premium users, improved quotes, improved sponsored messages and improved methods for custom emoji stickersets.
-
-#### Schema changes
-
-##### New Methods
-
-- Added channels.toggleViewForumAsMessages - Users may also choose to display messages from all topics of a forum as if they were sent to a normal group, using a "View as messages" setting in the local client: this setting only affects the current account, and is synced to other logged in sessions using this method.
-
-- Added messages.searchEmojiStickerSets - Search for custom emoji stickersets »
-
-- Added channels.getChannelRecommendations - Obtain a list of similarly themed public channels, selected based on similarities in their subscriber bases.
-
-- Added stats.getStoryStats - Get statistics for a certain story.
-
-- Added stats.getStoryPublicForwards - Obtain forwards of a story as a message to public chats and reposts by public channels.
-
-- Added help.getPeerColors - Get the set of accent color palettes » that can be used for message accents.
-
-- Added help.getPeerProfileColors - Get the set of accent color palettes » that can be used in profile page backgrounds.
-
-##### Changed Methods
-
-- Added for_both, revert parameters in messages.setChatWallPaper
-
-- Added fwd_modified, fwd_from_id, fwd_from_story parameters in stories.sendStory
-
-- Added for_profile parameter, changed type of color from int to flags.2?int in account.updateColor
-
-##### New Constructors
-
-- Added updateChannelViewForumAsMessages - Users may also choose to display messages from all topics as if they were sent to a normal group, using a "View as messages" setting in the local client.
-
-- Added messageActionGiveawayResults - A giveaway has ended.
-
-- Added updatePeerWallpaper - The wallpaper » of a given peer has changed.
-
-- Added storyFwdHeader - Contains info about the original poster of a reposted story.
-
-- Added postInteractionCountersMessage - Interaction counters for a message.
-
-- Added postInteractionCountersStory - Interaction counters for a story.
-
-- Added stats.storyStats - Contains statistics about a story.
-
-- Added publicForwardMessage - Contains info about a forward of a story as a message.
-
-- Added publicForwardStory - Contains info about a forward of a story as a repost by a public channel.
-
-- Added stats.publicForwards - Contains info about the forwards of a story as a message to public chats and reposts by public channels.
-
-- Added peerColor - Represents a color palette ».
-
-- Added help.peerColorSet - Represents a color palette that can be used in message accents ».
-
-- Added help.peerColorProfileSet - Represents a color palette that can be used in profile pages ».
-
-- Added help.peerColorOption - Contains info about a color palette ».
-
-- Added help.peerColorsNotModified - The list of color palettes has not changed.
-
-- Added help.peerColors - Contains info about multiple color palettes ».
-
-##### Changed Constructors
-
-- Added view_forum_as_messages parameter in dialog
-
-- Added wallpaper_overridden parameter in userFull
-
-- Added profile_color parameter, removed background_emoji_id parameter, changed type of color from flags2.7?int to flags2.8?PeerColor in user
-
-- Removed background_emoji_id parameter, changed type of color from flags2.6?int to flags2.7?PeerColor in channel
-
-- Added view_forum_as_messages parameter in channelFull
-
-- Added reactions_per_post, views_per_story, shares_per_story, reactions_per_story, reactions_by_emotion_graph, story_interactions_graph, story_reactions_by_emotion_graph, recent_posts_interactions parameters, removed recent_message_interactions parameter in stats.broadcastStats
-
-- Added quote_offset parameter in messageReplyHeader
-
-- Added reactions_by_emotion_graph parameter in stats.messageStats
-
-- Added app, button_text parameters in sponsoredMessage
-
-- Added trial_remains_num, trial_remains_until_date parameters in messages.transcribedAudio
-
-- Added flags, same, for_both parameters in messageActionSetChatWallPaper
-
-- Added fwd_from parameter in storyItem
-
-- Added quote_offset parameter in inputReplyToMessage
-
-##### Deleted Constructors
-
-- Removed messageInteractionCounters
-
-- Removed messageActionSetSameChatWallPaper
-
-#### PUSH notification changes
-
-##### New PUSH notifications
-
-- Added CHANNEL_MESSAGE_GIVEAWAY - {1} posted a giveaway of {2}x {3}m Premium subscriptions
-
-- Added CHAT_MESSAGE_GIVEAWAY - {1} sent a giveaway of {3}x {4}m Premium subscriptions to the group {2}
-
-- Added CHAT_REACT_GIVEAWAY - {1} reacted {3} in group {2} to your giveaway
-
-- Added MESSAGE_GIFTCODE - {1} sent you a Gift Code for {2} of Telegram Premium
-
-- Added MESSAGE_GIVEAWAY - {1} sent you a giveaway of {2}x {3}m Premium subscriptions
-
-- Added MESSAGE_SAME_WALLPAPER - {1} set a same wallpaper for this chat
-
-- Added MESSAGE_WALLPAPER - {1} set a new wallpaper for this chat
-
-- Added PINNED_GIVEAWAY - {1} pinned a giveaway
-
-- Added REACT_GIVEAWAY - {1} reacted {2} to your giveaway
-
-#### Schema
-
-### Layer 166
-
-Introducing giveaways, gift code links, accent colors, quotes, improved boosts and improved webpage previews.
-
-#### Schema changes
-
-##### New Methods
-
-- Added payments.getPremiumGiftCodeOptions - Obtain a list of Telegram Premium giveaway/gift code » options.
-
-- Added payments.checkGiftCode - Obtain information about a Telegram Premium giftcode »
-
-- Added payments.applyGiftCode - Apply a Telegram Premium giftcode »
-
-- Added payments.getGiveawayInfo - Obtain information about a Telegram Premium giveaway ».
-
-- Added payments.launchPrepaidGiveaway - Launch a prepaid giveaway ».
-
-- Added account.updateColor - Update the accent color and background custom emoji » of the current account.
-
-- Added channels.updateColor - Update the accent color and background custom emoji » of a channel.
-
-- Added account.getDefaultBackgroundEmojis - Get a set of suggested custom emoji stickers that can be used in an accent color pattern.
-
-- Added premium.getBoostsList - Obtains info about the boosts that were applied to a certain channel (admins only)
-
-- Added premium.getMyBoosts - Obtain which peers are we currently boosting, and how many boost slots we have left.
-
-- Added premium.applyBoost - Apply one or more boosts » to a peer.
-
-- Added premium.getBoostsStatus - Gets the current number of boosts of a channel.
-
-- Added premium.getUserBoosts - Returns the lists of boost that were applied to a channel by a specific user (admins only)
-
-##### Changed Methods
-
-- Added invert_media parameter in messages.sendMessage
-
-- Added invert_media parameter in messages.sendMedia
-
-- Added invert_media parameter in messages.editMessage
-
-- Added invert_media parameter in messages.editInlineBotMessage
-
-- Added invert_media, reply_to, media parameters, removed reply_to_msg_id, top_msg_id parameters in messages.saveDraft
-
-- Changed type of messages.getWebPage from WebPage to messages.WebPage
-
-- Added invert_media parameter in messages.sendMultiMedia
-
-##### Deleted Methods
-
-- Removed stories.getBoostsStatus
-
-- Removed stories.getBoostersList
-
-- Removed stories.canApplyBoost
-
-- Removed stories.applyBoost
-
-##### New Constructors
-
-- Added messages.webPage - Represents an Instant View webpage.
-
-- Added inputStorePaymentPremiumGiftCode - Used to gift Telegram Premium subscriptions only to some specific subscribers of a channel or to some of our contacts, see here » for more info on giveaways and gifts.
-
-- Added inputStorePaymentPremiumGiveaway - Used to pay for a giveaway, see here » for more info.
-
-- Added inputInvoicePremiumGiftCode - Used if the user wishes to start a channel giveaway or send some giftcodes to members of a channel, in exchange for boosts.
-
-- Added premiumGiftCodeOption - Contains info about a giveaway/gift option.
-
-- Added payments.checkedGiftCode - Contains info about a Telegram Premium giftcode link.
-
-- Added messageMediaGiveaway - Contains info about a giveaway, see here » for more info.
-
-- Added messageActionGiftCode - Contains a Telegram Premium giftcode link.
-
-- Added messageActionGiveawayLaunch - A giveaway was started.
-
-- Added payments.giveawayInfo - Contains info about an ongoing giveaway.
-
-- Added payments.giveawayInfoResults - A giveaway has ended.
-
-- Added messageEntityBlockquote - Message entity representing a block quote.
-
-- Added prepaidGiveaway - Contains info about a prepaid giveaway ».
-
-- Added inputMediaWebPage - Specifies options that will be used to generate the link preview for the caption, or even a standalone link preview without an attached message.
-
-- Added inputBotInlineMessageMediaWebPage - Specifies options that will be used to generate the link preview for the message, or even a standalone link preview without an attached message.
-
-- Added botInlineMessageMediaWebPage - Specifies options that must be used to generate the link preview for the message, or even a standalone link preview without an attached message.
-
-- Added channelAdminLogEventActionChangeColor - The background profile color » of a channel was changed.
-
-- Added channelAdminLogEventActionChangeBackgroundEmoji - The custom emoji used to generate the pattern of the background profile color » of a channel was changed.
-
-- Added boost - Info about one or more boosts applied by a specific user.
-
-- Added premium.boostsList - List of boosts that were applied to a peer by multiple users.
-
-- Added myBoost - Contains information about a single boost slot ».
-
-- Added premium.myBoosts - A list of peers we are currently boosting, and how many boost slots we have left.
-
-- Added premium.boostsStatus - Contains info about the current boost status of a peer.
-
-- Added updateBotChatBoost - A channel boost has changed (bots only)
-
-##### Changed Constructors
-
-- Added invert_media parameter in message
-
-- Added invert_media parameter in updateServiceNotification
-
-- Added flags, url parameters in webPageEmpty
-
-- Added flags, url parameters in webPagePending
-
-- Added has_large_media parameter in webPage
-
-- Added flags, force_large_media, force_small_media, manual, safe parameters in messageMediaWebPage
-
-- Added color parameter in chatInvite
-
-- Added text_color parameter in stickerSet
-
-- Added color, background_emoji_id parameters in user
-
-- Added color, background_emoji_id parameters in channel
-
-- Added invert_media parameter in inputBotInlineMessageMediaAuto
-
-- Added invert_media parameter in inputBotInlineMessageText
-
-- Added invert_media parameter in botInlineMessageMediaAuto
-
-- Added invert_media parameter in botInlineMessageText
-
-- Added invert_media, reply_to, media parameters, removed reply_to_msg_id parameter in draftMessage
-
-- Added quote, reply_from, reply_media, quote_text, quote_entities parameters, changed type of reply_to_msg_id from int to flags.4?int in messageReplyHeader
-
-- Added reply_to_peer_id, quote_text, quote_entities parameters in inputReplyToMessage
-
-##### Deleted Constructors
-
-- Removed stories.boostsStatus
-
-- Removed stories.canApplyBoostOk
-
-- Removed stories.canApplyBoostReplace
-
-- Removed booster
-
-- Removed stories.boostersList
-
-#### Schema
-
-### Layer 164
-
-Introducing Telegram Stories, channel boosts, session confirmation, side menu Mini Apps, direct link Mini Apps, custom methods and multiple new events for Mini Apps and a close friends list.
-
-A new story premium feature identifier was added.
-
-The following new web events were also added to provide more functionality to mini apps:
-
-- web_app_request_write_access »
-
-- web_app_request_phone »
-
-- web_app_invoke_custom_method »
-
-- web_app_read_text_from_clipboard »
-
-- web_app_open_scan_qr_popup »
-
-- web_app_close_scan_qr_popup »
-
-- web_app_setup_settings_button »
-
-Also, the following changes were made to existing web events:
-
-- web_app_open_link » events have now a 1-second inactivity TTL instead of 10 seconds, see here » for more info.
-
-- web_app_open_link » now has an optional try_instant_view field that if set, equal to true and if the scheme of the passed url is either http or https, indicates the link should be opened in Instant View mode if possible.
-
-#### Schema changes
-
-##### New Methods
-
-- Added stories.activateStealthMode - Activates stories stealth mode, see here » for more info.
-
-- Added contacts.setBlocked - Replace the contents of an entire blocklist, see here for more info ».
-
-- Added stories.sendReaction - React to a story.
-
-- Added bots.canSendMessage - Check whether the specified bot can send us messages
-
-- Added bots.allowSendMessage - Allow the specified bot to send us messages
-
-- Added bots.invokeWebViewCustomMethod - Send a custom request from a mini bot app, triggered by a web_app_invoke_custom_method event ».
-
-- Added stories.getPeerStories - Fetch the full active story list of a specific peer.
-
-- Added stories.getAllReadPeerStories - Obtain the latest read story ID for all peers when first logging in, returned as a list of updateReadStories updates, see here » for more info.
-
-- Added stories.getPeerMaxIDs - Get the IDs of the maximum read stories for a set of peers.
-
-- Added stories.getChatsToSend - Obtain a list of channels where the user can post stories
-
-- Added stories.togglePeerStoriesHidden - Hide the active stories of a user, preventing them from being displayed on the action bar on the homescreen, see here » for more info.
-
-- Added stories.getBoostsStatus - Get the current boost status of a channel, see here » for more info on boosts.
-
-- Added stories.getBoostersList - Obtain info about the users currently boosting a channel, see here » for more info about boosts.
-
-- Added stories.canApplyBoost - Check whether a channel can be boosted, see here for more info ».
-
-- Added stories.applyBoost - Boost » a channel, leveling it up and granting it permission to post stories ».
-
-##### Changed Methods
-
-- Added flags, my_stories_from parameters in contacts.block
-
-- Added flags, my_stories_from parameters in contacts.unblock
-
-- Added flags, my_stories_from parameters in contacts.getBlocked
-
-- Added confirmed parameter in account.changeAuthorizationSettings
-
-- Added from_side_menu, start_param parameters, changed type of url from string to flags.3?string in messages.requestSimpleWebView
-
-- Added peer parameter in stories.canSendStory
-
-- Added peer, media_areas parameters in stories.sendStory
-
-- Added peer, media_areas parameters in stories.editStory
-
-- Added peer parameter in stories.deleteStories
-
-- Added peer parameter in stories.togglePinned
-
-- Added peer parameter, removed user_id parameter in stories.getPinnedStories
-
-- Added peer parameter in stories.getStoriesArchive
-
-- Added peer parameter, removed user_id parameter in stories.getStoriesByID
-
-- Added peer parameter, removed user_id parameter in stories.readStories
-
-- Added peer parameter, removed user_id parameter in stories.incrementStoryViews
-
-- Added flags, just_contacts, reactions_first, peer, q, offset parameters, removed offset_date, offset_id parameters in stories.getStoryViewsList
-
-- Added peer parameter in stories.getStoriesViews
-
-- Added peer parameter, removed user_id parameter in stories.exportStoryLink
-
-- Added peer parameter, removed user_id parameter in stories.report
-
-##### Deleted Methods
-
-- Removed contacts.toggleStoriesHidden
-
-- Removed stories.getUserStories
-
-- Removed stories.getAllReadUserStories
-
-- Removed users.getStoriesMaxIDs
-
-##### New Constructors
-
-- Added updateNewAuthorization - A new session logged into the current user's account through an unknown device.
-
-- Added storiesStealthMode - Information about the current stealth mode session.
-
-- Added updateStoriesStealthMode - Indicates that stories stealth mode was activated.
-
-- Added mediaAreaCoordinates - Coordinates and size of a clicable rectangular area on top of a story.
-
-- Added mediaAreaVenue - Represents a location tag attached to a story, with additional venue information.
-
-- Added inputMediaAreaVenue - Represents a location tag attached to a story, with additional venue information.
-
-- Added mediaAreaGeoPoint - Represents a geolocation tag attached to a story.
-
-- Added updateSentStoryReaction - Indicates we reacted to a story ».
-
-- Added mediaAreaSuggestedReaction - Represents a reaction bubble.
-
-- Added peerStories - Stories associated to a peer
-
-- Added stories.peerStories - Active story list of a specific peer.
-
-- Added stories.boostsStatus - The current boost status » of a channel.
-
-- Added stories.canApplyBoostOk - We're not boosting any channel, and we can freely boost the specified channel.
-
-- Added stories.canApplyBoostReplace - We're boosting another channel, but we can freely boost the specified channel.
-
-- Added booster - Info about a boost made by a specific user.
-
-- Added stories.boostersList - Info about the users currently boosting the channel.
-
-##### Changed Constructors
-
-- Removed view_forum_as_messages parameter in dialog
-
-- Added blocked_my_stories_from parameter, changed type of stories from flags.25?UserStories to flags.25?PeerStories in userFull
-
-- Removed video, round, voice parameters in messageMediaDocument
-
-- Added unconfirmed parameter in authorization
-
-- Added flags, date parameters in updateReadMessagesContents
-
-- Added stories_hidden, stories_hidden_min, stories_unavailable, stories_max_id parameters in channel
-
-- Added stories_pinned_available, stories parameters in channelFull
-
-- Added terms_url parameter, removed recurring_terms_url parameter in invoice
-
-- Added from_request parameter in messageActionBotAllowed
-
-- Added post_stories, edit_stories, delete_stories parameters in chatAdminRights
-
-- Added flags, blocked_my_stories_from parameters, changed type of blocked from Bool to flags.0?true in updatePeerBlocked
-
-- Added show_in_attach_menu, show_in_side_menu, side_menu_disclaimer_needed parameters, changed type of peer_types from Vector<AttachMenuPeerType> to flags.3?Vector<AttachMenuPeerType> in attachMenuBot
-
-- Added has_settings parameter in messages.botApp
-
-- Added has_viewers, forwards_count, reactions, reactions_count parameters in storyViews
-
-- Added out, media_areas, sent_reaction parameters in storyItem
-
-- Added peer parameter, removed user_id parameter in updateStory
-
-- Added peer parameter, removed user_id parameter in updateReadStories
-
-- Added flags, stealth_mode parameters in stories.allStoriesNotModified
-
-- Added peer_stories, chats, stealth_mode parameters, removed user_stories parameter in stories.allStories
-
-- Added chats parameter in stories.stories
-
-- Added flags, blocked, blocked_my_stories_from, reaction parameters in storyView
-
-- Added flags, reactions_count, next_offset parameters in stories.storyViewsList
-
-- Added peer parameter, removed user_id parameter in inputMediaStory
-
-- Added peer parameter, removed user_id parameter in messageMediaStory
-
-- Added peer parameter, removed user_id parameter in webPageAttributeStory
-
-##### Deleted Constructors
-
-- Removed userStories
-
-- Removed stories.userStories
-
-#### PUSH notification changes
-
-##### New PUSH notifications
-
-- Added CHANNEL_MESSAGE_STORY - {1} shared a story
-
-- Added CHAT_MESSAGE_STORY - {1} shared a story to the group
-
-- Added MESSAGE_STORY - {1} shared a story with you
-
-- Added MESSAGE_STORY_MENTION - {1} mentioned you in a story
-
-- Added STORY_HIDDEN_AUTHOR - A new story was posted (comment: emitted when previews are hidden for this peer)
-
-- Added STORY_NOTEXT - {1} posted a story
-
-#### Schema
-
-### Layer 160
-
-#### Schema changes
-
-##### New Methods
-
-- Added contacts.editCloseFriends - Edit the close friends list, see here » for more info.
-
-- Added contacts.toggleStoriesHidden
-
-- Added stories.canSendStory - Check whether we can post stories as the specified peer.
-
-- Added stories.sendStory - Uploads a Telegram Story.
-
-- Added stories.editStory - Edit an uploaded story
-
-- Added stories.deleteStories - Deletes some posted stories.
-
-- Added stories.togglePinned - Pin or unpin one or more stories
-
-- Added stories.getAllStories - Fetch the List of active (or active and hidden) stories, see here » for more info on watching stories.
-
-- Added stories.getUserStories
-
-- Added stories.getPinnedStories - Fetch the stories pinned on a peer's profile.
-
-- Added stories.getStoriesArchive - Fetch the story archive » of a peer we control.
-
-- Added stories.getStoriesByID - Obtain full info about a set of stories by their IDs.
-
-- Added stories.toggleAllStoriesHidden - Hide the active stories of a specific peer, preventing them from being displayed on the action bar on the homescreen.
-
-- Added stories.getAllReadUserStories
-
-- Added stories.readStories - Mark all stories up to a certain ID as read, for a given peer; will emit an updateReadStories update to all logged-in sessions.
-
-- Added stories.incrementStoryViews - Increment the view counter of one or more stories.
-
-- Added stories.getStoryViewsList - Obtain the list of users that have viewed a specific story we posted
-
-- Added stories.getStoriesViews - Obtain info about the view count, forward count, reactions and recent viewers of one or more stories.
-
-- Added stories.exportStoryLink - Generate a story deep link for a specific story
-
-- Added stories.report - Report a story.
-
-- Added users.getStoriesMaxIDs
-
-##### Changed Methods
-
-- Added reply_to parameter, removed reply_to_msg_id, top_msg_id parameters in messages.sendMessage
-
-- Added reply_to parameter, removed reply_to_msg_id, top_msg_id parameters in messages.sendMedia
-
-- Added reply_to parameter, removed reply_to_msg_id, top_msg_id parameters in messages.sendInlineBotResult
-
-- Added reply_to parameter, removed reply_to_msg_id parameter in messages.sendScreenshotNotification
-
-- Added reply_to parameter, removed reply_to_msg_id, top_msg_id parameters in messages.sendMultiMedia
-
-- Added compare_stories parameter in account.getNotifyExceptions
-
-- Added reply_to parameter, removed reply_to_msg_id, top_msg_id parameters in messages.requestWebView
-
-- Added reply_to parameter, removed reply_to_msg_id, top_msg_id parameters in messages.prolongWebView
-
-##### New Constructors
-
-- Added storyViews - Aggregated view and reaction information of a story.
-
-- Added storyItemDeleted - Represents a previously active story, that was deleted
-
-- Added storyItemSkipped - Represents an active story, whose full information was omitted for space and performance reasons; use stories.getStoriesByID to fetch full info about the skipped story when and if needed.
-
-- Added storyItem - Represents a story.
-
-- Added userStories
-
-- Added updateStory - A new story was posted.
-
-- Added updateReadStories - Stories of a specific peer were marked as read.
-
-- Added stories.allStoriesNotModified - The list of active (or active and hidden) stories has not changed.
-
-- Added stories.allStories - Full list of active (or active and hidden) stories.
-
-- Added stories.stories - List of stories
-
-- Added stories.userStories
-
-- Added inputPrivacyValueAllowCloseFriends - Allow only close friends »
-
-- Added privacyValueAllowCloseFriends - Allow only close friends »
-
-- Added storyView - Story view date and reaction information
-
-- Added stories.storyViewsList - Reaction and view counters for a story
-
-- Added stories.storyViews - Reaction and view counters for a list of stories
-
-- Added inputReplyToMessage - Reply to a message.
-
-- Added inputReplyToStory - Reply to a story.
-
-- Added messageReplyStoryHeader - Represents a reply to a story
-
-- Added updateStoryID - A story was successfully uploaded.
-
-- Added exportedStoryLink - Represents a story deep link.
-
-- Added inputMediaStory - Forwarded story
-
-- Added messageMediaStory - Represents a forwarded story or a story mention.
-
-- Added webPageAttributeStory - Webpage preview of a Telegram story
-
-##### Changed Constructors
-
-- Added view_forum_as_messages parameter in dialog
-
-- Added stories_muted, stories_hide_sender, stories_sound parameters in inputPeerNotifySettings
-
-- Added stories_muted, stories_hide_sender, stories_ios_sound, stories_android_sound, stories_other_sound parameters in peerNotifySettings
-
-- Added stories_pinned_available, stories parameters in userFull
-
-- Added video, round, voice, alt_document parameters in messageMediaDocument
-
-- Added nosound, preload_prefix_size parameters, changed type of duration from int to double in documentAttributeVideo
-
-- Added close_friend, stories_hidden, stories_unavailable, stories_max_id parameters in user
-
-- Added stories_preload parameter in autoDownloadSettings
-
-- Added keep_archived_unmuted, keep_archived_folders parameters, changed type of archive_and_mute_new_noncontact_peers from flags.0?Bool to flags.0?true in globalPrivacySettings
-
-##### Deleted Constructors
-
-- Removed messageEntityBlockquote
-
-#### Schema
-
-### Layer 159
-
-Introducing privacy settings for user bios, improved login code invalidation, improved chat invites, improved update handling, sponsored websites and click reporting for sponsored messages.
-
-Also, anonymous channels can now vote in polls: when invoking messages.sendVote, the vote will be sent from the peer specified using messages.saveDefaultSendAs.
-
-#### Schema changes
-
-##### New Methods
-
-- Added account.invalidateSignInCodes - Invalidate the specified login codes, see here » for more info.
-
-- Added channels.clickSponsoredMessage - Informs the server that the user has either:
-
-##### Changed Methods
-
-- Added pts_limit, qts_limit parameters in updates.getDifference
-
-##### New Constructors
-
-- Added messagePeerVote - How a peer voted in a poll
-
-- Added messagePeerVoteInputOption - How a peer voted in a poll (reduced constructor, returned if an option was provided to messages.getPollVotes)
-
-- Added messagePeerVoteMultiple - How a peer voted in a multiple-choice poll
-
-- Added inputPrivacyKeyAbout - Whether people can see your bio
-
-- Added privacyKeyAbout - Whether people can see your bio
-
-- Added sponsoredWebPage - Represents a sponsored website.
-
-##### Changed Constructors
-
-- Added verified, scam, fake parameters in chatInvite
-
-- Changed type of recent_voters from flags.3?Vector<long> to flags.3?Vector<Peer> in pollResults
-
-- Added small_queue_active_operations_max, large_queue_active_operations_max parameters in autoDownloadSettings
-
-- Added peer parameter, removed user_id parameter in updateMessagePollVote
-
-- Added chats parameter, changed type of votes from Vector<MessageUserVote> to Vector<MessagePeerVote> in messages.votesList
-
-- Added webpage parameter in sponsoredMessage
-
-##### Deleted Constructors
-
-- Removed messageUserVote
-
-- Removed messageUserVoteInputOption
-
-- Removed messageUserVoteMultiple
-
-#### Schema
-
-### Layer 158
-
-To view all the changes since the last update, start reading the changelog @ Layer 146.
-
-Most importantly, layer 152 added support for Firebase SMS authentication, which in some conditions may be required by the server in order to send SMS codes.
-Currently, only official apps can make use of Firebase SMS authentication: this means that in some conditions, only the official applications can receive a login/signup code via SMS/call.
-Third-party apps may log in using any of the other code delivery methods (Telegram codes, Fragment codes, email codes, future auth tokens, QR codes).
-
-And now, here are the changes made in this layer:
-
-You can now share folders », use collectible usernames for bots », set custom per-chat wallpapers » and reset the login email ».
-Users may now edit the usernames, name, about text, description and profile picture of bots they own using the API.
-Bots can now directly invoke photos.updateProfilePhoto and photos.uploadProfilePhoto to edit their own profile picture.
-Bots may also now specify a custom peer filter when using keyboardButtonSwitchInline buttons.
-
-Added the small_queue_max_active_operations_count » and large_queue_max_active_operations_count » client configuration parameters, used to limit parallelism when downloading multiple files in parallel from the same DC as described in the docs ».
-
-The RPC error database » was also updated, and a small clarification for open-source push notification standards like UnifiedPush was added to the push notifications documentation ».
-
-#### Schema changes
-
-##### New Methods
-
-- Added auth.resetLoginEmail - Reset the login email ».
-
-- Added chatlists.exportChatlistInvite - Export a folder », creating a chat folder deep link ».
-
-- Added chatlists.deleteExportedInvite - Delete a previously created chat folder deep link ».
-
-- Added chatlists.editExportedInvite - Edit a chat folder deep link ».
-
-- Added chatlists.getExportedInvites - List all chat folder deep links » associated to a folder
-
-- Added chatlists.checkChatlistInvite - Obtain information about a chat folder deep link ».
-
-- Added chatlists.joinChatlistInvite - Import a chat folder deep link », joining some or all the chats in the folder.
-
-- Added chatlists.getChatlistUpdates - Fetch new chats associated with an imported chat folder deep link ». Must be invoked at most every chatlist_update_period seconds (as per the related client configuration parameter »).
-
-- Added chatlists.joinChatlistUpdates - Join channels and supergroups recently added to a chat folder deep link ».
-
-- Added chatlists.hideChatlistUpdates - Dismiss new pending peers recently added to a chat folder deep link ».
-
-- Added chatlists.getLeaveChatlistSuggestions - Returns identifiers of pinned or always included chats from a chat folder imported using a chat folder deep link », which are suggested to be left when the chat folder is deleted.
-
-- Added chatlists.leaveChatlist - Delete a folder imported using a chat folder deep link »
-
-- Added bots.reorderUsernames - Reorder usernames associated to a bot we own.
-
-- Added bots.toggleUsername - Activate or deactivate a purchased fragment.com username associated to a bot we own.
-
-- Added messages.setChatWallPaper - Set a custom wallpaper » in a specific private chat with another user.
-
-##### Changed Methods
-
-- Added bot parameter in photos.updateProfilePhoto
-
-- Added bot parameter in photos.uploadProfilePhoto
-
-- Added flags, for_chat parameters in account.uploadWallPaper
-
-- Added bot, name parameters in bots.setBotInfo
-
-- Changed type of bots.getBotInfo from Vector<string> to bots.BotInfo
-
-- Added flags, bot parameters in bots.getBotInfo
-
-##### Deleted Methods
-
-- Removed messages.getAllChats
-
-- Removed folders.deleteFolder
-
-##### New Constructors
-
-- Added dialogFilterChatlist - A folder imported using a chat folder deep link ».
-
-- Added inputChatlistDialogFilter - Folder ID
-
-- Added exportedChatlistInvite - Exported chat folder deep link ».
-
-- Added chatlists.exportedChatlistInvite - Info about an exported chat folder deep link ».
-
-- Added chatlists.exportedInvites - Info about multiple chat folder deep links ».
-
-- Added chatlists.chatlistInviteAlready - Updated info about a chat folder deep link » we already imported.
-
-- Added chatlists.chatlistInvite - Info about a chat folder deep link ».
-
-- Added chatlists.chatlistUpdates - Updated information about a chat folder deep link ».
-
-- Added messageActionSetChatWallPaper - The wallpaper » of the current chat was changed.
-
-- Added messageActionSetSameChatWallPaper - The user applied a wallpaper » previously sent by the other user in a messageActionSetChatWallPaper message.
-
-- Added bots.botInfo - Localized information about a bot.
-
-- Added inlineQueryPeerTypeBotPM - Peer type: private chat with a bot.
-
-##### Changed Constructors
-
-- Added wallpaper parameter in userFull
-
-- Added bot_can_edit parameter in user
-
-- Added peer_types parameter in keyboardButtonSwitchInline
-
-- Added via_chatlist parameter in updateChannelParticipant
-
-- Added via_chatlist parameter in chatInviteImporter
-
-- Added flags, via_chatlist parameters in channelAdminLogEventActionParticipantJoinByInvite
-
-- Added my parameter in messagePeerReaction
-
-- Added flags, crypto_currency, crypto_amount parameters in messageActionGiftPremium
-
-- Added reset_available_period, reset_pending_date parameters, removed next_phone_login_date parameter in auth.sentCodeTypeEmailCode
-
-#### Schema
-
-### Layer 155
-
-Reaction dates.
-
-#### Schema changes
-
-##### Changed Constructors
-
-- Added date parameter in messagePeerReaction
-
-#### Schema
-
-### Layer 154
-
-Added support for named Mini Apps, which can be opened from a Direct Mini App link.
-Web apps can now be opened by clicking on a switch_webview inline result, similar to switch_pm inline results.
-Bots can now edit and localize their own about text and description.
-The current future auth token is now directly returned in the config constructor, which was also cleaned up to remove redundant information already contained in the appConfig configuration.
-messages.getMessageReadParticipants now returns a timestamp for each user, indicating when that user has read the specified message.
-
-When using messages.addChatUser, channels.inviteToChannel or messages.createChat, 0-N updates of type updateGroupInvitePrivacyForbidden may now be returned, indicating that the server couldn't add a user to a chat because of their privacy settings; if required, an invite link can be shared with the user, instead.
-
-Sponsored messages can now contain detailed info about the sponsor of the message or the message itself.
-
-#### Schema changes
-
-##### New Methods
-
-- Added messages.getBotApp - Obtain information about a direct link Mini App
-
-- Added messages.requestAppWebView - Open a bot mini app from a direct Mini App deep link, sending over user information after user confirmation.
-
-- Added bots.setBotInfo - Set localized name, about text and description of a bot (or of the current account, if called by a bot).
-
-- Added bots.getBotInfo - Get localized name, about text and description of a bot (or of the current account, if called by a bot).
-
-##### Changed Methods
-
-- Added switch_webview parameter in messages.setInlineBotResults
-
-- Changed type of messages.getMessageReadParticipants from Vector<long> to Vector<ReadParticipantDate>
-
-- Added from_switch_webview parameter in messages.requestSimpleWebView
-
-##### New Constructors
-
-- Added inputBotAppID - Used to fetch information about a direct link Mini App by its ID
-
-- Added inputBotAppShortName - Used to fetch information about a direct link Mini App by its short name
-
-- Added botAppNotModified - Bot app info hasn't changed.
-
-- Added botApp - Contains information about a direct link Mini App.
-
-- Added messages.botApp - Contains information about a direct link Mini App
-
-- Added appWebViewResultUrl - Contains the link that must be used to open a direct link Mini App.
-
-- Added inlineBotWebView - Specifies an inline mode mini app button, shown on top of the inline query results list.
-
-- Added readParticipantDate - Contains info about when a certain participant has read a message
-
-- Added updateGroupInvitePrivacyForbidden - 0-N updates of this type may be returned only when invoking messages.addChatUser, channels.inviteToChannel or messages.createChat: it indicates we couldn't add a user to a chat because of their privacy settings; if required, an invite link can be shared with the user, instead.
-
-##### Changed Constructors
-
-- Added autologin_token parameter, removed phonecalls_enabled, ignore_phone_entities, pfs_enabled, saved_gifs_limit, stickers_faved_limit, pinned_dialogs_count_max, pinned_infolder_count_max parameters in config
-
-- Added switch_webview parameter in messages.botResults
-
-- Added flags, attach_menu, app parameters, changed type of domain from string to flags.0?string in messageActionBotAllowed
-
-- Added sponsor_info, additional_info parameters in sponsoredMessage
-
-#### Schema
-
-### Layer 153
-
-Allow bots to modify stickersets they created, allow changing the thumbnail of custom emoji stickersets and improve client configuration caching.
-
-#### Schema changes
-
-##### New Methods
-
-- Added stickers.changeSticker - Update the keywords, emojis or mask coordinates of a sticker, bots only.
-
-- Added stickers.renameStickerSet - Renames a stickerset, bots only.
-
-- Added stickers.deleteStickerSet - Deletes a stickerset we created, bots only.
-
-##### Changed Methods
-
-- Changed type of help.getAppConfig from JSONValue to help.AppConfig
-
-- Added hash parameter in help.getAppConfig
-
-- Added flags, thumb_document_id parameters, changed type of thumb from InputDocument to flags.0?InputDocument in stickers.setStickerSetThumb
-
-##### New Constructors
-
-- Added help.appConfigNotModified - The client configuration parameters haven't changed
-
-- Added help.appConfig - Contains various client configuration parameters
-
-##### Changed Constructors
-
-- Added keywords parameter in inputStickerSetItem
-
-#### Schema
-
-### Layer 152
-
-Users can now set stickers or custom emojis as profile or group/channel pictures », and Telegram Premium users can enable real-time chat translation », which allows seamless translation of chat messages, keeping style entities intact.
-Bots can now prompt the user to select and share a peer with the bot with messages.sendBotRequestedPeer, by using a keyboardButtonRequestPeer bot button.
-Added support for categorized custom emojis », a messages.searchCustomEmoji method to look up custom emojis by their corresponding UTF8 emoji and added custom emoji stickerset deep links.
-Also implemented synchronization of media autosave settings.
-
-Future auth token login now works even for accounts without 2FA.
-
-Most importantly, added support for Firebase SMS authentication, which in some conditions may be required by the server in order to send SMS codes.
-Currently, only official apps can make use of Firebase SMS authentication: this means that in some conditions, only the official applications can receive a login/signup code via SMS/call.
-Third-party apps may log in using any of the other code delivery methods (Telegram codes, Fragment codes, email codes, future auth tokens, QR codes).
-
-#### Schema changes
-
-##### New Methods
-
-- Added messages.sendBotRequestedPeer - Send one or more chosen peers, as requested by a keyboardButtonRequestPeer button.
-
-- Added account.getDefaultProfilePhotoEmojis - Get a set of suggested custom emoji stickers that can be used as profile picture
-
-- Added account.getDefaultGroupPhotoEmojis - Get a set of suggested custom emoji stickers that can be used as group picture
-
-- Added auth.requestFirebaseSms - Request an SMS code via Firebase.
-
-- Added messages.getEmojiGroups - Represents a list of emoji categories, to be used when selecting custom emojis.
-
-- Added messages.getEmojiStatusGroups - Represents a list of emoji categories, to be used when selecting custom emojis to set as custom emoji status.
-
-- Added messages.getEmojiProfilePhotoGroups - Represents a list of emoji categories, to be used when selecting custom emojis to set as profile picture.
-
-- Added messages.searchCustomEmoji - Look for custom emojis associated to a UTF8 emoji
-
-- Added messages.togglePeerTranslations - Show or hide the real-time chat translation popup for a certain chat
-
-- Added account.getAutoSaveSettings - Get autosave settings
-
-- Added account.saveAutoSaveSettings - Modify autosave settings
-
-- Added account.deleteAutoSaveExceptions - Clear all peer-specific autosave settings.
-
-##### Changed Methods
-
-- Added video_emoji_markup parameter in photos.uploadProfilePhoto
-
-- Added id parameter, removed msg_id, from_lang parameters, changed type of text from flags.1?string to flags.1?Vector<TextWithEntities> in messages.translateText
-
-- Added video_emoji_markup parameter in photos.uploadContactProfilePhoto
-
-##### New Constructors
-
-- Added auth.sentCodeSuccess - The user successfully authorized using future auth tokens
-
-- Added messageActionRequestedPeer - Contains info about one or more peers that the user shared with the bot after clicking on a keyboardButtonRequestPeer button.
-
-- Added requestPeerTypeUser - Choose a user.
-
-- Added requestPeerTypeChat - Choose a chat or supergroup
-
-- Added requestPeerTypeBroadcast - Choose a channel
-
-- Added keyboardButtonRequestPeer - Prompts the user to select and share one or more peers with the bot using messages.sendBotRequestedPeer
-
-- Added emojiListNotModified - The list of custom emojis hasn't changed.
-
-- Added emojiList - Represents a list of custom emojis.
-
-- Added auth.sentCodeTypeFirebaseSms - An authentication code should be delivered via SMS after Firebase attestation, as described in the auth documentation ».
-
-- Added emojiGroup - Represents an emoji category.
-
-- Added messages.emojiGroupsNotModified - The list of emoji categories hasn't changed.
-
-- Added messages.emojiGroups - Represents a list of emoji categories.
-
-- Added videoSizeEmojiMarkup - An animated profile picture based on a custom emoji sticker.
-
-- Added videoSizeStickerMarkup - An animated profile picture based on a sticker.
-
-- Added textWithEntities - Styled text with message entities
-
-- Added messages.translateResult - Translated text with entities
-
-- Added autoSaveSettings - Media autosave settings
-
-- Added autoSaveException - Peer-specific media autosave settings
-
-- Added account.autoSaveSettings - Contains media autosave settings
-
-- Added updateAutoSaveSettings - Media autosave settings have changed and must be refetched using account.getAutoSaveSettings.
-
-##### Changed Constructors
-
-- Added video_emoji_markup parameter in inputChatUploadedPhoto
-
-- Added translations_disabled parameter in chatFull
-
-- Added future_auth_token parameter in auth.authorization
-
-- Added translations_disabled parameter in userFull
-
-- Added translations_disabled parameter in channelFull
-
-- Added send_photos, send_videos, send_roundvideos, send_audios, send_voices, send_docs, send_plain parameters in chatBannedRights
-
-- Added allow_firebase, token, app_sandbox parameters in codeSettings
-
-- Added transaction parameter in premiumSubscriptionOption
-
-##### Deleted Constructors
-
-- Removed messages.translateNoResult
-
-- Removed messages.translateResultText
-
-#### Schema
-
-### Layer 151
-
-Introducing spoiler media, custom contact profile pictures, hidden supergroup participants and persistent bot keyboards.
-Attachment menu bot mini apps may now ask permission to write direct messages to the users that install them.
-
-#### Schema changes
-
-##### New Methods
-
-- Added photos.uploadContactProfilePhoto - Upload a custom profile picture for a contact, or suggest a new profile picture to a contact.
-
-- Added channels.toggleParticipantsHidden - Hide or display the participants list in a supergroup.
-
-##### Changed Methods
-
-- Added flags, fallback parameters in photos.updateProfilePhoto
-
-- Added fallback parameter in photos.uploadProfilePhoto
-
-- Added flags, write_allowed parameters in messages.toggleBotInAttachMenu
-
-##### New Constructors
-
-- Added messageActionSuggestProfilePhoto - A new profile picture was suggested using photos.uploadContactProfilePhoto.
-
-- Added stickerSetNoCovered - Just the stickerset information, with no previews.
-
-- Added updateUser - User information was updated, it must be refetched using users.getFullUser.
-
-##### Changed Constructors
-
-- Added spoiler parameter in inputMediaUploadedPhoto
-
-- Added spoiler parameter in inputMediaPhoto
-
-- Added personal parameter in userProfilePhoto
-
-- Added spoiler parameter in messageMediaPhoto
-
-- Added personal_photo, fallback_photo parameters in userFull
-
-- Added spoiler parameter in inputMediaUploadedDocument
-
-- Added spoiler parameter in inputMediaDocument
-
-- Added spoiler parameter in messageMediaDocument
-
-- Added persistent parameter in replyKeyboardMarkup
-
-- Added participants_hidden parameter in channelFull
-
-- Added spoiler parameter in inputMediaPhotoExternal
-
-- Added spoiler parameter in inputMediaDocumentExternal
-
-- Added request_write_access parameter in attachMenuBot
-
-##### Deleted Constructors
-
-- Removed updateUserPhoto
-
-#### Schema
-
-### Layer 150
-
-Fragment » phone numbers, temporary profile links », native group antispam », message autodeletion in groups, allow hiding the "General" forum topic.
-
-Also added a new autodelete settings deep link » and a profile settings deep link ».
-
-#### Schema changes
-
-##### New Methods
-
-- Added channels.toggleAntiSpam - Enable or disable the native antispam system.
-
-- Added channels.reportAntiSpamFalsePositive - Report a native antispam false positive
-
-- Added messages.setDefaultHistoryTTL - Changes the default value of the Time-To-Live setting, applied to all new chats.
-
-- Added messages.getDefaultHistoryTTL - Gets the default value of the Time-To-Live setting, applied to all new chats.
-
-- Added contacts.exportContactToken - Generates a temporary profile link for the currently logged-in user.
-
-- Added contacts.importContactToken - Obtain user info from a temporary profile link.
-
-##### Changed Methods
-
-- Added flags, ttl_period parameters in messages.createChat
-
-- Added forum, ttl_period parameters in channels.createChannel
-
-- Added hidden parameter in channels.editForumTopic
-
-##### New Constructors
-
-- Added defaultHistoryTTL - Contains info about the default value of the Time-To-Live setting, applied to all new chats.
-
-- Added auth.codeTypeFragmentSms - The next time, the authentication code will be delivered via fragment.com
-
-- Added auth.sentCodeTypeFragmentSms - The code was delivered via fragment.com.
-
-- Added exportedContactToken - Describes a temporary profile link.
-
-- Added channelAdminLogEventActionToggleAntiSpam - Native antispam functionality was enabled or disabled.
-
-##### Changed Constructors
-
-- Added ttl_period parameter in dialog
-
-- Added antispam parameter in channelFull
-
-- Added flags, auto_setting_from parameters in messageActionSetMessagesTTL
-
-- Added hidden parameter in messageActionTopicEdit
-
-#### Schema
-
-### Layer 149
-
-Pinned forum topics.
-
-#### Schema changes
-
-##### New Methods
-
-- Added channels.reorderPinnedForumTopics - Reorder pinned forum topics
-
-##### New Constructors
-
-- Added updateChannelPinnedTopics - The pinned topics of a forum have changed.
-
-##### Changed Constructors
-
-- Added topics parameter in messages.channelMessages
-
-- Added pinned parameter, changed type of topic_id from flags.0?int to int in updateChannelPinnedTopic
-
-#### Schema
-
-### Layer 148
-
-Collectible usernames », groups with topics (aka forums »), sponsored message improvements.
-Added support for thread IDs in message deep links », which now double as forum topic deep links », and added a new manage_topics parameter to group/channel bot deep links.
-
-#### Schema changes
-
-##### New Methods
-
-- Added account.reorderUsernames - Reorder usernames associated with the currently logged-in user.
-
-- Added account.toggleUsername - Activate or deactivate a purchased fragment.com username associated to the currently logged-in user.
-
-- Added channels.reorderUsernames - Reorder active usernames
-
-- Added channels.toggleUsername - Activate or deactivate a purchased fragment.com username associated to a supergroup or channel we own.
-
-- Added channels.deactivateAllUsernames - Disable all purchased usernames of a supergroup or channel
-
-- Added channels.toggleForum - Enable or disable forum functionality in a supergroup.
-
-- Added channels.createForumTopic - Create a forum topic; requires manage_topics rights.
-
-- Added channels.getForumTopics - Get topics of a forum
-
-- Added channels.getForumTopicsByID - Get forum topics by their ID
-
-- Added channels.editForumTopic - Edit forum topic; requires manage_topics rights.
-
-- Added channels.updatePinnedForumTopic - Pin or unpin forum topics
-
-- Added channels.deleteTopicHistory - Delete message history of a forum topic
-
-##### Changed Methods
-
-- Added top_msg_id parameter in messages.sendMessage
-
-- Added top_msg_id parameter in messages.sendMedia
-
-- Added top_msg_id parameter in messages.forwardMessages
-
-- Added top_msg_id parameter in messages.sendInlineBotResult
-
-- Added top_msg_id parameter in messages.saveDraft
-
-- Added flags, top_msg_id parameters in messages.getUnreadMentions
-
-- Added flags, top_msg_id parameters in messages.readMentions
-
-- Added top_msg_id parameter in messages.sendMultiMedia
-
-- Added flags, top_msg_id parameters in messages.getSearchCounters
-
-- Removed document_id parameter in account.getTheme
-
-- Added flags, top_msg_id parameters in messages.unpinAllMessages
-
-- Added flags, top_msg_id parameters in messages.getUnreadReactions
-
-- Added flags, top_msg_id parameters in messages.readReactions
-
-- Added top_msg_id parameter in messages.requestWebView
-
-- Added top_msg_id parameter in messages.prolongWebView
-
-##### New Constructors
-
-- Added username - Contains information about a username.
-
-- Added channelAdminLogEventActionChangeUsernames - The list of usernames associated with the channel was changed
-
-- Added channelAdminLogEventActionToggleForum - Forum functionality was enabled or disabled.
-
-- Added channelAdminLogEventActionCreateTopic - A forum topic was created
-
-- Added channelAdminLogEventActionEditTopic - A forum topic was edited
-
-- Added channelAdminLogEventActionDeleteTopic - A forum topic was deleted
-
-- Added channelAdminLogEventActionPinTopic - A forum topic was pinned or unpinned
-
-- Added forumTopicDeleted - Represents a deleted forum topic.
-
-- Added forumTopic - Represents a forum topic.
-
-- Added messages.forumTopics - Contains information about multiple forum topics
-
-- Added messageActionTopicCreate - A forum topic was created.
-
-- Added messageActionTopicEdit - Forum topic information was edited.
-
-- Added updateChannelPinnedTopic - A forum topic » was pinned or unpinned.
-
-- Added inputNotifyForumTopic - Notifications generated by a topic in a forum.
-
-- Added notifyForumTopic - Notifications generated by a topic in a forum.
-
-- Added inputStickerSetEmojiDefaultTopicIcons - Default custom emoji stickerset for forum topic icons
-
-- Added messages.sponsoredMessagesEmpty - No sponsored messages are available.
-
-##### Changed Constructors
-
-- Added usernames parameter, removed username parameter in updateUserName
-
-- Added flags2, usernames parameters in user
-
-- Added forum, flags2, usernames parameters in channel
-
-- Added flags, top_msg_id parameters in updateDraftMessage
-
-- Added forums parameter in channelAdminLogEventsFilter
-
-- Added flags, top_msg_id parameters in updateChannelReadMessagesContents
-
-- Added manage_topics parameter in chatAdminRights
-
-- Added manage_topics parameter in chatBannedRights
-
-- Added forum_topic parameter in messageReplyHeader
-
-- Added show_peer_photo parameter in sponsoredMessage
-
-- Added flags, posts_between parameters in messages.sponsoredMessages
-
-- Added flags, top_msg_id parameters in updateMessageReactions
-
-#### Schema
-
-### Layer 147
-
-Keywords for custom emojis and non-mask stickers, web token authorization.
-
-#### Schema changes
-
-##### New Methods
-
-- Added auth.importWebTokenAuthorization - Login by importing an authorization token
-
-##### New Constructors
-
-- Added stickerKeyword - Keywords for a certain sticker
-
-##### Changed Constructors
-
-- Added keywords parameter in messages.stickerSet
-
-- Added keywords parameter in stickerSetFullCovered
-
-#### Schema
-
-### Layer 146
-
-Scheduled replies to scheduled messages, accent colors for custom emojis.
-
-#### Schema changes
-
-##### New Methods
-
-- Added messages.getExtendedMedia - Get information about extended media
-
-##### Changed Methods
-
-- Added emojis, text_color parameters in stickers.createStickerSet
-
-##### New Constructors
-
-- Added messageExtendedMediaPreview - Extended media preview
-
-- Added messageExtendedMedia - Extended media
-
-- Added updateMessageExtendedMedia - Extended media update
-
-##### Changed Constructors
-
-- Added extended_media parameter in inputMediaInvoice
-
-- Added extended_media parameter in messageMediaInvoice
-
-- Added reply_to_scheduled parameter in messageReplyHeader
-
-- Added text_color parameter in documentAttributeCustomEmoji
-
-- Added upgrade parameter in inputStorePaymentPremiumSubscription
-
-- Added current, can_purchase_upgrade parameters in premiumSubscriptionOption
-
-#### Schema
-
-### Layer 145
-
-Custom emoji statuses, custom emoji & multiple message reactions, login via email, recent stickersets, Telegram Premium and bot mini app improvements.
-
-Added the following brand new documentation articles:
-
-- Deep links
-
-- Stickers
-
-- Themes
-
-- Wallpapers
-
-Also added more details on entity length calculation and AUTH_KEY_DUPLICATED errors.
-
-The RPC error database » was also updated.
-
-#### Schema changes
-
-##### New Methods
-
-- Added account.updateEmojiStatus - Set an emoji status
-
-- Added account.getDefaultEmojiStatuses - Get a list of default suggested emoji statuses
-
-- Added account.getRecentEmojiStatuses - Get recently used emoji statuses
-
-- Added account.clearRecentEmojiStatuses - Clears list of recently used emoji statuses
-
-- Added messages.reportReaction - Report a message reaction
-
-- Added messages.getTopReactions - Got popular message reactions
-
-- Added messages.getRecentReactions - Get recently used message reactions
-
-- Added messages.clearRecentReactions - Clear recently used message reactions
-
-##### Changed Methods
-
-- Added flags, email_verification parameters, changed type of phone_code from string to flags.0?string in auth.signIn
-
-- Added update_stickersets_order parameter in messages.sendMessage
-
-- Added update_stickersets_order parameter in messages.sendMedia
-
-- Added update_stickersets_order parameter in messages.sendMultiMedia
-
-- Added purpose parameter in account.sendVerifyEmailCode
-
-- Changed type of account.verifyEmail from Bool to account.EmailVerified
-
-- Added purpose, verification parameters, removed email, code parameters in account.verifyEmail
-
-- Added add_to_recent parameter, changed type of reaction from flags.0?string to flags.0?Vector<Reaction> in messages.sendReaction
-
-- Changed type of reaction from flags.0?string to flags.0?Reaction in messages.getMessageReactionsList
-
-- Changed type of available_reactions from Vector<string> to ChatReactions in messages.setChatAvailableReactions
-
-- Changed type of reaction from string to Reaction in messages.setDefaultReaction
-
-- Added platform parameter in messages.requestWebView
-
-- Added platform parameter in messages.requestSimpleWebView
-
-##### New Constructors
-
-- Added emojiStatusEmpty - No emoji status is set
-
-- Added emojiStatus - An emoji status
-
-- Added emojiStatusUntil - An emoji status valid until the specified date
-
-- Added updateUserEmojiStatus - The emoji status of a certain user has changed
-
-- Added updateRecentEmojiStatuses - The list of recent emoji statuses has changed
-
-- Added account.emojiStatusesNotModified - The server-side list of emoji statuses hasn't changed
-
-- Added account.emojiStatuses - A list of emoji statuses
-
-- Added reactionEmpty - No reaction
-
-- Added reactionEmoji - Normal emoji message reaction
-
-- Added reactionCustomEmoji - Custom emoji message reaction
-
-- Added chatReactionsNone - No reactions are allowed
-
-- Added chatReactionsAll - All reactions or all non-custom reactions are allowed
-
-- Added chatReactionsSome - Some reactions are allowed
-
-- Added messages.reactionsNotModified - The server-side list of message reactions hasn't changed
-
-- Added messages.reactions - List of message reactions
-
-- Added updateRecentReactions - The list of recent message reactions has changed
-
-- Added updateMoveStickerSetToTop - A stickerset was just moved to top, see here for more info »
-
-- Added auth.sentCodeTypeEmailCode - The code was sent via the previously configured login email »
-
-- Added auth.sentCodeTypeSetUpEmailRequired - The user should add and verify an email address in order to login as described here ».
-
-- Added emailVerifyPurposeLoginSetup - Email verification purpose: setup login email
-
-- Added emailVerifyPurposeLoginChange - Email verification purpose: change login email
-
-- Added emailVerifyPurposePassport - Verify an email for use in telegram passport
-
-- Added emailVerificationCode - Email verification code
-
-- Added emailVerificationGoogle - Google ID email verification token
-
-- Added emailVerificationApple - Apple ID email verification token
-
-- Added account.emailVerified - The email was verified correctly.
-
-- Added account.emailVerifiedLogin - The email was verified correctly, and a login code was just sent to it.
-
-- Added premiumSubscriptionOption - Describes a Telegram Premium subscription option
-
-- Added inputStickerSetEmojiGenericAnimations - Generic animation stickerset containing animations to play when reacting to messages using a normal emoji without a custom animation
-
-- Added inputStickerSetEmojiDefaultStatuses - Default custom emoji status stickerset
-
-- Added sendAsPeer - Indicates a peer that can be used to send messages
-
-##### Changed Constructors
-
-- Changed type of available_reactions from flags.18?Vector<string> to flags.18?ChatReactions in chatFull
-
-- Added reactions_default parameter in config
-
-- Added login_email_pattern parameter in account.password
-
-- Added emoji_status parameter in user
-
-- Changed type of available_reactions from flags.30?Vector<string> to flags.30?ChatReactions in channelFull
-
-- Added flags, masks, emojis parameters in updateStickerSets
-
-- Changed type of peers from Vector<Peer> to Vector<SendAsPeer> in channels.sendAsPeers
-
-- Added chosen_order parameter, removed chosen parameter, changed type of reaction from string to Reaction in reactionCount
-
-- Changed type of prev_value from Vector<string> to ChatReactions, new_value from Vector<string> to ChatReactions in channelAdminLogEventActionChangeAvailableReactions
-
-- Changed type of reaction from string to Reaction in messagePeerReaction
-
-- Added period_options parameter, removed currency, monthly_amount parameters in help.premiumPromo
-
-#### Schema
-
-### Layer 144
-
-Users can now send custom emojis, gift Telegram Premium to other users, and download album covers for any music file.
-Also introducing new voice message privacy settings and support for additional payment methods.
-
-The E2E schema was updated to account for previous changes in the main schema (custom emojis+spoiler entities).
-
-#### Schema changes
-
-##### New Methods
-
-- Added messages.getCustomEmojiDocuments - Fetch custom emoji stickers ».
-
-- Added messages.getEmojiStickers - Gets the list of currently installed custom emoji stickersets.
-
-- Added messages.getFeaturedEmojiStickers - Gets featured custom emoji stickersets.
-
-##### Changed Methods
-
-- Added emojis parameter in messages.reorderStickerSets
-
-- Added emojis parameter in messages.getArchivedStickers
-
-- Added purpose parameter, removed flags, restore parameters in payments.assignAppStoreTransaction
-
-- Added receipt, purpose parameters, removed purchase_token parameter in payments.assignPlayMarketTransaction
-
-- Added purpose parameter in payments.canPurchasePremium
-
-##### New Constructors
-
-- Added messageEntityCustomEmoji - Represents a custom emoji.
-
-- Added documentAttributeCustomEmoji - Info about a custom emoji
-
-- Added stickerSetFullCovered - Stickerset preview with all stickers of the stickerset included.
-
-- Added inputStorePaymentPremiumSubscription - Info about a Telegram Premium purchase
-
-- Added inputStorePaymentGiftPremium - Info about a gifted Telegram Premium purchase
-
-- Added messageActionGiftPremium - Info about a gifted Telegram Premium subscription
-
-- Added premiumGiftOption - Telegram Premium gift option
-
-- Added inputStickerSetPremiumGifts - Stickers to show when receiving a gifted Telegram Premium subscription
-
-- Added updateReadFeaturedEmojiStickers - Some featured custom emoji stickers were marked as read
-
-- Added inputPrivacyKeyVoiceMessages - Whether people can send you voice messages
-
-- Added privacyKeyVoiceMessages - Whether the user accepts voice messages
-
-- Added paymentFormMethod - Represents an additional payment method
-
-- Added inputWebFileAudioAlbumThumbLocation - Used to download an album cover for any music file using upload.getWebFile, see the webfile docs for more info ».
-
-##### Changed Constructors
-
-- Added voice_messages_forbidden, premium_gifts parameters in userFull
-
-- Added emojis, thumb_document_id parameters in stickerSet
-
-- Added emojis parameter in updateStickerSetsOrder
-
-- Added additional_methods parameter, changed type of saved_credentials from flags.1?PaymentSavedCredentials to flags.1?Vector<PaymentSavedCredentials> in payments.paymentForm
-
-#### Schema
-
-#### End-to-end schema changes
-
-##### New Constructors
-
-- Added messageEntitySpoiler - Message entity representing a spoiler
-
-- Added messageEntityCustomEmoji - Represents a custom emoji.
-
-#### End-to-end schema
-
-### Layer 143
-
-Telegram Premium, voice message transcription, invoices, bot description photos/animations, immediate account deletion, recurring payments and attachment menu improvements.
-Also, discussion group admins can now require users to join before commenting.
-
-The main and E2E schemes were also modified to eventually support uploading and downloading files bigger than 4GB: the current supported maximum filesize is dynamically specified, and can be fetched from the new upload_max_fileparts_default » and upload_max_fileparts_premium » app configuration fields.
+- Stars topup link »
 

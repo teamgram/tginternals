@@ -1,5 +1,5 @@
 # messages.getSavedGifs
-Get saved GIFs
+Get saved GIFs.
 
 ```
 messages.savedGifsNotModified#e8025ca2 = messages.SavedGifs;
@@ -11,7 +11,7 @@ messages.getSavedGifs#5cf09635 hash:long = messages.SavedGifs;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

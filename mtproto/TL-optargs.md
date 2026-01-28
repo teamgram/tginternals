@@ -16,6 +16,10 @@ Moreover, the unknown result type is obviously usually (but not always) bound to
 
 We can formulate the following rules. Let there be some constructor
 
+```
+C {a1:T1} ... {am:Tm} b1:U1 ... bn:Un = T;
+```
+
 Some of its arguments or its result may be marked with the ! modifier (We consider a functional combinator to be a constructor whose result type has been modified by an implicit !).
 
 The following conditions must hold:

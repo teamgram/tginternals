@@ -21,5 +21,6 @@ account.TmpPassword
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 400 | PASSWORD_HASH_INVALID | The provided password hash is invalid. |
+| 400 | SRP_A_INVALID | The specified inputCheckPasswordSRP.A value is invalid. |
 | 400 | TMP_PASSWORD_DISABLED | The temporary password is disabled. |
 

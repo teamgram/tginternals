@@ -20,6 +20,6 @@ messages.getSavedGifs#5cf09635 hash:long = messages.SavedGifs;
 ## Methods
 | Method | Description |
 | ---- | ----------- |
-| messages.getSavedGifs | Get saved GIFs |
+| messages.getSavedGifs | Get saved GIFs. |
 
 

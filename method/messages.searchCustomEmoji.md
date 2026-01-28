@@ -12,7 +12,7 @@ messages.searchCustomEmoji#2c11c0d7 emoticon:string hash:long = EmojiList;
 | Name | Type | Description |
 | ---- | :----: | ----------- |
 | emoticon | string | The emoji |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

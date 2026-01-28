@@ -8,7 +8,7 @@ account.savedRingtones#c1e92cc5 hash:long ringtones:Vector<Document> = account.S
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here |
 | ringtones | Vector<Document> | Saved notification sounds |
 
 

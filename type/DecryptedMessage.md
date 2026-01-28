@@ -20,6 +20,8 @@ decryptedMessage#91cc4674 flags:# no_webpage:flags.1?true silent:flags.5?true ra
 ## Constructors
 | Constructor | Description |
 | ---- | ----------- |
+| decryptedMessage | Contents of an encrypted message. |
+| decryptedMessageService | Contents of an encrypted service message. |
 
 
 ## Methods

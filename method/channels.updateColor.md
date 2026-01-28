@@ -17,7 +17,7 @@ channels.updateColor#d8aa3671 flags:# for_profile:flags.1?true channel:InputChan
 | Name | Type | Description |
 | ---- | :----: | ----------- |
 | flags | # | Flags, see TL conditional fields |
-| for_profile | flags.1?true | Whether to change the accent color emoji pattern of the profile page; otherwise, the accent color and emoji pattern of messages will be changed. |
+| for_profile | flags.1?true | Whether to change the accent color emoji pattern of the profile page; otherwise, the accent color and emoji pattern of messages will be changed. Channels can change both message and profile palettes; supergroups can only change the profile palette, of course after reaching the appropriate boost level. |
 | channel | InputChannel | Channel whose accent color should be changed. |
 | color | flags.2?int | ID of the accent color palette » to use (not RGB24, see here » for more info); if not set, the default palette is used. |
 | background_emoji_id | flags.0?long | Custom emoji ID used in the accent color pattern. |

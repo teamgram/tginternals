@@ -2,6 +2,20 @@
 
 Telegram's API allows users to export all of their information through the takeout API.
 
+```
+account.takeout#4dba4501 id:long = account.Takeout;
+
+inputTakeoutFileLocation#29be5899 = InputFileLocation;
+
+---functions---
+
+account.initTakeoutSession#8ef3eab0 flags:# contacts:flags.0?true message_users:flags.1?true message_chats:flags.2?true message_megagroups:flags.3?true message_channels:flags.4?true files:flags.5?true file_max_size:flags.5?long = account.Takeout;
+
+invokeWithTakeout#aca9fd2e {X:Type} takeout_id:long query:!X = X;
+
+account.finishTakeoutSession#1d2652ee flags:# success:flags.0?true = Bool;
+```
+
 Use account.initTakeoutSession to initialize a takeout session: pass the appropriate flags to enable usage of the corresponding methods, as described below.
 
 When invoking the methods described below, each query must be wrapped using invokeWithTakeout, with the id returned by account.initTakeoutSession.
@@ -9,6 +23,16 @@ When invoking the methods described below, each query must be wrapped using invo
 After finishing the export, terminate the session using account.finishTakeoutSession.
 
 ### Split ranges
+
+```
+messageRange#ae30253 min_id:int max_id:int = MessageRange;
+
+---functions---
+
+messages.getSplitRanges#1cff7e08 = Vector<MessageRange>;
+
+invokeWithMessagesRange#365275f2 {X:Type} range:MessageRange query:!X = X;
+```
 
 Some method calls require additional pagination using message ranges.
 
@@ -63,7 +87,7 @@ Unless otherwise specified, all requests do not require pagination using split r
 
 - If the user wants to export their contact list:
 
-- See here »
+- See here »
 
 - If the user wants to export their sessions:
 
@@ -75,11 +99,28 @@ Unless otherwise specified, all requests do not require pagination using split r
 
 #### Contacts
 
+```
+savedPhoneContact#1142bd56 phone:string first_name:string last_name:string date:int = SavedContact;
+
+---functions---
+
+contacts.getSaved#82f1e39f = Vector<SavedContact>;
+```
+
 This method does not require pagination using message ranges.
 
-Use contacts.getSaved to export the full contact list, see here » for another alternative method that may be used to fetch the full list of all contacts with a Telegram account, without using a takeout session.
+Use contacts.getSaved to export the full contact list, see here » for another alternative method that may be used to fetch the full list of all contacts with a Telegram account, without using a takeout session.
 
 #### Left channels
+
+```
+messages.chats#64ff9fd5 chats:Vector<Chat> = messages.Chats;
+messages.chatsSlice#9cd81144 count:int chats:Vector<Chat> = messages.Chats;
+
+---functions---
+
+channels.getLeftChannels#8341ecc0 offset:int = messages.Chats;
+```
 
 This method does not require pagination using message ranges.
 

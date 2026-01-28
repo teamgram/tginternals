@@ -8,9 +8,9 @@ Constructor schema is available as of layer 98. Switch »
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| volume_id | long | Server volume |
-| local_id | int | File ID |
-| secret | long | Checksum to access the file |
+| volume_id | long | Volume ID |
+| local_id | int | Local ID |
+| secret | long | Secret |
 
 
 ## Type

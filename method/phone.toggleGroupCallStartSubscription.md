@@ -27,4 +27,5 @@ Updates
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 403 | GROUPCALL_ALREADY_STARTED | The groupcall has already started, you can join directly using phone.joinGroupCall. |
+| 400 | GROUPCALL_INVALID | The specified group call is invalid. |
 

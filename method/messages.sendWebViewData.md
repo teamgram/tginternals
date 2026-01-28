@@ -28,4 +28,5 @@ Updates
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | BOT_INVALID | This is not a valid bot. |
 

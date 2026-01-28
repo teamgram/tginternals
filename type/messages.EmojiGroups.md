@@ -10,6 +10,7 @@ messages.emojiGroups#881fb94b hash:int groups:Vector<EmojiGroup> = messages.Emoj
 messages.getEmojiGroups#7488ce5b hash:int = messages.EmojiGroups;
 messages.getEmojiStatusGroups#2ecd56cd hash:int = messages.EmojiGroups;
 messages.getEmojiProfilePhotoGroups#21a548f3 hash:int = messages.EmojiGroups;
+messages.getEmojiStickerGroups#1dd840f5 hash:int = messages.EmojiGroups;
 ```
 
 ## Constructors
@@ -22,8 +23,9 @@ messages.getEmojiProfilePhotoGroups#21a548f3 hash:int = messages.EmojiGroups;
 ## Methods
 | Method | Description |
 | ---- | ----------- |
-| messages.getEmojiGroups | Represents a list of emoji categories, to be used when selecting custom emojis. |
+| messages.getEmojiGroups | Represents a list of emoji categories. |
 | messages.getEmojiStatusGroups | Represents a list of emoji categories, to be used when selecting custom emojis to set as custom emoji status. |
 | messages.getEmojiProfilePhotoGroups | Represents a list of emoji categories, to be used when selecting custom emojis to set as profile picture. |
+| messages.getEmojiStickerGroups | Represents a list of emoji categories, to be used when choosing a sticker. |
 
 

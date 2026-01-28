@@ -22,4 +22,5 @@ Theme
 | ---- | :----: | ----------- |
 | 400 | THEME_FORMAT_INVALID | Invalid theme format provided. |
 | 400 | THEME_INVALID | Invalid theme provided. |
+| 400 | THEME_SLUG_INVALID | The specified theme slug is invalid. |
 

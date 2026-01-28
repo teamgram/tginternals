@@ -25,6 +25,19 @@ decryptedMessageActionNoop#a82fdd63 = DecryptedMessageAction;
 ## Constructors
 | Constructor | Description |
 | ---- | ----------- |
+| decryptedMessageActionSetMessageTTL | Setting of a message lifetime after reading.Upon receiving such message the client shall start deleting of all messages of an encrypted chat ttl_seconds seconds after the messages were read by user. |
+| decryptedMessageActionReadMessages | Messages marked as read. |
+| decryptedMessageActionDeleteMessages | Deleted messages. |
+| decryptedMessageActionScreenshotMessages | A screenshot was taken. |
+| decryptedMessageActionFlushHistory | The entire message history has been deleted. |
+| decryptedMessageActionResend | Request for the other party in a Secret Chat to automatically resend a contiguous range of previously sent messages, as explained in Sequence number is Secret Chats. |
+| decryptedMessageActionNotifyLayer | A notification stating the API layer that is used by the client. You should use your current layer and take notice of the layer used on the other side of a conversation when sending messages. |
+| decryptedMessageActionTyping | User is preparing a message: typing, recording, uploading, etc. |
+| decryptedMessageActionRequestKey | Request rekeying, see rekeying process |
+| decryptedMessageActionAcceptKey | Accept new key |
+| decryptedMessageActionAbortKey | Abort rekeying |
+| decryptedMessageActionCommitKey | Commit new key, see rekeying process |
+| decryptedMessageActionNoop | NOOP action |
 
 
 ## Methods

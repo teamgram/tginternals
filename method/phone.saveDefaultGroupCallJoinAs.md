@@ -22,4 +22,5 @@ Bool
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 400 | JOIN_AS_PEER_INVALID | The specified peer cannot be used to join a group call. |
+| 400 | PEER_ID_INVALID | The provided peer id is invalid. |
 

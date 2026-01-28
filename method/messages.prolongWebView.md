@@ -26,4 +26,5 @@ messages.prolongWebView#b0d81a83 flags:# silent:flags.5?true peer:InputPeer bot:
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | BOT_INVALID | This is not a valid bot. |
 

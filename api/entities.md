@@ -28,12 +28,12 @@ Since storing a 21-bit number for each letter would result in a waste of space, 
 
 #### UTF-8
 
-UTF-8 » is a Unicode encoding that allows storing a 21-bit Unicode code point into code units as small as 8 bits.
+UTF-8 » is a Unicode encoding that allows storing a 21-bit Unicode code point into code units as small as 8 bits.
 UTF-8 is used by the MTProto and Bot API when transmitting and receiving fields of type string.
 
 #### UTF-16
 
-UTF-16 » is a Unicode encoding that allows storing a 21-bit Unicode code point into one or two 16-bit code units.
+UTF-16 » is a Unicode encoding that allows storing a 21-bit Unicode code point into one or two 16-bit code units.
 
 UTF-16 is used when computing the length and offsets of entities in the MTProto and bot APIs, by counting the number of UTF-16 code units (not code points).
 
@@ -53,6 +53,15 @@ However, since UTF-8 encodes codepoints in non-BMP planes as a 32-bit code unit 
 
 Example:
 
+```
+length := 0
+for byte in text {
+    if (byte & 0xc0) != 0x80 {
+        length += (byte >= 0xf0 ? 2 : 1)
+    }
+}
+```
+
 Note: the length of an entity must not include the length of trailing newlines or whitespaces, rtrim entities before computing their length: however, the next offset must include the length of newlines or whitespaces that precede it.
 
 Example implementations: tdlib, MadelineProto.
@@ -65,13 +74,19 @@ For example the following HTML/Markdown aliases for message entities can be used
 
 - messageEntityItalic => <i>italic</i>, <em>italic</em> *italic*
 
-- messageEntityCode => <code>code</code>, `code`
+- messageEntityCode » => <code>code</code>, `code`
 
 - messageEntityStrike => <s>strike</s>, <strike>strike</strike>, <del>strike</del>, ~~strike~~
 
 - messageEntityUnderline => <u>underline</u>
 
-- messageEntityPre => <pre language="c++">code</pre>,
+- messageEntityPre » => <pre language="c++">code</pre>,
+
+```
+```c++
+code
+```
+```
 
 The following entities can also be used to mention users:
 
@@ -79,7 +94,7 @@ The following entities can also be used to mention users:
 
 - messageEntityMention => @botfather (this mention is generated automatically server-side for @usernames in messages)
 
-Also, messageEntityCustomEmoji entities are used for custom emojis ».
+Also, messageEntityCustomEmoji entities are used for custom emojis ».
 
-A number of other entities are also available, see the type page for the full list ».
+A number of other entities are also available, see the type page for the full list ».
 

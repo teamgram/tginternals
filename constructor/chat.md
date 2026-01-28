@@ -1,5 +1,5 @@
 # chat
-Info about a group
+Info about a group.
 
 ```
 chat#41cbf256 flags:# creator:flags.0?true left:flags.2?true deactivated:flags.5?true call_active:flags.23?true call_not_empty:flags.24?true noforwards:flags.25?true id:long title:string photo:ChatPhoto participants_count:int date:int version:int migrated_to:flags.6?InputChannel admin_rights:flags.14?ChatAdminRights default_banned_rights:flags.18?ChatBannedRights = Chat;
@@ -15,7 +15,7 @@ chat#41cbf256 flags:# creator:flags.0?true left:flags.2?true deactivated:flags.5
 | call_active | flags.23?true | Whether a group call is currently active |
 | call_not_empty | flags.24?true | Whether there's anyone in the group call |
 | noforwards | flags.25?true | Whether this group is protected, thus does not allow forwarding messages from it |
-| id | long | ID of the group |
+| id | long | ID of the group, see here » for more info and the available ID range. |
 | title | string | Title |
 | photo | ChatPhoto | Chat photo |
 | participants_count | int | Participant count |
@@ -27,6 +27,6 @@ chat#41cbf256 flags:# creator:flags.0?true left:flags.2?true deactivated:flags.5
 
 
 ## Type
-Chat
+
 
 ## Related pages

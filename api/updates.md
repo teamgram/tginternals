@@ -8,6 +8,20 @@ Update events are sent to an authorized user into the last active connection (ex
 
 So to start receiving updates the client needs to init connection and call API method, e.g. to fetch current state.
 
+Make sure to always ignore updates received from unencrypted connections (i.e. before the handshake is completed).
+
+If the connection is encrypted, but the session isn't logged in yet or was logged out, only the following updates may be handled:
+
+- updateLoginToken - For QR code logins
+
+- updateSentPhoneCode - For paid SMS code logins
+
+- updateDcOptions - Changes in the data center connection options that must be applied
+
+- updateConfig - The server-side configuration has changed; the client should re-fetch the config using help.getConfig and help.getAppConfig.
+
+- updateLangPackTooLong, updateLangPack - Localization pack updates
+
 ### Event sequences
 
 All events are received from the socket as a sequence of TL-serialized Updates objects, which might be optionally gzip-compressed in the same way as responses to queries.
@@ -16,11 +30,21 @@ Each Updates object may contain single or multiple Update objects, representing 
 
 In order to apply all updates in precise order and to guarantee that no update is missed or applied twice there is seq attribute in Updates constructors, and pts (with pts_count) or qts attributes in Update constructors. The client must use those attributes values in combination with locally stored state to correctly apply incoming updates.
 
-When a gap in updates sequence occurs, it must be filled via calling one of the API methods. More below »
+When a gap in updates sequence occurs, it must be filled via calling one of the API methods. More below »
 
 ### Updates sequence
 
 As said earlier, each payload with updates has a TL-type Updates. It can be seen from the schema below that this type has several constructors.
+
+```
+updatesTooLong#e317af7e = Updates;
+updateShort#78d4dec1 update:Update date:int = Updates;
+updateShortMessage#313bc7f8 flags:# out:flags.1?true mentioned:flags.4?true media_unread:flags.5?true silent:flags.13?true id:int user_id:long message:string pts:int pts_count:int date:int fwd_from:flags.2?MessageFwdHeader via_bot_id:flags.11?long reply_to:flags.3?MessageReplyHeader entities:flags.7?Vector<MessageEntity> ttl_period:flags.25?int = Updates;
+updateShortChatMessage#4d6deea5 flags:# out:flags.1?true mentioned:flags.4?true media_unread:flags.5?true silent:flags.13?true id:int from_id:long chat_id:long message:string pts:int pts_count:int date:int fwd_from:flags.2?MessageFwdHeader via_bot_id:flags.11?long reply_to:flags.3?MessageReplyHeader entities:flags.7?Vector<MessageEntity> ttl_period:flags.25?int = Updates;
+updateShortSentMessage#9015e101 flags:# out:flags.1?true id:int pts:int pts_count:int date:int media:flags.9?MessageMedia entities:flags.7?Vector<MessageEntity> ttl_period:flags.25?int = Updates;
+updatesCombined#725b04c3 updates:Vector<Update> users:Vector<User> chats:Vector<Chat> date:int seq_start:int seq:int = Updates;
+updates#74ae4240 updates:Vector<Update> users:Vector<User> chats:Vector<Chat> date:int seq:int = Updates;
+```
 
 updatesTooLong indicates that there are too many events pending to be pushed to the client, so one needs to fetch them manually.
 
@@ -75,9 +99,9 @@ The Updates sequence state is represented by the date and seq of the Updates seq
 
 Update handling in Telegram clients consists of receiving events, making sure there were no gaps and no events were missed based on the locally stored state of the correspondent event sequence, and then updating the locally stored state based on the parameters received.
 
-When the client receives payload with serialized updates, first of all, it needs to walk through all of the nested Update objects and check if they belong to any of message box sequences (have pts or qts parameters). Those updates need to be handled separately according to corresponding local state and new pts/qts values. Details below »
+When the client receives payload with serialized updates, first of all, it needs to walk through all of the nested Update objects and check if they belong to any of message box sequences (have pts or qts parameters). Those updates need to be handled separately according to corresponding local state and new pts/qts values. Details below »
 
-After message box updates are handled, if there are any other updates remaining the client needs to handle them with respect to seq. Details below »
+After message box updates are handled, if there are any other updates remaining the client needs to handle them with respect to seq. Details below »
 
 #### pts: checking and applying
 
@@ -91,8 +115,16 @@ Here, local_pts will be the local state, pts will be the remote state, pts_count
 
 For example, let's assume the client has the following local state for the channel 123456789:
 
+```
+local_pts = 131
+```
+
 Now let's assume an updateNewChannelMessage from channel 123456789 is received with pts = 132 and pts_count=1.
 Since local_pts + pts_count === pts, the total number of events since the last stored state is, in fact, equal to pts_count: this means the update can be safely accepted and the remote pts applied:
+
+```
+local_pts = 132
+```
 
 Since:
 
@@ -131,8 +163,14 @@ For all the other Updates type constructors there is no need to check seq or cha
 ### Recovering gaps
 
 To do this, updates.getDifference (common/secret state) or updates.getChannelDifference (channel state) with the respective local states must be called.
-These methods should also be called on startup, to fetch new updates (preferably with some flags to reduce server load, see the method's docs).
-Manually obtaining updates is also required in the following situations:
+
+Manually obtaining updates through the above methods is required in the following situations:
+
+- On startup, only updates.getDifference should be called, to fetch updates received while the client was offline (preferably with some flags to reduce server load, see the method's docs).
+
+- updates.getChannelDifference does not have to be manually called for all channels on startup.
+
+- Instead, updates.getChannelDifference will be automatically triggered (only for channels that need catching up) by a set of updateChannelTooLong updates that will be returned by the updates.getDifference call.
 
 - Loss of sync: a gap was found in  seq / pts / qts (as described above). It may be useful to wait up to 0.5 seconds in this situation and abort the sync in case a new update arrives, that fills the gap.
 
@@ -158,13 +196,23 @@ If the gap is too large and there are too many updates to fetch, a *TooLong cons
 
 It is recommended to use limit 10-100 for channels and 1000-10000 otherwise.
 
-### Subscribing to updates of channels/supergroups we haven't joined
+Do not re-invoke updates.getChannelDifference if the returned difference is final, unless the user has opened the channel/supergroup ».
 
-Clients may ask the API to passively send them updates for channels/supergroups they haven't joined, by simply making a updates.getChannelDifference query.
+### Subscribing to updates of channels/supergroups
 
-If the specified channel or supergroup is public, or is private but temporarily available for a limited time thanks to a chatInvitePeek, the API will start passively sending updates (i.e. as standalone Updates constructors in the socket, as is already the case for normal channels/supergroups we've already joined) to all logged-in sessions, as long as any of the sessions continues to periodically invoke updates.getChannelDifference every timeout seconds (returned by the method, or every 10 seconds if the timeout flag is absent from the return value of the method).
+The API will automatically send passive updates (i.e. as standalone Updates constructors in the socket) for channels/supergroups the user/bot is a member of.
 
-To stop passively receiving updates, simply stop invoking updates.getChannelDifference, and the API will automatically stop passively sending updates after a while.
+However, clients (user accounts only) should also additionally invoke updates.getChannelDifference periodically for channels and supergroups the user is currently viewing (i.e. explicitly opened channels/supergroups in one or more tabs/windows).
+
+If the returned difference is non-final, the method should be called immediately with the new parameters as usual.
+
+If the returned difference is final, and the user is still viewing the messages of the supergroup/channel (i.e. via distinct tabs/windows), updates.getChannelDifference should be re-invoked after timeout seconds (if the flag is specified, otherwise after 1 second).
+
+This mechanism may also be used to enable passive reception of updates from channels or supergroups we're not a member of: if the specified channel or supergroup is public, or is private but temporarily available for a limited time thanks to a chatInvitePeek, the API will start passively sending updates (i.e. as standalone Updates constructors in the socket, as is already the case for normal channels/supergroups we've already joined) to all logged-in sessions, as long as any of the sessions continues to periodically invoke updates.getChannelDifference every timeout seconds (returned by the method, or every second if the timeout flag is absent from the return value of the method, or immediately with the new parameters if the returned difference is non-final).
+
+Clients should stop updates.getChannelDifference polling once the user closes the channel/supergroup: the API will continue emitting passive updates only if the user is a member of the channel/supergroup.
+
+Clients should also limit to 10 the maximum number of channels/supergroups shortpolled using the above mechanism (i.e. if the user opens 11 windows on 11 different channels, shortpoll with updates.getChannelDifference only the first 10).
 
 ### Example implementations
 
@@ -172,7 +220,7 @@ Implementations also have to take care to postpone updates received via the sock
 
 Example implementations: tdlib, MadelineProto.
 
-An interesting and easy way this can be implemented, instead of using various locks, is by running background loops, like in MadelineProto ».
+An interesting and easy way this can be implemented, instead of using various locks, is by running background loops, like in MadelineProto ».
 
 ### PUSH Notifications about Updates
 

@@ -8,7 +8,7 @@ messages.foundStickerSets#8af09dd2 hash:long sets:Vector<StickerSetCovered> = me
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here |
 | sets | Vector<StickerSetCovered> | Found stickersets |
 
 

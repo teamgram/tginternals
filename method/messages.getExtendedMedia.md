@@ -1,5 +1,5 @@
 # messages.getExtendedMedia
-Get information about extended media
+Fetch updated information about paid media, see here » for the full flow.
 
 ```
 updatesTooLong#e317af7e = Updates;
@@ -16,12 +16,12 @@ messages.getExtendedMedia#84f80814 peer:InputPeer id:Vector<int> = Updates;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| peer | InputPeer | Peer |
-| id | Vector<int> | Message IDs |
+| peer | InputPeer | Peer with visible paid media messages. |
+| id | Vector<int> | IDs of currently visible messages containing paid media. |
 
 
 ## Result
-Updates
+
 
 ## Possible errors
 | Code | Type | Description |

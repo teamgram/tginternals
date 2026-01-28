@@ -22,9 +22,25 @@ Use this constructor to get embeddable code for your website.
 
 Feel free to create your own custom UI for the button. The only thing you need to make it work is to point the user to this URL on click:
 
+```
+https://t.me/share/url?url={url}&text={text}
+```
+
 where {url} is the URL the user will be sharing and {text} is an optional description that will be included with the link. Both values should be URL-encoded.
 
 Here is a sample code for PHP:
+
+```
+/**
+ * @param string $url Absolute URL to share, e.g. "https://example.com/path/to/article?with=params"
+ * @param string $text Optional comment to share URL with, e.g. "Check out this article!"
+ * @return string Button HTML markup, feel free to modify to your taste
+ */
+function telegramForwardButton($url, $text = '') {
+  $share_url = 'https://t.me/share/url?url='.rawurlencode($url).'&text='.rawurlencode($text);
+  return "<a href=\"{$share_url}\">Share</a>";
+}
+```
 
 You are welcome to use the Telegram Logos in your custom button design.
 

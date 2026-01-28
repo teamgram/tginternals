@@ -12,7 +12,7 @@ messages.getTopReactions#bb8125ba limit:int hash:long = messages.Reactions;
 | Name | Type | Description |
 | ---- | :----: | ----------- |
 | limit | int | Maximum number of results to return, see pagination |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

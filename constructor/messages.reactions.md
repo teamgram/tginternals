@@ -8,7 +8,7 @@ messages.reactions#eafdf716 hash:long reactions:Vector<Reaction> = messages.Reac
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, can also be locally regenerated using the algorithm specified here ». |
 | reactions | Vector<Reaction> | Reactions |
 
 

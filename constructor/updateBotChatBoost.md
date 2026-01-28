@@ -1,5 +1,5 @@
 # updateBotChatBoost
-A channel boost has changed (bots only)
+A channel/supergroup boost has changed (bots only)
 
 ```
 updateBotChatBoost#904dd49c peer:Peer boost:Boost qts:int = Update;

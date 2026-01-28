@@ -27,4 +27,5 @@ stories.activateStealthMode#57bbd166 flags:# past:flags.0?true future:flags.1?tr
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | PREMIUM_ACCOUNT_REQUIRED | A premium account is required to execute this action. |
 

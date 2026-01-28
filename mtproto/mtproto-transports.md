@@ -33,6 +33,17 @@ The lightest protocol available.
 
 Payload structure:
 
+```
++-+----...----+
+|l|  payload  |
++-+----...----+
+OR
+
++-+---+----...----+
+|h|len|  payload  +
++-+---+----...----+
+```
+
 Before sending anything into the underlying socket (see transports), the client must first send 0xef as the first byte (the server will not send 0xef as the first byte in the first reply).
 Then, payloads are wrapped in the following envelope:
 
@@ -50,7 +61,7 @@ If the packet length divided by four is bigger than or equal to 127, the followi
 
 - Payload: the MTProto payload
 
-Quick ACK » may be enabled for this transport.
+Quick ACK » may be enabled for this transport.
 
 To request a quick ACK from the server for an encrypted MTProto payload, use the following envelope for outgoing messages, instead of the one specified above.
 
@@ -70,6 +81,12 @@ If the packet length divided by four is bigger than or equal to 127, the followi
 
 The server will send quick ACK tokens by bswapping them (i.e. inverting the order of the 4 bytes of the ACK token) and sending them as a standalone 4-byte packet without a length header.
 
+```
++----+
+|dcba|
++----+
+```
+
 These quick ACK packets can be easily distinguished from normal abridged packets because the first byte will always have the most-significant bit set (because quick ACK tokens have the most-significant bit of the last byte set, and since they are bswapped the last byte will come first), and the length/header of normal payload packets coming from the server is always less than or equal to 127 (thus the most-significant bit is not set for normal payloads).
 
 ### Intermediate
@@ -84,6 +101,12 @@ In case 4-byte data alignment is needed, an intermediate version of the original
 
 Payload structure:
 
+```
++----+----...----+
++len.+  payload  +
++----+----...----+
+```
+
 Before sending anything into the underlying socket (see transports), the client must first send 0xeeeeeeee as the first int (four bytes, the server will not send 0xeeeeeeee as the first int in the first reply).
 Then, payloads are wrapped in the following envelope:
 
@@ -91,11 +114,17 @@ Then, payloads are wrapped in the following envelope:
 
 - Payload: the MTProto payload
 
-Quick ACK » may be enabled for this transport.
+Quick ACK » may be enabled for this transport.
 
 To request a quick ACK from the server for an encrypted MTProto payload, add 0x80000000 to the len field before encoding it (equivalent to doing len = len | (1 << 31), i.e. set the most-significant bit of the length).
 
 The server will send quick ACK tokens as a standalone 4-byte packet without a length header.
+
+```
++----+
+|abcd|
++----+
+```
 
 These quick ACK packets can be easily distinguished from normal intermediate packets because quick ACK tokens always have the most-significant bit of the last byte set, and trying to decode an ACK token as a little-endian 32-bit integer will always yield a value bigger than or equal to 0x80000000, which can never be a valid packet length.
 
@@ -112,6 +141,12 @@ Padded version of the intermediate protocol, to use with obfuscation enabled to 
 Before sending anything into the underlying socket (see transports), the client must first send 0xdddddddd as the first int (four bytes, the server will not send 0xdddddddd as the first int in the first reply).
 Then, payloads are wrapped in the following envelope:
 
+```
++----+----...----+----...----+
+|tlen|  payload  |  padding  |
++----+----...----+----...----+
+```
+
 Envelope description:
 
 - Total length: payload+padding length encoded as 4 length bytes (little endian)
@@ -120,11 +155,17 @@ Envelope description:
 
 - Padding: A random padding string of length 0-15
 
-Quick ACK » may be enabled for this transport.
+Quick ACK » may be enabled for this transport.
 
 To request a quick ACK from the server for an encrypted MTProto payload, add 0x80000000 to the len field before encoding it (equivalent to doing len = len | (1 << 31), i.e. set the most-significant bit of the length).
 
 The server will send quick ACK tokens as a standalone 8 to 16-byte packet (excluding the length of the packet itself, encoded as usual), containing a 4-byte header with all bits set, followed by the ACK token (abcd), followed by 0 to 8 random padding bytes.
+
+```
++----+----+----+----...----+
+|tlen|FFFF|abcd|  padding  |
++----+----+----+----...----+
+```
 
 These quick ACK packets can be easily distinguished from normal intermediate padded packets because their length will be always smaller than or equal to 16, smaller than any MTProto packet.
 They can be distinguished from transport errors because the first 4 bytes of the payload are equal to 0xFFFFFFFF, not a valid transport error.
@@ -140,6 +181,12 @@ The basic MTProto transport protocol
 - Maximum envelope length: 12 bytes (length+seqno+crc)
 
 Payload structure:
+
+```
++----+----+----...----+----+
+|len.|seq.|  payload  |crc.|
++----+----+----...----+----+
+```
 
 Envelope description:
 
@@ -211,7 +258,7 @@ Two keys are extracted from both initialization payloads, using bytes at offsets
 Two IVs are extracted from both initialization payloads, using bytes at offsets 40-56: the IV extracted from the primary payload is used as encryption IV, the IV extracted from the secondary payload is used as decryption IV.
 
 Only if using MTProxy, the secret is used to provide connection with the MTProxy server.
-The secret is a 16-byte string, usually distributed in its hexadecimal form along with the MTProxy host and port in proxy deep links ».
+The secret is a 16-byte string, usually distributed in its hexadecimal form along with the MTProxy host and port in proxy deep links ».
 
 Often, a 17-byte version of the secret can be found: this simply indicates that the client should use a specific MTProto transport (based on the first byte, usually it's 0xdd, to indicate that the padded intermediate protocol should be used 0xdddddddd; however, clients should default to the padded intermediate transport whenever an additional byte in the secret is encountered).
 
@@ -228,4 +275,44 @@ The final initialization payload must then be sent in the socket as first 64 byt
 
 Example pseudocode for the generation of an MTProxy connection payload (media DC 4) using the obfuscated padded intermediate transport.
 Warning: do not use the specified proxy secret in any MTProxy exposed on the internet.
+
+```
+protocol := 0xdddddddd
+dc := 0xfcff
+
+while True:
+    init := (56 random bytes) + protocol + dc + (2 random bytes)
+
+    if init[0] == 0xef:
+      continue
+
+    first_int := substr(init, 0, 4)
+    if first_int == 0x44414548 || first_int == 0x54534f50 || first_int == 0x20544547 || first_int == 0x4954504f || first_int == 0x02010316 || first_int == 0xdddddddd || first_int == 0xeeeeeeee:
+      continue
+
+    second_int := substr(init, 4, 4)
+    if second_int == 0x00000000:
+      continue
+
+    break
+
+initRev := strrev(init)
+
+encryptKey := substr(init, 8, 32)
+encryptIV := substr(init, 40, 16)
+
+decryptKey := substr(initRev, 8, 32)
+decryptIV := substr(initRev, 40, 16)
+
+secret := substr(0xdd99999999999999999999999999999999, 1, 16)
+
+encryptKey = SHA256(encryptKey + secret)
+decryptKey = SHA256(decryptKey + secret)
+
+encryptedInit := CTR(encryptKey, encryptIV, init)
+
+finalInit := substr(init, 0, 56) + substr(encryptedInit, 56, 8)
+
+write(finalInit)
+```
 

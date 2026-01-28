@@ -22,5 +22,7 @@ account.EmailVerified
 | Code | Type | Description |
 | ---- | :----: | ----------- |
 | 400 | EMAIL_INVALID | The specified email is invalid. |
+| 400 | EMAIL_NOT_ALLOWED | The specified email cannot be used to complete the operation. |
 | 400 | EMAIL_VERIFY_EXPIRED | The verification email has expired. |
+| 400 | PHONE_NUMBER_INVALID | The phone number is invalid. |
 

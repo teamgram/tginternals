@@ -3,7 +3,7 @@ Get messages in a reply thread
 
 ```
 messages.messages#8c718e87 messages:Vector<Message> chats:Vector<Chat> users:Vector<User> = messages.Messages;
-messages.messagesSlice#3a54685e flags:# inexact:flags.1?true count:int next_rate:flags.0?int offset_id_offset:flags.2?int messages:Vector<Message> chats:Vector<Chat> users:Vector<User> = messages.Messages;
+messages.messagesSlice#762b263d flags:# inexact:flags.1?true count:int next_rate:flags.0?int offset_id_offset:flags.2?int search_flood:flags.3?SearchPostsFlood messages:Vector<Message> chats:Vector<Chat> users:Vector<User> = messages.Messages;
 messages.channelMessages#c776ba4e flags:# inexact:flags.1?true pts:int count:int offset_id_offset:flags.2?int messages:Vector<Message> topics:Vector<ForumTopic> chats:Vector<Chat> users:Vector<User> = messages.Messages;
 messages.messagesNotModified#74535f21 count:int = messages.Messages;
 ---functions---
@@ -21,7 +21,7 @@ messages.getReplies#22ddd30c peer:InputPeer msg_id:int offset_id:int offset_date
 | limit | int | Maximum number of results to return, see pagination |
 | max_id | int | If a positive value was transferred, the method will return only messages with ID smaller than max_id |
 | min_id | int | If a positive value was transferred, the method will return only messages with ID bigger than min_id |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here |
 
 
 ## Result

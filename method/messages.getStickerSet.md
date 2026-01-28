@@ -12,7 +12,7 @@ messages.getStickerSet#c8a0ec74 stickerset:InputStickerSet hash:int = messages.S
 | Name | Type | Description |
 | ---- | :----: | ----------- |
 | stickerset | InputStickerSet | Stickerset |
-| hash | int | Hash for pagination, for more info click here |
+| hash | int | Hash used for caching, for more info click here |
 
 
 ## Result

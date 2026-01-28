@@ -8,7 +8,7 @@ messages.favedStickers#2cb51097 hash:long packs:Vector<StickerPack> stickers:Vec
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here |
 | packs | Vector<StickerPack> | Emojis associated to stickers |
 | stickers | Vector<Document> | Favorited stickers |
 

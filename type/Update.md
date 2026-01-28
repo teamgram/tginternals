@@ -44,7 +44,7 @@ updateBotCallbackQuery#b9cfc48d flags:# query_id:long user_id:long peer:Peer msg
 updateEditMessage#e40370a3 message:Message pts:int pts_count:int = Update;
 updateInlineBotCallbackQuery#691e9052 flags:# query_id:long user_id:long msg_id:InputBotInlineMessageID chat_instance:long data:flags.0?bytes game_short_name:flags.1?string = Update;
 updateReadChannelOutbox#b75f99a9 channel_id:long max_id:int = Update;
-updateDraftMessage#1b49ec6d flags:# peer:Peer top_msg_id:flags.0?int draft:DraftMessage = Update;
+updateDraftMessage#edfc111e flags:# peer:Peer top_msg_id:flags.0?int saved_peer_id:flags.1?Peer draft:DraftMessage = Update;
 updateReadFeaturedStickers#571d2742 = Update;
 updateRecentStickers#9a422c20 = Update;
 updateConfig#a229dd06 = Update;
@@ -60,17 +60,17 @@ updatePhoneCall#ab0f6b1e phone_call:PhoneCall = Update;
 updateLangPackTooLong#46560264 lang_code:string = Update;
 updateLangPack#56022f4d difference:LangPackDifference = Update;
 updateFavedStickers#e511996d = Update;
-updateChannelReadMessagesContents#ea29055d flags:# channel_id:long top_msg_id:flags.0?int messages:Vector<int> = Update;
+updateChannelReadMessagesContents#25f324f7 flags:# channel_id:long top_msg_id:flags.0?int saved_peer_id:flags.1?Peer messages:Vector<int> = Update;
 updateContactsReset#7084a7be = Update;
 updateChannelAvailableMessages#b23fc698 channel_id:long available_min_id:int = Update;
-updateDialogUnreadMark#e16459c3 flags:# unread:flags.0?true peer:DialogPeer = Update;
+updateDialogUnreadMark#b658f23e flags:# unread:flags.0?true peer:DialogPeer saved_peer_id:flags.1?Peer = Update;
 updateMessagePoll#aca1657b flags:# poll_id:long poll:flags.0?Poll results:PollResults = Update;
 updateChatDefaultBannedRights#54c01850 peer:Peer default_banned_rights:ChatBannedRights version:int = Update;
 updateFolderPeers#19360dc0 folder_peers:Vector<FolderPeer> pts:int pts_count:int = Update;
 updatePeerSettings#6a7e7366 peer:Peer settings:PeerSettings = Update;
 updatePeerLocated#b4afcfb0 peers:Vector<PeerLocated> = Update;
 updateNewScheduledMessage#39a51dfb message:Message = Update;
-updateDeleteScheduledMessages#90866cee peer:Peer messages:Vector<int> = Update;
+updateDeleteScheduledMessages#f2a71983 flags:# peer:Peer messages:Vector<int> sent_messages:flags.0?Vector<int> = Update;
 updateTheme#8216fba3 theme:Theme = Update;
 updateGeoLiveViewed#871fb939 peer:Peer msg_id:int = Update;
 updateLoginToken#564fe691 = Update;
@@ -88,7 +88,7 @@ updatePinnedMessages#ed85eab5 flags:# pinned:flags.0?true peer:Peer messages:Vec
 updatePinnedChannelMessages#5bb98608 flags:# pinned:flags.0?true channel_id:long messages:Vector<int> pts:int pts_count:int = Update;
 updateChat#f89a6a4e chat_id:long = Update;
 updateGroupCallParticipants#f2ebdb4e call:InputGroupCall participants:Vector<GroupCallParticipant> version:int = Update;
-updateGroupCall#14b24500 chat_id:long call:GroupCall = Update;
+updateGroupCall#97d64341 flags:# chat_id:flags.0?long call:GroupCall = Update;
 updatePeerHistoryTTL#bb9bb9a5 flags:# peer:Peer ttl_period:flags.0?int = Update;
 updateChatParticipant#d087663a flags:# chat_id:long date:int actor_id:long user_id:long prev_participant:flags.0?ChatParticipant new_participant:flags.1?ChatParticipant invite:flags.2?ExportedChatInvite qts:int = Update;
 updateChannelParticipant#985d3abb flags:# via_chatlist:flags.3?true channel_id:long date:int actor_id:long user_id:long prev_participant:flags.0?ChannelParticipant new_participant:flags.1?ChannelParticipant invite:flags.2?ExportedChatInvite qts:int = Update;
@@ -97,7 +97,7 @@ updateGroupCallConnection#b783982 flags:# presentation:flags.0?true params:DataJ
 updateBotCommands#4d712f2e peer:Peer bot_id:long commands:Vector<BotCommand> = Update;
 updatePendingJoinRequests#7063c3db peer:Peer requests_pending:int recent_requesters:Vector<long> = Update;
 updateBotChatInviteRequester#11dfa986 peer:Peer date:int user_id:long about:string invite:ExportedChatInvite qts:int = Update;
-updateMessageReactions#5e1b3cb8 flags:# peer:Peer msg_id:int top_msg_id:flags.0?int reactions:MessageReactions = Update;
+updateMessageReactions#1e297bfa flags:# peer:Peer msg_id:int top_msg_id:flags.0?int saved_peer_id:flags.1?Peer reactions:MessageReactions = Update;
 updateAttachMenuBots#17b7a20b = Update;
 updateWebViewResultSent#1592b79d query_id:long = Update;
 updateBotMenuButton#14b85813 bot_id:long button:BotMenuButton = Update;
@@ -108,12 +108,11 @@ updateUserEmojiStatus#28373599 user_id:long emoji_status:EmojiStatus = Update;
 updateRecentEmojiStatuses#30f443db = Update;
 updateRecentReactions#6f7863f4 = Update;
 updateMoveStickerSetToTop#86fccf85 flags:# masks:flags.0?true emojis:flags.1?true stickerset:long = Update;
-updateMessageExtendedMedia#5a73a98c peer:Peer msg_id:int extended_media:MessageExtendedMedia = Update;
+updateMessageExtendedMedia#d5a41724 peer:Peer msg_id:int extended_media:Vector<MessageExtendedMedia> = Update;
 updateChannelPinnedTopic#192efbe3 flags:# pinned:flags.0?true channel_id:long topic_id:int = Update;
 updateChannelPinnedTopics#fe198602 flags:# channel_id:long order:flags.0?Vector<int> = Update;
 updateUser#20529438 user_id:long = Update;
 updateAutoSaveSettings#ec05b097 = Update;
-updateGroupInvitePrivacyForbidden#ccf08ad6 user_id:long = Update;
 updateStory#75b3b798 peer:Peer story:StoryItem = Update;
 updateReadStories#f74e932b peer:Peer max_id:int = Update;
 updateStoryID#1bf335b9 id:int random_id:long = Update;
@@ -126,6 +125,28 @@ updateBotMessageReaction#ac21d3ce peer:Peer msg_id:int date:int actor:Peer old_r
 updateBotMessageReactions#9cb7759 peer:Peer msg_id:int date:int reactions:Vector<ReactionCount> qts:int = Update;
 updateSavedDialogPinned#aeaf9e74 flags:# pinned:flags.0?true peer:DialogPeer = Update;
 updatePinnedSavedDialogs#686c85a6 flags:# order:flags.0?Vector<DialogPeer> = Update;
+updateSavedReactionTags#39c67432 = Update;
+updateSmsJob#f16269d4 job_id:string = Update;
+updateQuickReplies#f9470ab2 quick_replies:Vector<QuickReply> = Update;
+updateNewQuickReply#f53da717 quick_reply:QuickReply = Update;
+updateDeleteQuickReply#53e6f1ec shortcut_id:int = Update;
+updateQuickReplyMessage#3e050d0f message:Message = Update;
+updateDeleteQuickReplyMessages#566fe7cd shortcut_id:int messages:Vector<int> = Update;
+updateBotBusinessConnect#8ae5c97a connection:BotBusinessConnection qts:int = Update;
+updateBotNewBusinessMessage#9ddb347c flags:# connection_id:string message:Message reply_to_message:flags.0?Message qts:int = Update;
+updateBotEditBusinessMessage#7df587c flags:# connection_id:string message:Message reply_to_message:flags.0?Message qts:int = Update;
+updateBotDeleteBusinessMessage#a02a982e connection_id:string peer:Peer messages:Vector<int> qts:int = Update;
+updateNewStoryReaction#1824e40b story_id:int peer:Peer reaction:Reaction = Update;
+updateStarsBalance#4e80a379 balance:StarsAmount = Update;
+updateBusinessBotCallbackQuery#1ea2fda7 flags:# query_id:long user_id:long connection_id:string message:Message reply_to_message:flags.2?Message chat_instance:long data:flags.0?bytes = Update;
+updateStarsRevenueStatus#a584b019 peer:Peer status:StarsRevenueStatus = Update;
+updateBotPurchasedPaidMedia#283bd312 user_id:long payload:string qts:int = Update;
+updatePaidReactionPrivacy#8b725fce private:PaidReactionPrivacy = Update;
+updateSentPhoneCode#504aa18f sent_code:auth.SentCode = Update;
+updateGroupCallChainBlocks#a477288f call:InputGroupCall sub_chain_id:int blocks:Vector<bytes> next_offset:int = Update;
+updateReadMonoForumInbox#77b0e372 channel_id:long saved_peer_id:Peer read_max_id:int = Update;
+updateReadMonoForumOutbox#a4a79376 channel_id:long saved_peer_id:Peer read_max_id:int = Update;
+updateMonoForumNoPaidException#9f812b08 flags:# exception:flags.0?true channel_id:long saved_peer_id:Peer = Update;
 ```
 
 ## Constructors
@@ -154,9 +175,9 @@ updatePinnedSavedDialogs#686c85a6 flags:# order:flags.0?Vector<DialogPeer> = Upd
 | updateReadHistoryInbox | Incoming messages were read |
 | updateReadHistoryOutbox | Outgoing messages were read |
 | updateWebPage | An instant view webpage preview was generated |
-| updateReadMessagesContents | Contents of messages in the common message box were read |
+| updateReadMessagesContents | Contents of messages in the common message box were read (emitted specifically for messages like voice messages or video, only once the media is watched and marked as read using messages.readMessageContents). |
 | updateChannelTooLong | There are new updates in the specified channel, the client must fetch them.  If the difference is too long or if the channel isn't currently in the states, start fetching from the specified pts. |
-| updateChannel | A new channel or supergroup is available, or info about an existing channel has changed and must be refeteched. |
+| updateChannel | Channel/supergroup (channel and/or channelFull) information was updated.This update can only be received through getDifference or in updates/updatesCombined constructors, so it will always come bundled with the updated channel, that should be applied as usual », without re-fetching the info manually.However, full peer information will not come bundled in updates, so the full peer cache (channelFull) must be invalidated for channel_id when receiving this update. |
 | updateNewChannelMessage | A new message was sent in a channel/supergroup |
 | updateReadChannelInbox | Incoming messages in a channel/supergroup were read |
 | updateDeleteChannelMessages | Some messages in a supergroup/channel were deleted |
@@ -176,7 +197,7 @@ updatePinnedSavedDialogs#686c85a6 flags:# order:flags.0?Vector<DialogPeer> = Upd
 | updateDraftMessage | Notifies a change of a message draft. |
 | updateReadFeaturedStickers | Some featured stickers were marked as read |
 | updateRecentStickers | The recent sticker list was updated |
-| updateConfig | The server-side configuration has changed; the client should re-fetch the config using help.getConfig |
+| updateConfig | The server-side configuration has changed; the client should re-fetch the config using help.getConfig and help.getAppConfig. |
 | updatePtsChanged | Common message box sequence PTS has changed, state has to be refetched using updates.getState |
 | updateChannelWebPage | A webpage preview of a link in a channel/supergroup message was generated |
 | updateDialogPinned | A dialog was pinned/unpinned |
@@ -189,7 +210,7 @@ updatePinnedSavedDialogs#686c85a6 flags:# order:flags.0?Vector<DialogPeer> = Upd
 | updateLangPackTooLong | A language pack has changed, the client should manually fetch the changed strings using langpack.getDifference |
 | updateLangPack | Language pack updated |
 | updateFavedStickers | The list of favorited stickers was changed, the client should call messages.getFavedStickers to refetch the new list |
-| updateChannelReadMessagesContents | The specified channel/supergroup messages were read |
+| updateChannelReadMessagesContents | The specified channel/supergroup messages were read (emitted specifically for messages like voice messages or video, only once the media is watched and marked as read using channels.readMessageContents) |
 | updateContactsReset | All contacts were deleted |
 | updateChannelAvailableMessages | The history of a channel/supergroup was hidden. |
 | updateDialogUnreadMark | The manual unread mark of a chat was changed |
@@ -199,7 +220,7 @@ updatePinnedSavedDialogs#686c85a6 flags:# order:flags.0?Vector<DialogPeer> = Upd
 | updatePeerSettings | Settings of a certain peer have changed |
 | updatePeerLocated | List of peers near you was updated |
 | updateNewScheduledMessage | A message was added to the schedule queue of a chat |
-| updateDeleteScheduledMessages | Some scheduled messages were deleted from the schedule queue of a chat |
+| updateDeleteScheduledMessages | Some scheduled messages were deleted (or sent) from the schedule queue of a chat |
 | updateTheme | A cloud theme was updated |
 | updateGeoLiveViewed | Live geoposition message was viewed |
 | updateLoginToken | A login token (for login via QR code) was accepted. |
@@ -215,7 +236,7 @@ updatePinnedSavedDialogs#686c85a6 flags:# order:flags.0?Vector<DialogPeer> = Upd
 | updateChannelUserTyping | A user is typing in a supergroup, channel or message thread |
 | updatePinnedMessages | Some messages were pinned in a chat |
 | updatePinnedChannelMessages | Messages were pinned/unpinned in a channel/supergroup |
-| updateChat | A new chat is available |
+| updateChat | Chat (chat and/or chatFull) information was updated.This update can only be received through getDifference or in updates/updatesCombined constructors, so it will always come bundled with the updated chat, that should be applied as usual », without re-fetching the info manually.However, full peer information will not come bundled in updates, so the full peer cache (chatFull) must be invalidated for chat_id when receiving this update. |
 | updateGroupCallParticipants | The participant list of a certain group call has changed |
 | updateGroupCall | A new groupcall was started |
 | updatePeerHistoryTTL | The Time-To-Live for messages sent by the current user in a specific chat has changed |
@@ -237,24 +258,45 @@ updatePinnedSavedDialogs#686c85a6 flags:# order:flags.0?Vector<DialogPeer> = Upd
 | updateRecentEmojiStatuses | The list of recent emoji statuses has changed |
 | updateRecentReactions | The list of recent message reactions has changed |
 | updateMoveStickerSetToTop | A stickerset was just moved to top, see here for more info » |
-| updateMessageExtendedMedia | Extended media update |
+| updateMessageExtendedMedia | You bought a paid media »: this update contains the revealed media. |
 | updateChannelPinnedTopic | A forum topic » was pinned or unpinned. |
 | updateChannelPinnedTopics | The pinned topics of a forum have changed. |
-| updateUser | User information was updated, it must be refetched using users.getFullUser. |
+| updateUser | User (user and/or userFull) information was updated.This update can only be received through getDifference or in updates/updatesCombined constructors, so it will always come bundled with the updated user, that should be applied as usual », without re-fetching the info manually.However, full peer information will not come bundled in updates, so the full peer cache (userFull) must be invalidated for user_id when receiving this update. |
 | updateAutoSaveSettings | Media autosave settings have changed and must be refetched using account.getAutoSaveSettings. |
-| updateGroupInvitePrivacyForbidden | 0-N updates of this type may be returned only when invoking messages.addChatUser, channels.inviteToChannel or messages.createChat: it indicates we couldn't add a user to a chat because of their privacy settings; if required, an invite link can be shared with the user, instead. |
 | updateStory | A new story was posted. |
 | updateReadStories | Stories of a specific peer were marked as read. |
 | updateStoryID | A story was successfully uploaded.Once a story is successfully uploaded, an updateStoryID will be returned, indicating the story ID (id) that was attributed to the story (like for messages, random_id indicates the random_id that was passed to stories.sendStory: this way, you can tell which story was assigned a specific id by checking which stories.sendStory call has the returned random_id). |
 | updateStoriesStealthMode | Indicates that stories stealth mode was activated. |
 | updateSentStoryReaction | Indicates we reacted to a story ». |
-| updateBotChatBoost | A channel boost has changed (bots only) |
+| updateBotChatBoost | A channel/supergroup boost has changed (bots only) |
 | updateChannelViewForumAsMessages | Users may also choose to display messages from all topics as if they were sent to a normal group, using a "View as messages" setting in the local client.  This setting only affects the current account, and is synced to other logged in sessions using the channels.toggleViewForumAsMessages method; invoking this method will update the value of the view_forum_as_messages flag of channelFull or dialog and emit an updateChannelViewForumAsMessages. |
 | updatePeerWallpaper | The wallpaper » of a given peer has changed. |
 | updateBotMessageReaction | Bots only: a user has changed their reactions on a message with public reactions. |
 | updateBotMessageReactions | Bots only: the number of reactions on a message with anonymous reactions has changed. |
 | updateSavedDialogPinned | A saved message dialog was pinned/unpinned |
 | updatePinnedSavedDialogs | Pinned saved dialogs » were updated |
+| updateSavedReactionTags | The list of reaction tag » names assigned by the user has changed and should be refetched using messages.getSavedReactionTags ». |
+| updateSmsJob | A new SMS job was received |
+| updateQuickReplies | Info about or the order of quick reply shortcuts » was changed. |
+| updateNewQuickReply | A new quick reply shortcut » was created. |
+| updateDeleteQuickReply | A quick reply shortcut » was deleted. This will not emit updateDeleteQuickReplyMessages updates, even if all the messages in the shortcut are also deleted by this update. |
+| updateQuickReplyMessage | A new message was added to a quick reply shortcut ». |
+| updateDeleteQuickReplyMessages | One or more messages in a quick reply shortcut » were deleted. |
+| updateBotBusinessConnect | Connecting or disconnecting a business bot or changing the connection settings will emit an updateBotBusinessConnect update to the bot, with the new settings and a connection_id that will be used by the bot to handle updates from and send messages as the user. |
+| updateBotNewBusinessMessage | A message was received via a connected business chat ». |
+| updateBotEditBusinessMessage | A message was edited in a connected business chat ». |
+| updateBotDeleteBusinessMessage | A message was deleted in a connected business chat ». |
+| updateNewStoryReaction | Represents a new reaction to a story. |
+| updateStarsBalance | The current account's Telegram Stars balance » has changed. |
+| updateBusinessBotCallbackQuery | A callback button sent via a business connection was pressed, and the button data was sent to the bot that created the button. |
+| updateStarsRevenueStatus | The Telegram Star balance of a channel/bot we own has changed ». |
+| updateBotPurchasedPaidMedia | Bots only: a user has purchased a paid media. |
+| updatePaidReactionPrivacy | Contains the current default paid reaction privacy, see here » for more info.Clients should invoke messages.getPaidReactionPrivacy on startup to fetch the current default reaction privacy because this update is only sent to currently online sessions and cannot be fetched using getDifference on client startup. |
+| updateSentPhoneCode | A paid login SMS code was successfully sent. |
+| updateGroupCallChainBlocks | Contains updates to the blockchain of a conference call, see here » for more info. |
+| updateReadMonoForumInbox | Incoming messages in a monoforum topic were read |
+| updateReadMonoForumOutbox | Outgoing messages in a monoforum were read. |
+| updateMonoForumNoPaidException | An admin has (un)exempted this monoforum topic » from payment to send messages using account.toggleNoPaidMessagesException. |
 
 
 ## Methods

@@ -22,7 +22,7 @@ phone.getCallConfig#55451fa9 = DataJSON;
 | Method | Description |
 | ---- | ----------- |
 | bots.sendCustomRequest | Sends a custom request; for bots only |
-| phone.getCallConfig | Get phone call configuration to be passed to libtgvoip's shared config |
 | bots.invokeWebViewCustomMethod | Send a custom request from a mini bot app, triggered by a web_app_invoke_custom_method event ».The response should be sent using a custom_method_invoked event, see here » for more info on the flow. |
+| phone.getCallConfig | Get phone call configuration to be passed to libtgvoip's shared config |
 
 

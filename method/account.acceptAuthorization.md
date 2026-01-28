@@ -24,5 +24,6 @@ Bool
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | BOT_INVALID | This is not a valid bot. |
 | 400 | PUBLIC_KEY_REQUIRED | A public key is required. |
 

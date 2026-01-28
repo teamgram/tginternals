@@ -27,8 +27,8 @@ messages.searchCustomEmoji#2c11c0d7 emoticon:string hash:long = EmojiList;
 | ---- | ----------- |
 | account.getDefaultProfilePhotoEmojis | Get a set of suggested custom emoji stickers that can be used as profile picture |
 | account.getDefaultGroupPhotoEmojis | Get a set of suggested custom emoji stickers that can be used as group picture |
-| messages.searchCustomEmoji | Look for custom emojis associated to a UTF8 emoji |
 | account.getDefaultBackgroundEmojis | Get a set of suggested custom emoji stickers that can be used in an accent color pattern. |
 | account.getChannelRestrictedStatusEmojis | Returns fetch the full list of custom emoji IDs » that cannot be used in channel emoji statuses ». |
+| messages.searchCustomEmoji | Look for custom emojis associated to a UTF8 emoji |
 
 

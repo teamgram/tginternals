@@ -31,4 +31,5 @@ auth.Authorization
 | 406 | PHONE_NUMBER_INVALID | The phone number is invalid. |
 | 400 | PHONE_NUMBER_UNOCCUPIED | The phone number is not yet being used. |
 | 500 | SIGN_IN_FAILED | Failure while signing in. |
+| 406 | UPDATE_APP_TO_LOGIN | Please update your client to login. |
 

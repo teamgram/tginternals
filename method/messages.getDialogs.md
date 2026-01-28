@@ -19,7 +19,7 @@ messages.getDialogs#a0f4cb4f flags:# exclude_pinned:flags.0?true folder_id:flags
 | offset_id | int | Offsets for pagination, for more info click here (top_message ID used for pagination) |
 | offset_peer | InputPeer | Offset peer for pagination |
 | limit | int | Number of list elements to be returned |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here |
 
 
 ## Result
@@ -28,7 +28,10 @@ messages.Dialogs
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | CHAT_NOT_MODIFIED | No changes were made to chat information because the new information you passed is identical to the current information. |
 | 403 | CHAT_WRITE_FORBIDDEN | You can't write in this chat. |
 | 400 | FOLDER_ID_INVALID | Invalid folder ID. |
 | 400 | OFFSET_PEER_ID_INVALID | The provided offset peer is invalid. |
+| 400 | PINNED_DIALOGS_TOO_MUCH | Too many pinned dialogs. |
+| 400 | TAKEOUT_INVALID | The specified takeout ID is invalid. |
 

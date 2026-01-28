@@ -2,10 +2,11 @@
 Report a story.
 
 ```
-boolFalse#bc799737 = Bool;
-boolTrue#997275b5 = Bool;
+reportResultChooseOption#f0e4e0b6 title:string options:Vector<MessageReportOption> = ReportResult;
+reportResultAddComment#6f09ac31 flags:# optional:flags.0?true option:bytes = ReportResult;
+reportResultReported#8db33c4b = ReportResult;
 ---functions---
-stories.report#1923fa8c peer:InputPeer id:Vector<int> reason:ReportReason message:string = Bool;
+stories.report#19d8eb45 peer:InputPeer id:Vector<int> option:bytes message:string = ReportResult;
 ```
 
 ## Parameters
@@ -13,12 +14,12 @@ stories.report#1923fa8c peer:InputPeer id:Vector<int> reason:ReportReason messag
 | ---- | :----: | ----------- |
 | peer | InputPeer | The peer that uploaded the story. |
 | id | Vector<int> | IDs of the stories to report. |
-| reason | ReportReason | Why are these storeis being reported. |
+| option | bytes | Menu option, intially empty |
 | message | string | Comment for report moderation |
 
 
 ## Result
-Bool
+ReportResult
 
 ## Possible errors
 | Code | Type | Description |

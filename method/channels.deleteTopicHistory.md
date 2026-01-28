@@ -20,6 +20,8 @@ messages.AffectedHistory
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | CHANNEL_FORUM_MISSING | This supergroup is not a forum. |
 | 400 | CHANNEL_INVALID | The provided channel is invalid. |
+| 403 | CHAT_WRITE_FORBIDDEN | You can't write in this chat. |
 | 400 | TOPIC_ID_INVALID | The specified topic ID is invalid. |
 

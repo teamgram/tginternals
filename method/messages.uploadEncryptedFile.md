@@ -1,5 +1,5 @@
 # messages.uploadEncryptedFile
-Upload encrypted file and associate it to a secret chat
+Upload encrypted file and associate it to a secret chat (without actually sending it to the chat).
 
 ```
 encryptedFileEmpty#c21f497e = EncryptedFile;
@@ -21,4 +21,5 @@ EncryptedFile
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | CHAT_ID_INVALID | The provided chat id is invalid. |
 

@@ -21,6 +21,9 @@ messages.AffectedMessages
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 403 | BOT_ACCESS_FORBIDDEN | The specified method can be used over a business connection for some operations, but the specified query attempted an operation that is not allowed over a business connection. |
+| 400 | BUSINESS_CONNECTION_INVALID | The connection_id passed to the wrapping invokeWithBusinessConnection call is invalid. |
 | 403 | MESSAGE_DELETE_FORBIDDEN | You can't delete one of the messages you tried to delete, most likely because it is a service message. |
 | 400 | MESSAGE_ID_INVALID | The provided message id is invalid. |
+| 400 | SELF_DELETE_RESTRICTED | Business bots can't delete messages just for the user, revoke must be set. |
 

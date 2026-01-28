@@ -11,7 +11,7 @@ messages.getFeaturedStickers#64780b14 hash:long = messages.FeaturedStickers;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

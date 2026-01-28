@@ -26,4 +26,6 @@ Updates
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | INPUT_PURPOSE_INVALID | The specified payment purpose is invalid. |
+| 400 | RECEIPT_EMPTY | The specified receipt is empty. |
 

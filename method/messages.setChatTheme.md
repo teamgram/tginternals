@@ -1,5 +1,5 @@
 # messages.setChatTheme
-Change the chat theme of a certain chat
+Change the chat theme of a certain chat, see here » for more info.
 
 ```
 updatesTooLong#e317af7e = Updates;
@@ -10,14 +10,14 @@ updatesCombined#725b04c3 updates:Vector<Update> users:Vector<User> chats:Vector<
 updates#74ae4240 updates:Vector<Update> users:Vector<User> chats:Vector<Chat> date:int seq:int = Updates;
 updateShortSentMessage#9015e101 flags:# out:flags.1?true id:int pts:int pts_count:int date:int media:flags.9?MessageMedia entities:flags.7?Vector<MessageEntity> ttl_period:flags.25?int = Updates;
 ---functions---
-messages.setChatTheme#e63be13f peer:InputPeer emoticon:string = Updates;
+messages.setChatTheme#81202c9 peer:InputPeer theme:InputChatTheme = Updates;
 ```
 
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
 | peer | InputPeer | Private chat where to change theme |
-| emoticon | string | Emoji, identifying a specific chat theme; a list of chat themes can be fetched using account.getChatThemes |
+| theme | InputChatTheme | The theme to set. |
 
 
 ## Result

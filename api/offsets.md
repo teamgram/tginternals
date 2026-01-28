@@ -50,9 +50,24 @@ There is a number of parameters, which are applied to the list after slicing wit
 
 To further reduce the result subset, there is a mechanism to avoid fetching data if the resulting list hasn't changed from the one stored on client, similar to ETag.
 
-When the client has cached results for API request, it can calculate the hash value for it by taking the result IDs (message IDs or other fields with name id) and using them to compute a 64-bit hash with the following algorithm:
+When the client has cached results for API request, it can calculate the hash value for it by taking the result IDs (message IDs or other fields with name id, or some extra fields in some cases) and using them to compute a 64-bit hash with the following algorithm:
 
-In some cases, the result container already has a hash field, that can be used instead.
+```
+# Here, ^ indicates a bitwise XOR
+
+hash = 0
+for id in ids:
+    hash = hash ^ (hash >> 21)
+    hash = hash ^ (hash << 35)
+    hash = hash ^ (hash >> 4)
+    hash = hash + id
+```
+
+The >> operator is the unsigned right shift operator.
+
+Note: in some cases, the ids array passed to the algorithm must contain strings (i.e. the shortcut name in business shortcuts, and so on...), in which case they must be transformed to longs by taking the first 8 bytes of the MD5 hash of the string (not in hex form) and treating it as a big-endian 64-bit long.
+
+In some cases, if the result container already has a hash field, that can be used instead.
 
 When the client passes a correct value, the API will return one of *NotModified constructors, e.g. messages.messagesNotModified instead of the actual results.
 

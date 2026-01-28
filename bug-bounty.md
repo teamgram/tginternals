@@ -80,6 +80,25 @@ If you found an issue which is in scope, is eligible and was found in accordance
 
 We expect all reports to be written in English and to follow a consistent template, spacing included:
 
+```
+# Attack surface: (e.g. my.telegram.org/auth)
+# Severity: (e.g. 7) [Optional, CVSS v3 rating]
+
+## Description: 
+[Describe the vulnerability briefly here, including its type]
+
+## Steps to reproduce:
+[1] Step one...
+[2] Step two...
+[n] Finally...
+
+## Impact:
+[What practical, realistic risk does this vulnerability pose?]
+
+## Additional details:
+[Tools used, preconditions, media proof, session and timestamps as needed]
+```
+
 ##### Third-Party Bug Bounty Platforms
 
 We ask for all submissions and correspondence to be sent directly to security@telegram.org – Telegram currently does not maintain a presence on third-party bug bounty platforms or services.

@@ -13,7 +13,7 @@ messages.getOldFeaturedStickers#7ed094a1 offset:int limit:int hash:long = messag
 | ---- | :----: | ----------- |
 | offset | int | Offset |
 | limit | int | Maximum number of results to return, see pagination |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

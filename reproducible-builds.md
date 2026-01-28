@@ -80,79 +80,92 @@ The verification process for iOS builds is, unfortunately, a lot more complex th
 
 > As things stand now, you'll need a jailbroken device, at least 1,5 hours and approximately 90GB of free space to properly set up a virtual machine for the verification process.
 
-To provide a stable and easily reproducible environment, Telegram iOS builds are compiled on a virtual machine. Parallels is used to verify the builds.
+To provide a stable and easily reproducible environment, Telegram iOS builds are compiled on a virtual machine.
 
-> Despite the compiler bugs introduced by Apple in Xcode 14 (read more), we were able to restore deterministic builds using manually crafted linker flags. Use the steps below to verify builds compiled with XCode 13 and below, see here for XCode 14 instructions.
+### Step 1. Running Darwin-Containers
 
-### Step 1. Install the Parallels virtual machine
+### Step 2. Creating an OS image
 
-Parallels can be obtained here, it features a fully-functional trial version.
+> Check versions.json for information on the relevant macOS and Xcode versions.
 
-### Step 2. Install the latest version of macOS Big Sur
+./darwin-containers fetch
 
-To download an image that can be installed on the virtual machine, open the App Store, search for “Catalina” and click “View”.
+Download the appropriate macOS restore image (e.g. 13.6):
 
-This will open a system pop-up offering to download the OS:
+./darwin-containers fetch "macOS 13.6"
 
-Before starting the installation, configure the virtual machine:
+Create a new OS image:
 
-Change the name of the virtual machine to macos11_Xcode12_5_1
+./darwin-containers create --source "macOS 13.6" --tag "macos-13.0-xcode-{XCODE_VERSION}" --manual
 
-Hardware > Processors: 2-4Memory > 4GB may suffice but 8GB is recommended
+Follow the installation instructions. Set username to containerhost and password to containerhost.
 
-You will get something like this:
+Enable Remote Login and allow full disk access for remote users.
 
-Parallels may request access to your microphone and camera, this is not required – just press Close.
+Connect to the guest VM using SSH with username containerhost and password containerhost.
 
-Your Apple ID is also not required, you can choose Set Up Later.
+Create the directory ~/.ssh and set up the authorized_keys using the public key string printed by the darwin-containers create command earlier.
 
-Use “telegram” for both the account name and password.
+Upload the appropriate version of Xcode via scp and install to /Applications. Run it at least once to complete installation. Don't forget to download the iOS SDK.
 
-> Do not ever use the password “telegram” for anything else, it's cursed.
+Shut down the guest OS.
 
-Now install Parallels tools from the menu bar:
+### Step 3. Obtaining verification IPA
 
-After the system restarts, log in.Open Terminal and run:sudo visudoEnter the password “telegram”
+```
+python3 -u build-system/Make/Make.py remote-build --darwinContainers="path-to-darwin-containers-script" --darwinContainersHost="unix://$HOME/.darwin-containers.sock" --configurationPath="build-system/appstore-configuration.json" --codesigningInformationPath=build-system/fake-codesigning --configuration=release_arm64
+```
 
-Find this line at the end of the file:%admin ALL=(ALL) ALLPress “i” on your keyboard, add “NOPASSWD:”%admin ALL=(ALL) NOPASSWD: ALLPress Escape.Type in “:wq”Press Enter
+For more information see:
 
-In the terminal, run:sudo systemsetup -setcomputersleep Never
+build-system/Make/RemoteBuild.py.gitlab-ci.yml lane verify_beta_testflight
 
-### Step 3. Install SSH keys on the virtual machine
-
-In the virtual machine, open System Settings > Sharing and enable Remote Login.
-
-In the virtual machine, open Terminal and run:mkdir -p .ssh; nano .ssh/authorized_keys
-
-In your main OS, open Terminal and run:if [ ! -e ~/.ssh/id_rsa.pub ]; then ssh-keygen -t rsa -b 4096; fi && cat ~/.ssh/id_rsa.pub | pbcopy
-
-If you see the line “Enter file in which to save the key (/Users/…/.ssh/id_rsa):”, press EnterIn the virtual machine, press CMD+VThen Ctrl+O, Ctrl+X
-
-### Step 4. Install Xcode version 12.5.1
-
-In the virtual machine, open Safari and go to https://developer.apple.comSign in to your Account:
-
-Go to Downloads > MoreEnter Xcode in the search field and find the version 12.5.1
-
-Once the installation is complete, open the file Xcode 12.5.1.xip. The system will unarchive the app into the same folder. Move it to the Applications folder using Finder.
-
-On the virtual machine, run this command from the terminal:sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
-
-Shut down the virtual machine.
-
-### Step 4.1
-
-Download the certificates at https://github.com/TelegramMessenger/Telegram-iOS/tree/master/build-system/fake-codesigning/certs/distribution and install them into the virtual machine.
-
-Launch Keychain Access and double-click the installed certificate. Under “Trust”, change “When using this certificate” to “Always Trust”.
-
-### Step 5. Obtaining the source code
+### Step 4. Obtaining the source code
 
 git clone --recursive https://github.com/TelegramMessenger/telegram-ios.git $HOME/telegram-ioscd $HOME/telegram-iosgit checkout release-${VERSION_NUMBER}
 
 E.g., git checkout release-7.3. Please note that you need to check out the whole git history as the build version depends on the number of commits in the repository.
 
-### Step 6. Downloading Bazel 3.7.0 to $HOME/bazel/bazel
+### Step 5. Downloading a decrypted version of the app from the App Store
+
+This step requires a jailbroken device equipped with tools for decrypting apps. We‘d love to make this process more simple but that’s what you get for using Apple tech.
+
+### Step 6. Comparing the AppStore build and the version built in the virtual machine
+
+Runpython3 tools/ipadiff.py build/artifacts/Telegram.ipa PATH-TO-THE-IPA-FILE-FROM-STEP-9
+
+In case of a successful comparison, you will get a text along these lines:
+
+```
+IPAs are equal, except for the files that can't currently be checked:
+    Excluded files that couldn't be checked due to being encrypted:
+        PlugIns/SiriIntents.appex/SiriIntents
+        PlugIns/Widget.appex/Widget
+        PlugIns/NotificationContent.appex/NotificationContent
+        PlugIns/NotificationService.appex/NotificationService
+        PlugIns/Share.appex/Share
+    IPAs contain Watch directory with a Watch app which can't be checked currently.
+    IPAs contain .car (Asset Catalog) files that are compiled by the App Store and can't currently be checked:
+
+        Frameworks/TelegramUI.framework/Assets.car
+        Assets.car
+    IPAs contain .nib (compiled Interface Builder) files that are compiled by the App Store and can't currently be checked:
+        Base.lproj/LaunchScreen.nib
+```
+
+In case of any mismatches, you'll get a detailed report.
+
+---
+
+### iOS: Notes
+
+---
+
+If you encounter any issues with obtaining the code, building and comparing the apps, please contact us at @BotSupport and include the hashtag #reproducibleBuilds with your message describing the problem.
+
+### Troubleshooting: Android
+
+bazel
 
 mkdir -p $HOME/bazel && cd $HOME/bazelcurl -O -L https://github.com/bazelbuild/bazel/releases/download/3.7.0/bazel-3.7.0-darwin-x86_64mv bazel-3.7.0-darwin-x86_64 bazel
 

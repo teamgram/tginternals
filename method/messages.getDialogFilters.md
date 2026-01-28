@@ -2,8 +2,9 @@
 Get folders
 
 ```
+messages.dialogFilters#2ad93719 flags:# tags_enabled:flags.0?true filters:Vector<DialogFilter> = messages.DialogFilters;
 ---functions---
-messages.getDialogFilters#f19ed96d = Vector<DialogFilter>;
+messages.getDialogFilters#efd48c89 = messages.DialogFilters;
 ```
 
 ## Parameters

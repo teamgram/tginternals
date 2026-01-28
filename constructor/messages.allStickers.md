@@ -8,7 +8,7 @@ messages.allStickers#cdbbcebb hash:long sets:Vector<StickerSet> = messages.AllSt
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here |
 | sets | Vector<StickerSet> | All stickersets |
 
 

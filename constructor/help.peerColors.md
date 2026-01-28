@@ -8,7 +8,7 @@ help.peerColors#f8ed08 hash:int colors:Vector<help.PeerColorOption> = help.PeerC
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | int | Hash for pagination, for more info click here |
+| hash | int | Hash used for caching, for more info click here |
 | colors | Vector<help.PeerColorOption> | Usable color palettes. |
 
 

@@ -19,25 +19,24 @@ updateStoryID#1bf335b9 id:int random_id:long = Update;
 
 ---functions---
 
-stories.canSendStory#c7dfdfdd peer:InputPeer = Bool;
-stories.sendStory#e4e6694b flags:# pinned:flags.2?true noforwards:flags.4?true fwd_modified:flags.7?true peer:InputPeer media:InputMedia media_areas:flags.5?Vector<MediaArea> caption:flags.0?string entities:flags.1?Vector<MessageEntity> privacy_rules:Vector<InputPrivacyRule> random_id:long period:flags.3?int fwd_from_id:flags.6?InputPeer fwd_from_story:flags.6?int = Updates;
-stories.editStory#b583ba46 flags:# peer:InputPeer id:int media:flags.0?InputMedia media_areas:flags.3?Vector<MediaArea> caption:flags.1?string entities:flags.1?Vector<MessageEntity> privacy_rules:flags.2?Vector<InputPrivacyRule> = Updates;
+stories.canSendStory#30eb63f0 peer:InputPeer = stories.CanSendStoryCount;
+stories.sendStory#737fc2ec flags:# pinned:flags.2?true noforwards:flags.4?true fwd_modified:flags.7?true peer:InputPeer media:InputMedia media_areas:flags.5?Vector<MediaArea> caption:flags.0?string entities:flags.1?Vector<MessageEntity> privacy_rules:Vector<InputPrivacyRule> random_id:long period:flags.3?int fwd_from_id:flags.6?InputPeer fwd_from_story:flags.6?int albums:flags.8?Vector<int> = Updates;
 
 stories.getChatsToSend#a56a8b60 = messages.Chats;
 ```
 
-Before posting a story, clients should invoke stories.canSendStory, to make sure they can send stories to the specified peer (which can be inputPeerSelf to send the story as a normal user and inputPeerChannel to send a story as a channel).
+Before posting a story, clients should invoke stories.canSendStory, to make sure they can send stories to the specified peer (which can be inputPeerSelf to send the story as a normal user and inputPeerChannel to send a story as a channel or supergroup).
 
-Use stories.getChatsToSend to obtain a list of channels where the user can post stories; stories.canSendStory must still be used before uploading a story to make sure no other limit was reached, as described in the main documentation ».
-Note that in order to obtain permission to post stories as a channel, it must be boosted, first, see here » for more info.
+Use stories.getChatsToSend to obtain a list of channels/supergroups where the user can post stories; stories.canSendStory must still be used before uploading a story to make sure no other limit was reached, as described in the main documentation ».
+Note that in order to obtain permission to post stories as a channel/supergroup, it must be boosted, first, see here » for more info.
 
-stories.canSendStory returns boolTrue only if:
+stories.canSendStory returns a stories.canSendStoryCount with the number of available active story slots (equal to the value of the story_expiring_limit_* client configuration parameter minus the number of currently active stories) only if:
 
-- If we're trying to send a story as a channel:
+- If we're trying to send a story as a channel/supergroup:
 
-- The current user is an administrator of the channel and has post_stories admin rights; otherwise, a CHAT_ADMIN_REQUIRED error is returned.
+- The current user is an administrator of the channel/supergroup and has post_stories admin rights; otherwise, a CHAT_ADMIN_REQUIRED error is returned.
 
-- AND the channel has received enough boosts to post the story »; otherwise, a BOOSTS_REQUIRED error is returned.
+- AND the channel/supergroup has received enough boosts to post the story »; otherwise, a BOOSTS_REQUIRED error is returned.
 
 - If we're trying to send a story as the current user:
 
@@ -52,21 +51,21 @@ stories.canSendStory returns boolTrue only if:
 After checking if a story can be posted, the client may invoke stories.sendStory to upload the story.
 Note that if any of the conditions changes in the period between the call to stories.canSendStory and stories.sendStory (for example, the user uploads a story from another client, reaching the weekly limit), the same errors listed above for stories.canSendStory will be emitted by stories.sendStory.
 
-The parameters of stories.sendStory are fully described on the method page », here are some of the most important ones:
+The parameters of stories.sendStory are fully described on the method page », here are some of the most important ones:
 
 - peer: The peer to send the story as.
 
-- media:  The story media.
+- media:  The story media (a vertical photo or a vertical video, max 30 MB).
 
-- media_areas: Media areas associated to the story, see here » for more info.
+- media_areas: Media areas associated to the story, see here » for more info.
 
-- privacy_rules: A set of privacy rules » for the story as an array of InputPrivacyRule constructors, indicating who can or can't view the story.
+- privacy_rules: A set of privacy rules » for the story as an array of InputPrivacyRule constructors, indicating who can or can't view the story.
 
 - expire: Period after which the story is moved to archive (and to the profile if pinned is set), in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400 for Telegram Premium users, and 86400 otherwise.
 
 - pinned: Whether to also add the story to the profile automatically upon expiration. If not set, the story will only be added to the archive.
 
-- caption and entities: The story caption, and related styled text entities; note that the story caption length is limited by the story_caption_length_limit_* » config keys, and story entities should only be sent and displayed according to the value of the stories_entities » config key.
+- caption and entities: The story caption, and related styled text entities; note that the story caption length is limited by the story_caption_length_limit_* » config keys, and story entities should only be sent and displayed according to the value of the stories_entities » config key.
 
 Once a story is successfully uploaded, an updateStoryID will be returned, indicating the story ID (id) that was attributed to the story (like for messages, random_id indicates the random_id that was passed to stories.sendStory: this way, you can tell which story was assigned a specific id by checking which stories.sendStory call has the returned random_id).
 
@@ -74,29 +73,57 @@ Also, posting a story will emit an updateStory both for us, and for our subscrib
 
 Additionally, a message containing a messageMediaStory with the via_mention flag coming from the story poster will also be generated automatically if the poster mentions us in the story's caption.
 
+Mini apps may also request to share a story on the user's profile using the web_app_share_to_story event ».
+
+#### Editing stories
+
+```
+inputFile#f52ff27f id:long parts:int name:string md5_checksum:string = InputFile;
+inputFileBig#fa4f0bb5 id:long parts:int name:string = InputFile;
+inputFileStoryDocument#62dc8b48 id:InputDocument = InputFile;
+
+inputMediaUploadedPhoto#1e287d04 flags:# spoiler:flags.2?true file:InputFile stickers:flags.0?Vector<InputDocument> ttl_seconds:flags.1?int = InputMedia;
+inputMediaUploadedDocument#37c9330 flags:# nosound_video:flags.3?true force_file:flags.4?true spoiler:flags.5?true file:InputFile thumb:flags.2?InputFile mime_type:string attributes:Vector<DocumentAttribute> stickers:flags.0?Vector<InputDocument> video_cover:flags.6?InputPhoto video_timestamp:flags.7?int ttl_seconds:flags.1?int = InputMedia;
+
+inputMediaPhoto#b3ba0635 flags:# spoiler:flags.1?true id:InputPhoto ttl_seconds:flags.0?int = InputMedia;
+inputMediaDocument#a8763ab5 flags:# spoiler:flags.2?true id:InputDocument video_cover:flags.3?InputPhoto video_timestamp:flags.4?int ttl_seconds:flags.0?int query:flags.1?string = InputMedia;
+
+---functions---
+
+stories.editStory#b583ba46 flags:# peer:InputPeer id:int media:flags.0?InputMedia media_areas:flags.3?Vector<MediaArea> caption:flags.1?string entities:flags.1?Vector<MessageEntity> privacy_rules:flags.2?Vector<InputPrivacyRule> = Updates;
+```
+
 A story may also be edited using stories.editStory.
+
+Note: usually, when editing just the DocumentAttributes of files (like the file name through documentAttributeFilename, the timestamp of a video thumbnail through documentAttributeVideo.preload_prefix_size, etc) without editing the media itself, a full download+reupload of the underlying media is required, as the attributes are baked into the media and cannot be modified through inputMediaDocument (unlike some other attributes like spoiler, which may be edited without a reupload, simply by passing the old media in inputMediaDocument.id and tweaking the appropriate flags of inputMediaDocument).
+
+However, a full download+reupload can be avoided just for video stories, when editing only the documentAttributeVideo.video_start_ts attribute: in this case, inputMediaUploadedDocument should be used, passing to file an inputFileStoryDocument with the old story media instead of the re-uploaded inputFile, and populating the remaining fields and attributes with exactly the same values used previously, except for the documentAttributeVideo.video_start_ts attribute, which should contain the new value.
 
 #### Pinned or archived stories
 
 ```
-stories.stories#5dd8c3c8 count:int stories:Vector<StoryItem> chats:Vector<Chat> users:Vector<User> = stories.Stories;
+stories.stories#63c3dd0a flags:# count:int stories:Vector<StoryItem> pinned_to_top:flags.0?Vector<int> chats:Vector<Chat> users:Vector<User> = stories.Stories;
 
 ---functions---
 
 stories.togglePinned#9a75a1ef peer:InputPeer id:Vector<int> pinned:Bool = Vector<int>;
+stories.togglePinnedToTop#b297e9b peer:InputPeer id:Vector<int> = Bool;
 
 stories.getStoriesArchive#b4352016 peer:InputPeer offset_id:int limit:int = stories.Stories;
 
 stories.getPinnedStories#5821a5dc peer:InputPeer offset_id:int limit:int = stories.Stories;
 ```
 
-After an active story expires, it is automatically added to the story archive: stories in the story archive are only visible to the poster.
+After an active story expires, it is automatically added to the story archive: stories in the story archive are only visible to the poster, or to channel/supergroup admins with edit_stories admin rights rights.
 
 Use stories.getStoriesArchive to fetch stories in the story archive.
 
 Archived stories may then be pinned on the profile, where they may be fetched using stories.getPinnedStories by users who explicitly open your profile: use stories.togglePinned to pin or unpin one or more stories to your profile.
 
 Stories may also be autopinned upon expiration if the pinned flag is set when posting them.
+
+Additionally, stories pinned to a profile may also be pinned to the top of the profile using stories.togglePinnedToTop; stories that are pinned to the top of the profile (max stories_pinned_to_top_count_max) should be displayed first when opening the profile.
+Stories pinned to the top of the profile will be returned first when invoking stories.getPinnedStories with offset_id=0, and their IDs will also be contained in stories.stories.pinned_to_top.
 
 #### Deleting stories
 
@@ -110,12 +137,51 @@ Use the stories.deleteStories method to delete one or more active, pinned or arc
 
 #### Preventing users from seeing your stories
 
-Users may be individually blocked from seeing all of your stories by adding them to the story blocklist ».
+Users may be individually blocked from seeing all of your stories by adding them to the story blocklist ».
+
+### Story albums
+
+```
+storyAlbum#9325705a flags:# album_id:int title:string icon_photo:flags.0?Photo icon_video:flags.1?Document = StoryAlbum;
+
+stories.albumsNotModified#564edaeb = stories.Albums;
+stories.albums#c3987a3a hash:long albums:Vector<StoryAlbum> = stories.Albums;
+
+---functions---
+
+stories.createAlbum#a36396e5 peer:InputPeer title:string stories:Vector<int> = StoryAlbum;
+stories.getAlbums#25b3eac7 peer:InputPeer hash:long = stories.Albums;
+stories.updateAlbum#5e5259b6 flags:# peer:InputPeer album_id:int title:flags.0?string delete_stories:flags.1?Vector<int> add_stories:flags.2?Vector<int> order:flags.3?Vector<int> = StoryAlbum;
+stories.reorderAlbums#8535fbd9 peer:InputPeer order:Vector<int> = Bool;
+stories.deleteAlbum#8d3456d0 peer:InputPeer album_id:int = Bool;
+
+stories.getAlbumStories#ac806d61 peer:InputPeer album_id:int offset:int limit:int = stories.Stories;
+```
+
+Stories may be organized in albums.
+
+Use stories.createAlbum to create a story album.
+
+Use stories.getAlbums to get all story albums owned by a user.
+
+Use stories.getAlbumStories to fetch the stories added to an album.
+
+Use the albums parameter of stories.sendStory to add a newly posted story to one or more albums.
+
+Use stories.updateAlbum to rename an album, or add, delete and reorder stories in an album.
+
+Use stories.reorderAlbums to reorder albums on the profile.
+
+Use stories.deleteAlbum to delete an album.
+
+A profile can contain a maximum of stories_albums_limit » albums, each containing a maximum of stories_album_stories_limit stories.
+
+Story album deep links » can be used to share an album.
 
 ### Watching stories
 
 ```
-storyItem#af6365a1 flags:# pinned:flags.5?true public:flags.7?true close_friends:flags.8?true min:flags.9?true noforwards:flags.10?true edited:flags.11?true contacts:flags.12?true selected_contacts:flags.13?true out:flags.16?true id:int date:int fwd_from:flags.17?StoryFwdHeader expire_date:int caption:flags.0?string entities:flags.1?Vector<MessageEntity> media:MessageMedia media_areas:flags.14?Vector<MediaArea> privacy:flags.2?Vector<PrivacyRule> views:flags.3?StoryViews sent_reaction:flags.15?Reaction = StoryItem;
+storyItem#edf164f1 flags:# pinned:flags.5?true public:flags.7?true close_friends:flags.8?true min:flags.9?true noforwards:flags.10?true edited:flags.11?true contacts:flags.12?true selected_contacts:flags.13?true out:flags.16?true id:int date:int from_id:flags.18?Peer fwd_from:flags.17?StoryFwdHeader expire_date:int caption:flags.0?string entities:flags.1?Vector<MessageEntity> media:MessageMedia media_areas:flags.14?Vector<MediaArea> privacy:flags.2?Vector<PrivacyRule> views:flags.3?StoryViews sent_reaction:flags.15?Reaction albums:flags.19?Vector<int> = StoryItem;
 storyItemSkipped#ffadc913 flags:# close_friends:flags.8?true id:int date:int expire_date:int = StoryItem;
 storyItemDeleted#51e6ee4f id:int = StoryItem;
 
@@ -144,7 +210,7 @@ stories.getAllReadPeerStories#9b5ae7f9 = Updates;
 stories.getPeerMaxIDs#535983c3 id:Vector<InputPeer> = Vector<int>;
 ```
 
-Active stories of contacts, subscribed channels and the changelog user should be shown in the action bar of the homescreen.
+Active stories of contacts, subscribed channels/supergroups and the changelog user should be shown in the action bar of the homescreen.
 Use stories.getAllStories to fetch the full list of active stories.
 
 Optionally, the hidden flag can be set to fetch the hidden stories to be shown in the archived tab, instead of the main story list.
@@ -176,7 +242,7 @@ Use stories.incrementStoryViews to actually increment the view counter of storie
 #### Hiding stories of other users
 
 ```
-user#215c4438 flags:# self:flags.10?true contact:flags.11?true mutual_contact:flags.12?true deleted:flags.13?true bot:flags.14?true bot_chat_history:flags.15?true bot_nochats:flags.16?true verified:flags.17?true restricted:flags.18?true min:flags.20?true bot_inline_geo:flags.21?true support:flags.23?true scam:flags.24?true apply_min_photo:flags.25?true fake:flags.26?true bot_attach_menu:flags.27?true premium:flags.28?true attach_menu_enabled:flags.29?true flags2:# bot_can_edit:flags2.1?true close_friend:flags2.2?true stories_hidden:flags2.3?true stories_unavailable:flags2.4?true id:long access_hash:flags.0?long first_name:flags.1?string last_name:flags.2?string username:flags.3?string phone:flags.4?string photo:flags.5?UserProfilePhoto status:flags.6?UserStatus bot_info_version:flags.14?int restriction_reason:flags.18?Vector<RestrictionReason> bot_inline_placeholder:flags.19?string lang_code:flags.22?string emoji_status:flags.30?EmojiStatus usernames:flags2.0?Vector<Username> stories_max_id:flags2.5?int color:flags2.8?PeerColor profile_color:flags2.9?PeerColor = User;
+user#20b1422 flags:# self:flags.10?true contact:flags.11?true mutual_contact:flags.12?true deleted:flags.13?true bot:flags.14?true bot_chat_history:flags.15?true bot_nochats:flags.16?true verified:flags.17?true restricted:flags.18?true min:flags.20?true bot_inline_geo:flags.21?true support:flags.23?true scam:flags.24?true apply_min_photo:flags.25?true fake:flags.26?true bot_attach_menu:flags.27?true premium:flags.28?true attach_menu_enabled:flags.29?true flags2:# bot_can_edit:flags2.1?true close_friend:flags2.2?true stories_hidden:flags2.3?true stories_unavailable:flags2.4?true contact_require_premium:flags2.10?true bot_business:flags2.11?true bot_has_main_app:flags2.13?true id:long access_hash:flags.0?long first_name:flags.1?string last_name:flags.2?string username:flags.3?string phone:flags.4?string photo:flags.5?UserProfilePhoto status:flags.6?UserStatus bot_info_version:flags.14?int restriction_reason:flags.18?Vector<RestrictionReason> bot_inline_placeholder:flags.19?string lang_code:flags.22?string emoji_status:flags.30?EmojiStatus usernames:flags2.0?Vector<Username> stories_max_id:flags2.5?int color:flags2.8?PeerColor profile_color:flags2.9?PeerColor bot_active_users:flags2.12?int bot_verification_icon:flags2.14?long send_paid_messages_stars:flags2.15?long = User;
 
 ---functions---
 
@@ -188,7 +254,7 @@ stories.toggleAllStoriesHidden#7c2557c4 hidden:Bool = Bool;
 Use stories.togglePeerStoriesHidden to hide the active stories of a specific peer, preventing them from being displayed on the action bar on the homescreen.
 When the stories of a user are marked as hidden, the stories_hidden flag is set on the related user constructor, and they should only be visible on the action bar when opening the archive folder, by setting the hidden flag when calling stories.getAllStories, see here for more info.
 
-Note that the archive folder is the peer folder used for archived chats: hidden stories are displayed there purely due to a UI implementation detail, not because they're actually added to the archive peer folder » or the story archive », which are different things.
+Note that the archive folder is the peer folder used for archived chats: hidden stories are displayed there purely due to a UI implementation detail, not because they're actually added to the archive peer folder » or the story archive », which are different things.
 
 ### Sharing stories
 
@@ -199,7 +265,7 @@ messageMediaStory#68cb6283 flags:# via_mention:flags.1?true peer:Peer id:int sto
 
 ---functions---
 
-messages.sendMedia#72ccc23d flags:# silent:flags.5?true background:flags.6?true clear_draft:flags.7?true noforwards:flags.14?true update_stickersets_order:flags.15?true invert_media:flags.16?true peer:InputPeer reply_to:flags.0?InputReplyTo media:InputMedia message:string random_id:long reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> schedule_date:flags.10?int send_as:flags.13?InputPeer = Updates;
+messages.sendMedia#ac55d9c1 flags:# silent:flags.5?true background:flags.6?true clear_draft:flags.7?true noforwards:flags.14?true update_stickersets_order:flags.15?true invert_media:flags.16?true allow_paid_floodskip:flags.19?true peer:InputPeer reply_to:flags.0?InputReplyTo media:InputMedia message:string random_id:long reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> schedule_date:flags.10?int send_as:flags.13?InputPeer quick_reply_shortcut:flags.17?InputQuickReplyShortcut effect:flags.18?long allow_paid_stars:flags.21?long suggested_post:flags.22?SuggestedPost = Updates;
 ```
 
 Stories can be shared as messages to any chat by simply using messages.sendMedia, passing an inputMediaStory referencing the shared story.
@@ -235,13 +301,13 @@ stories.getStoryReactionsList#b9b2881f flags:# forwards_first:flags.2?true peer:
 stories.getStoriesViews#28e16cc8 peer:InputPeer id:Vector<int> = stories.StoryViews;
 ```
 
-Use stories.getStoryViewsList to obtain the full list of users that have interacted with a specific story we posted as a user, returned as a list of StoryView constructors; pass the returned next_offset (if present) to offset to paginate through the results; the full list is available at all times only to Premium users, and will be deleted on stories posted by non-Premium users story_viewers_expire_period » seconds after the story expires; if it's still viewable, the has_viewers flag will be set.
+Use stories.getStoryViewsList to obtain the full list of users that have interacted with a specific story we posted as a user, returned as a list of StoryView constructors; pass the returned next_offset (if present) to offset to paginate through the results; the full list is available at all times only to Premium users, and will be deleted on stories posted by non-Premium users story_viewers_expire_period » seconds after the story expires; if it's still viewable, the has_viewers flag will be set.
 
-The above method can only be used for stories posted by users, to fetch almost the exact same information for stories posted by channels, use stories.getStoryReactionsList: the data returned by both methods is actually almost exactly the same, the only difference is that:
+The above method can only be used for stories posted by users, to fetch almost the exact same information for stories posted by channels/supergroups, use stories.getStoryReactionsList: the data returned by both methods is actually almost exactly the same, the only difference is that:
 
 - stories.getStoryViewsList can only be used for stories posted by the current user and also contains view and blocklist information.
 
-- stories.getStoryReactionsList can only be used for stories posted by channels we're an admin of and does not contain view information
+- stories.getStoryReactionsList can only be used for stories posted by channels/supergroups we're an admin of and does not contain view information
 
 For the rest, both methods return information about:
 
@@ -249,32 +315,32 @@ For the rest, both methods return information about:
 
 - Story forwards as a message to a public chat/channel: storyViewPublicForward/storyReactionPublicForward
 
-- Story reposts (as a story to a public channel/user): storyViewPublicRepost/storyReactionPublicRepost
+- Story reposts (as a story to a public channel/supergroup/user): storyViewPublicRepost/storyReactionPublicRepost
 
 Additionally, stories.getStoriesViews can be used to obtain info about the view count, forward count, reactions and recent viewers list of one or more stories, using a single, unpaginated method call, obviously potentially returning less info than stories.getStoryViewsList.
 
 ### Replying to stories
 
 ```
-inputReplyToStory#15b0f283 user_id:InputUser story_id:int = InputReplyTo;
+inputReplyToStory#5881323a peer:InputPeer story_id:int = InputReplyTo;
 
 ---functions---
 
-messages.sendMessage#280d096f flags:# no_webpage:flags.1?true silent:flags.5?true background:flags.6?true clear_draft:flags.7?true noforwards:flags.14?true update_stickersets_order:flags.15?true invert_media:flags.16?true peer:InputPeer reply_to:flags.0?InputReplyTo message:string random_id:long reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> schedule_date:flags.10?int send_as:flags.13?InputPeer = Updates;
+messages.sendMessage#fe05dc9a flags:# no_webpage:flags.1?true silent:flags.5?true background:flags.6?true clear_draft:flags.7?true noforwards:flags.14?true update_stickersets_order:flags.15?true invert_media:flags.16?true allow_paid_floodskip:flags.19?true peer:InputPeer reply_to:flags.0?InputReplyTo message:string random_id:long reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> schedule_date:flags.10?int send_as:flags.13?InputPeer quick_reply_shortcut:flags.17?InputQuickReplyShortcut effect:flags.18?long allow_paid_stars:flags.21?long suggested_post:flags.22?SuggestedPost = Updates;
 ```
 
-You may reply to stories posted by users by using messages.sendMessage, messages.sendMedia or any other method used to send messages, passing an inputReplyToStory to reply_to, with the ID of the user that posted the story (which must also be the destination peer of the message) and the story ID.
+You may reply to stories posted by users and supergroups by using messages.sendMessage, messages.sendMedia or any other method used to send messages, passing an inputReplyToStory to reply_to, with the ID of the user that posted the story (which must also be the destination peer of the message) and the story ID.
 
 ### Reposting stories
 
 ```
 storyFwdHeader#b826e150 flags:# modified:flags.3?true from:flags.0?Peer from_name:flags.1?string story_id:flags.2?int = StoryFwdHeader;
 
-storyItem#af6365a1 flags:# pinned:flags.5?true public:flags.7?true close_friends:flags.8?true min:flags.9?true noforwards:flags.10?true edited:flags.11?true contacts:flags.12?true selected_contacts:flags.13?true out:flags.16?true id:int date:int fwd_from:flags.17?StoryFwdHeader expire_date:int caption:flags.0?string entities:flags.1?Vector<MessageEntity> media:MessageMedia media_areas:flags.14?Vector<MediaArea> privacy:flags.2?Vector<PrivacyRule> views:flags.3?StoryViews sent_reaction:flags.15?Reaction = StoryItem;
+storyItem#edf164f1 flags:# pinned:flags.5?true public:flags.7?true close_friends:flags.8?true min:flags.9?true noforwards:flags.10?true edited:flags.11?true contacts:flags.12?true selected_contacts:flags.13?true out:flags.16?true id:int date:int from_id:flags.18?Peer fwd_from:flags.17?StoryFwdHeader expire_date:int caption:flags.0?string entities:flags.1?Vector<MessageEntity> media:MessageMedia media_areas:flags.14?Vector<MediaArea> privacy:flags.2?Vector<PrivacyRule> views:flags.3?StoryViews sent_reaction:flags.15?Reaction albums:flags.19?Vector<int> = StoryItem;
 
 ---functions---
 
-stories.sendStory#e4e6694b flags:# pinned:flags.2?true noforwards:flags.4?true fwd_modified:flags.7?true peer:InputPeer media:InputMedia media_areas:flags.5?Vector<MediaArea> caption:flags.0?string entities:flags.1?Vector<MessageEntity> privacy_rules:Vector<InputPrivacyRule> random_id:long period:flags.3?int fwd_from_id:flags.6?InputPeer fwd_from_story:flags.6?int = Updates;
+stories.sendStory#737fc2ec flags:# pinned:flags.2?true noforwards:flags.4?true fwd_modified:flags.7?true peer:InputPeer media:InputMedia media_areas:flags.5?Vector<MediaArea> caption:flags.0?string entities:flags.1?Vector<MessageEntity> privacy_rules:Vector<InputPrivacyRule> random_id:long period:flags.3?int fwd_from_id:flags.6?InputPeer fwd_from_story:flags.6?int albums:flags.8?Vector<int> = Updates;
 ```
 
 Stories may be reposted by using stories.sendStory, populating the fwd_from_story field with the original story ID and the fwd_from_id with the peer that posted the original story.
@@ -282,6 +348,27 @@ Stories may be reposted by using stories.sendStory, populating the fwd_from_stor
 The user may modify the story (for example by overlaying a round video reaction on top of the media); either way, the modified or the original media must be passed to the media field as usual, and the fwd_modified flag must be set if the media was modified.
 
 Reposted stories will have the storyItem set and populated with a storyFwdHeader constructor, containing info about the original story.
+
+### Searching stories
+
+```
+foundStory#e87acbc0 peer:Peer story:StoryItem = FoundStory;
+
+stories.foundStories#e2de7737 flags:# count:int stories:Vector<FoundStory> next_offset:flags.0?string chats:Vector<Chat> users:Vector<User> = stories.FoundStories;
+
+---functions---
+
+stories.searchPosts#d1810907 flags:# hashtag:flags.0?string area:flags.1?MediaArea peer:flags.2?InputPeer offset:string limit:int = stories.FoundStories;
+```
+
+stories.searchPosts may be used to globally search for stories from all users (even non-contacts and other peers we've never seen before) using either a hashtag passed to hashtag (without the #) or a location tag passed to area.
+
+Global search should be automatically triggered when clicking on a hashtag in the description of a story, or when clicking on a location tag (results displayed under the map).
+
+Note mediaAreaGeoPoint areas may be searched only if they have an associated address.
+
+Either hashtag or area must always be set when invoking the method, offset must initially be an empty string.
+Paginate the results by re-calling the method, passing to offset the stories.foundStories.next_offset field returned by the previous call.
 
 ### Reporting stories
 
@@ -299,7 +386,7 @@ inputReportReasonPersonalDetails#9ec7863d = ReportReason;
 
 ---functions---
 
-stories.report#1923fa8c peer:InputPeer id:Vector<int> reason:ReportReason message:string = Bool;
+stories.report#19d8eb45 peer:InputPeer id:Vector<int> option:bytes message:string = ReportResult;
 ```
 
 Use stories.report to report one or more stories.
@@ -316,37 +403,34 @@ stories.exportStoryLink#7b8def20 peer:InputPeer id:int = ExportedStoryLink;
 
 Use stories.exportStoryLink to generate a story deep link for a specific story.
 
-Upon encountering a story deep link, clients should open the specified story as specified here ».
+Upon encountering a story deep link, clients should open the specified story as specified here ».
 
-See here » for more info on story deep links.
+See here » for more info on story deep links.
 
 ### Media areas
 
 Schema:
 
 ```
-mediaAreaCoordinates#3d1ea4e x:double y:double w:double h:double rotation:double = MediaAreaCoordinates;
+mediaAreaCoordinates#cfc9e002 flags:# x:double y:double w:double h:double rotation:double radius:flags.0?double = MediaAreaCoordinates;
 
-mediaAreaVenue#be82db9c coordinates:MediaAreaCoordinates geo:GeoPoint title:string address:string provider:string venue_id:string venue_type:string = MediaArea;
-inputMediaAreaVenue#b282217f coordinates:MediaAreaCoordinates query_id:long result_id:string = MediaArea;
-mediaAreaGeoPoint#df8b3b22 coordinates:MediaAreaCoordinates geo:GeoPoint = MediaArea;
-mediaAreaSuggestedReaction#14455871 flags:# dark:flags.0?true flipped:flags.1?true coordinates:MediaAreaCoordinates reaction:Reaction = MediaArea;
-
-storyItem#af6365a1 flags:# pinned:flags.5?true public:flags.7?true close_friends:flags.8?true min:flags.9?true noforwards:flags.10?true edited:flags.11?true contacts:flags.12?true selected_contacts:flags.13?true out:flags.16?true id:int date:int fwd_from:flags.17?StoryFwdHeader expire_date:int caption:flags.0?string entities:flags.1?Vector<MessageEntity> media:MessageMedia media_areas:flags.14?Vector<MediaArea> privacy:flags.2?Vector<PrivacyRule> views:flags.3?StoryViews sent_reaction:flags.15?Reaction = StoryItem;
+storyItem#edf164f1 flags:# pinned:flags.5?true public:flags.7?true close_friends:flags.8?true min:flags.9?true noforwards:flags.10?true edited:flags.11?true contacts:flags.12?true selected_contacts:flags.13?true out:flags.16?true id:int date:int from_id:flags.18?Peer fwd_from:flags.17?StoryFwdHeader expire_date:int caption:flags.0?string entities:flags.1?Vector<MessageEntity> media:MessageMedia media_areas:flags.14?Vector<MediaArea> privacy:flags.2?Vector<PrivacyRule> views:flags.3?StoryViews sent_reaction:flags.15?Reaction albums:flags.19?Vector<int> = StoryItem;
 
 ---functions---
 
-stories.sendStory#e4e6694b flags:# pinned:flags.2?true noforwards:flags.4?true fwd_modified:flags.7?true peer:InputPeer media:InputMedia media_areas:flags.5?Vector<MediaArea> caption:flags.0?string entities:flags.1?Vector<MessageEntity> privacy_rules:Vector<InputPrivacyRule> random_id:long period:flags.3?int fwd_from_id:flags.6?InputPeer fwd_from_story:flags.6?int = Updates;
+stories.sendStory#737fc2ec flags:# pinned:flags.2?true noforwards:flags.4?true fwd_modified:flags.7?true peer:InputPeer media:InputMedia media_areas:flags.5?Vector<MediaArea> caption:flags.0?string entities:flags.1?Vector<MessageEntity> privacy_rules:Vector<InputPrivacyRule> random_id:long period:flags.3?int fwd_from_id:flags.6?InputPeer fwd_from_story:flags.6?int albums:flags.8?Vector<int> = Updates;
 stories.editStory#b583ba46 flags:# peer:InputPeer id:int media:flags.0?InputMedia media_areas:flags.3?Vector<MediaArea> caption:flags.1?string entities:flags.1?Vector<MessageEntity> privacy_rules:flags.2?Vector<InputPrivacyRule> = Updates;
 ```
 
 Stories can have so-called "media areas": clickable rectangular areas with animated overlays on top of the story offering functionality like location tags or reactions.
 
-The coordinates and size of each media area is specified in a mediaAreaCoordinates constructor attached to each MediaArea, see the constructor page » for more info.
+The coordinates and size of each media area is specified in a mediaAreaCoordinates constructor attached to each MediaArea, see the constructor page » for more info.
 
 After construction, the vector of MediaArea constructors can be passed to stories.sendStory or stories.editStory.
 
 #### Channel posts
+
+Schema:
 
 ```
 inputMediaAreaChannelPost#2271f2bf coordinates:MediaAreaCoordinates channel:InputChannel msg_id:int = MediaArea;
@@ -364,8 +448,9 @@ Schema:
 
 ```
 geoPoint#b2a2f663 flags:# long:double lat:double access_hash:long accuracy_radius:flags.0?int = GeoPoint;
+geoPointAddress#de4c5d93 flags:# country_iso2:string state:flags.0?string city:flags.1?string street:flags.2?string = GeoPointAddress;
 
-mediaAreaGeoPoint#df8b3b22 coordinates:MediaAreaCoordinates geo:GeoPoint = MediaArea;
+mediaAreaGeoPoint#cad5452d flags:# coordinates:MediaAreaCoordinates geo:GeoPoint address:flags.0?GeoPointAddress = MediaArea;
 mediaAreaVenue#be82db9c coordinates:MediaAreaCoordinates geo:GeoPoint title:string address:string provider:string venue_id:string venue_type:string = MediaArea;
 
 inputMediaAreaVenue#b282217f coordinates:MediaAreaCoordinates query_id:long result_id:string = MediaArea;
@@ -375,14 +460,14 @@ Location tags are represented by a mediaAreaVenue or mediaAreaGeoPoint, associat
 
 Both constructors have an associated geolocation represented as a geoPoint, and information about the clickable media area on top of the story media as a mediaAreaCoordinates constructor.
 
-mediaAreaGeoPoint is used to represent a simple geolocation without any extra information.
+mediaAreaGeoPoint is used to represent a simple geolocation with an optional textual address.
 mediaAreaVenue is used to represent the location of a specific venue (i.e. a mall, a shop, a dance school et cetera), and apart from the venue's coordinates, it also contains a textual representation of the address, the venue name (title) and a venue type/ID (venue_id/venue_type) in a format supported by the venue provider specified in provider.
 
 Currently, the only provider that needs to be supported is foursquare.
 
 To send a mediaAreaVenue, clients should use inputMediaAreaVenue, constructed as follows:
 
-- If the user gives permission to share their location with the location provider, query the inline bot specified in the stories_venue_search_username client configuration parameter », as described as the inline queries documentation », populating the geo_point.
+- If the user gives permission to share their location with the location provider, query the inline bot specified in the stories_venue_search_username client configuration parameter », as described as the inline queries documentation », populating the geo_point.
 
 - Note that this should be done transparently in a map UI, not in the usual inline query UI in the chat text bar.
 
@@ -393,6 +478,10 @@ To send a mediaAreaVenue, clients should use inputMediaAreaVenue, constructed as
 - result_id: the id of the chosen result.
 
 Clients may only re-use existing mediaAreaVenues when repositioning a pre-existing location tag when editing a story; use inputMediaAreaVenue when posting a new story or adding a new location tag to an existing story.
+
+Global story search » should be automatically triggered when clicking on a location, passing the mediaAreaGeoPoint/mediaAreaVenue to stories.searchPosts, with results displayed under the map.
+
+Note mediaAreaGeoPoint areas may be searched only if they have an associated address.
 
 #### Reactions
 
@@ -406,6 +495,8 @@ mediaAreaSuggestedReaction#14455871 flags:# dark:flags.0?true flipped:flags.1?tr
 
 updateSentStoryReaction#7d627683 peer:Peer story_id:int reaction:Reaction = Update;
 
+updateNewStoryReaction#1824e40b story_id:int peer:Peer reaction:Reaction = Update;
+
 ---functions---
 
 stories.sendReaction#7fd736b2 flags:# add_to_recent:flags.0?true peer:InputPeer story_id:int reaction:Reaction = Updates;
@@ -414,18 +505,60 @@ stories.sendReaction#7fd736b2 flags:# add_to_recent:flags.0?true peer:InputPeer 
 Story reactions are implemented using a simple in-UI button that allows the user to send any reaction using stories.sendReaction.
 
 Sending this method will return an updateSentStoryReaction update to all logged-in sessions.
+The story poster will also receive an updateNewStoryReaction update when a user reacts to their story, if enabled as specified here ».
 
-However, the poster of a story may also use mediaAreaSuggestedReaction media areas » to suggest some specific reactions as simple clickable buttons: they're rendered as a round comic-style thought bubble with its "tail" on the right, white background and the reaction » from the reaction field located in its center.
+However, the poster of a story may also use mediaAreaSuggestedReaction media areas » to suggest some specific reactions as simple clickable buttons: they're rendered as a round comic-style thought bubble with its "tail" on the right, white background and the reaction » from the reaction field located in its center.
 If the dark flag is set, the background should be black.
 If the flipped flag is set, the "tail" should be located on the left.
-The maximum number of story reaction media areas that can be added to a story is specified by the stories_suggested_reactions_limit_* » config keys.
+The maximum number of story reaction media areas that can be added to a story is specified by the stories_suggested_reactions_limit_* » config keys.
 Clicking it should invoke stories.sendReaction as usual.
 
-See here » to get more info on how to fetch the reaction list of a story.
+See here » to get more info on how to fetch the reaction list of a story.
+
+#### URLs
+
+```
+mediaAreaUrl#37381085 coordinates:MediaAreaCoordinates url:string = MediaArea;
+```
+
+URL media areas offer stickers that when clicked, should offer the user a prompt (implemented as a tooltip on the sticker) to open the specified url.
+
+The maximum number of URL media areas that can be added to a story is specified by the stories_area_url_max » config key.
+
+#### Weather
+
+```
+mediaAreaWeather#49a6549c coordinates:MediaAreaCoordinates emoji:string temperature_c:double color:int = MediaArea;
+
+---functions---
+
+messages.getInlineBotResults#514e999d flags:# bot:InputUser peer:InputPeer geo_point:flags.0?InputGeoPoint query:string offset:string = messages.BotResults;
+```
+
+Users can now share the weather in their stories by adding one weather media area represented by mediaAreaWeather to their stories.
+
+The weather media area should be rendered using the background ARGB color specified in color, and should contain the emoji specified in emoji (rendered as an animated emoji), followed by the temperature specified in temperature_c (Celsius, which should be converted by the client to Fahrenheit if required by the device's settings), followed by °C or °F depending on the unit used.
+
+To fetch the current temperature and emoji to use when creating a weather media area when posting a story, clients should internally make an inline query with messages.getInlineBotResults to the bot specified in the weather_search_username client configuration parameter, passing the user's current location in geo_point and inputPeerEmpty in peer.
+This query will return a single botInlineResult: the emoji to use will be contained in the botInlineResult.title and the temperature (always in Celsius) will be contained in botInlineResult.description (it will contain just the value without the unit, so it can be easily casted to a double).
+
+The inline query should be made internally by the client when the user creates a new weather media area, not by showing the usual inline query UI, but by treating the inline query as an API call to fetch the weather for the current user's location.
+
+If the story_weather_preload client configuration parameter is equal to true, clients should preload the weather using the flow specified above on startup (as opposed to only doing it when creating a weather media area).
+
+#### Collectible gifts
+
+Schema:
+
+```
+mediaAreaStarGift#5787686d coordinates:MediaAreaCoordinates slug:string = MediaArea;
+```
+
+Owned collectible gifts » may be shared in a story using a mediaAreaStarGift, containing the slug from starGiftUnique.slug, that can be resolved as specified here ».
 
 ### Stealth mode
 
-Premium users may enable stealth mode, erasing their views from any stories they opened in the past stories_stealth_past_period seconds », and hiding their views on stories for the next stories_stealth_future_period seconds », as specified by the client configuration ».
+Premium users may enable stealth mode, erasing their views from any stories they opened in the past stories_stealth_past_period seconds », and hiding their views on stories for the next stories_stealth_future_period seconds », as specified by the client configuration ».
 
 Schema:
 
@@ -439,7 +572,7 @@ updateStoriesStealthMode#2c084dc1 stealth_mode:StoriesStealthMode = Update;
 stories.activateStealthMode#57bbd166 flags:# past:flags.0?true future:flags.1?true = Updates;
 ```
 
-Invoke stories.activateStealthMode to activate stealth mode, passing the past flag to erase views from any stories opened in the past stories_stealth_past_period seconds » and/or the future flag to hide future story views for the next stories_stealth_future_period seconds ».
+Invoke stories.activateStealthMode to activate stealth mode, passing the past flag to erase views from any stories opened in the past stories_stealth_past_period seconds » and/or the future flag to hide future story views for the next stories_stealth_future_period seconds ».
 
 Clients can only invoke this method every stories_stealth_cooldown_period seconds as specified by the client configuration: invoking the method before the cooldown period has expired will trigger a FLOOD_WAIT_X error, with X being the number of seconds left before the cooldown period expires.
 
@@ -466,7 +599,7 @@ stats.getStoryStats#374fef40 flags:# dark:flags.0?true peer:InputPeer id:int = s
 stats.getStoryPublicForwards#a6437ef6 peer:InputPeer id:int offset:string limit:int = stats.PublicForwards;
 ```
 
-Use stats.getStoryStats to obtain statistics about a story; the returned StatsGraph graphs can be rendered as described here ».
+Use stats.getStoryStats to obtain statistics about a story; the returned StatsGraph graphs can be rendered as described here ».
 
 Use stats.getStoryPublicForwards to obtain forwards of a story as a message to public chats and reposts by public channels.
 

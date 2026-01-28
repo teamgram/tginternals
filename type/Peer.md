@@ -1,5 +1,5 @@
 # Peer
-Chat partner or group.
+Identifier of a private chat, basic group, group or channel (see here » for more info).
 
 ```
 peerUser#59511722 user_id:long = Peer;

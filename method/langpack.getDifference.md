@@ -10,8 +10,8 @@ langpack.getDifference#cd984aa5 lang_pack:string lang_code:string from_version:i
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| lang_pack | string | Language pack |
-| lang_code | string | Language code |
+| lang_pack | string | Platform identifier (i.e. android, tdesktop, etc). |
+| lang_code | string | Either an ISO 639-1 language code or a language pack name obtained from a language pack link. |
 | from_version | int | Previous localization pack version |
 
 

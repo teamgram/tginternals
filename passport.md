@@ -55,11 +55,19 @@ To request data from Telegram Passport users, your bot will need to generate a p
 
 First, use a console to generate a private key:
 
+```
+openssl genrsa 2048 > private.key
+```
+
 WARNING: Keep your private key SECRET!
 
 #### Generating your public key
 
 Then use the console to print the corresponding public key:
+
+```
+openssl rsa -in private.key -pubout
+```
 
 Use the /setpublickey command with @BotFather to connect this public key with your bot.
 

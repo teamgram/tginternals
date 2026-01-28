@@ -10,14 +10,16 @@ updatesCombined#725b04c3 updates:Vector<Update> users:Vector<User> chats:Vector<
 updates#74ae4240 updates:Vector<Update> users:Vector<User> chats:Vector<Chat> date:int seq:int = Updates;
 updateShortSentMessage#9015e101 flags:# out:flags.1?true id:int pts:int pts_count:int date:int media:flags.9?MessageMedia entities:flags.7?Vector<MessageEntity> ttl_period:flags.25?int = Updates;
 ---functions---
-channels.toggleSignatures#1f69b606 channel:InputChannel enabled:Bool = Updates;
+channels.toggleSignatures#418d549c flags:# signatures_enabled:flags.0?true profiles_enabled:flags.1?true channel:InputChannel = Updates;
 ```
 
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
+| flags | # | Flags, see TL conditional fields |
+| signatures_enabled | flags.0?true | If set, enables message signatures. |
+| profiles_enabled | flags.1?true | If set, messages from channel admins will link to their profiles, just like for group messages: can only be set if the signatures_enabled flag is set. |
 | channel | InputChannel | Channel |
-| enabled | Bool | Value |
 
 
 ## Result

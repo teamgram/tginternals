@@ -20,4 +20,5 @@ Bool
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | CHANNEL_INVALID | The provided channel is invalid. |
 

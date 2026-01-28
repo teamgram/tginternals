@@ -12,7 +12,7 @@ photos.uploadContactProfilePhoto#e14c4a71 flags:# suggest:flags.3?true save:flag
 | ---- | :----: | ----------- |
 | flags | # | Flags, see TL conditional fields |
 | suggest | flags.3?true | If set, will send a messageActionSuggestProfilePhoto service message to user_id, suggesting them to use the specified profile picture; otherwise, will set a personal profile picture for the user (only visible to the current user). |
-| save | flags.4?true | If set, removes a previously set personal profile picture (does not affect suggested profile pictures, to remove them simply deleted the messageActionSuggestProfilePhoto service message with messages.deleteMessages). |
+| save | flags.4?true | If set, removes a previously set personal profile picture (does not affect suggested profile pictures, to remove them simply delete the messageActionSuggestProfilePhoto service message with messages.deleteMessages). |
 | user_id | InputUser | The contact |
 | file | flags.0?InputFile | Profile photo |
 | video | flags.1?InputFile | Animated profile picture video |

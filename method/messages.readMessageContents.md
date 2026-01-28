@@ -1,5 +1,5 @@
 # messages.readMessageContents
-Notifies the sender about the recipient having listened a voice message or watched a video.
+Notifies the sender about the recipient having listened a voice message or watched a video, emitting an updateReadMessagesContents.
 
 ```
 messages.affectedMessages#84d19185 pts:int pts_count:int = messages.AffectedMessages;

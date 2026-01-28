@@ -8,8 +8,9 @@ messages.savedDialogsNotModified#c01f6fe8 count:int = messages.SavedDialogs;
 
 ---functions---
 
-messages.getSavedDialogs#5381d21a flags:# exclude_pinned:flags.0?true offset_date:int offset_id:int offset_peer:InputPeer limit:int hash:long = messages.SavedDialogs;
+messages.getSavedDialogs#1e91fc99 flags:# exclude_pinned:flags.0?true parent_peer:flags.1?InputPeer offset_date:int offset_id:int offset_peer:InputPeer limit:int hash:long = messages.SavedDialogs;
 messages.getPinnedSavedDialogs#d63d94e0 = messages.SavedDialogs;
+messages.getSavedDialogsByID#6f6f9c96 flags:# parent_peer:flags.1?InputPeer ids:Vector<InputPeer> = messages.SavedDialogs;
 ```
 
 ## Constructors
@@ -23,7 +24,8 @@ messages.getPinnedSavedDialogs#d63d94e0 = messages.SavedDialogs;
 ## Methods
 | Method | Description |
 | ---- | ----------- |
-| messages.getSavedDialogs | Returns the current saved dialog list, see here » for more info. |
+| messages.getSavedDialogs | Returns the current saved dialog list » or monoforum topic list ». |
 | messages.getPinnedSavedDialogs | Get pinned saved dialogs, see here » for more info. |
+| messages.getSavedDialogsByID | Obtain information about specific saved message dialogs » or monoforum topics ». |
 
 

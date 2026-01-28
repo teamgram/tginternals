@@ -21,6 +21,8 @@ Bool
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | BUTTON_INVALID | The specified button is invalid. |
 | 400 | BUTTON_TEXT_INVALID | The specified button text is invalid. |
 | 400 | BUTTON_URL_INVALID | Button URL invalid. |
+| 400 | USER_BOT_REQUIRED | This method can only be called by a bot. |
 

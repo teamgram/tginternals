@@ -14,7 +14,7 @@ invokeWithLayer#da9b0d0d {X:Type} layer:int query:!X = X;
 
 
 ## Result
-The type returned by the invoked method.
+Returns the type returned by the invoked method.
 
 ## Possible errors
 | Code | Type | Description |

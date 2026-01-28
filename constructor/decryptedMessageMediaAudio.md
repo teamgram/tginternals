@@ -13,10 +13,10 @@ decryptedMessageMediaAudio#57e0a9cb duration:int mime_type:string size:int key:b
 | Name | Type | Description |
 | ---- | :----: | ----------- |
 | duration | int | Audio duration in seconds |
-| mime_type | string | MIME-type of the audio fileParameter added in Layer 13. |
 | size | int | File size |
 | key | bytes | Key to decrypt the attached media file |
 | iv | bytes | Initialization vector |
+| mime_type | string | MIME-type of the audio fileParameter added in Layer 13. |
 
 
 ## Type

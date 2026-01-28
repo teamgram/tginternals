@@ -1,5 +1,5 @@
 # premium.getUserBoosts
-Returns the lists of boost that were applied to a channel by a specific user (admins only)
+Returns the lists of boost that were applied to a channel/supergroup by a specific user (admins only)
 
 ```
 premium.boostsList#86f8613c flags:# count:int boosts:Vector<Boost> next_offset:flags.0?string users:Vector<User> = premium.BoostsList;
@@ -10,7 +10,7 @@ premium.getUserBoosts#39854d1f peer:InputPeer user_id:InputUser = premium.Boosts
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| peer | InputPeer | The channel |
+| peer | InputPeer | The channel/supergroup |
 | user_id | InputUser | The user |
 
 

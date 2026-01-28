@@ -11,7 +11,7 @@ messages.getAttachMenuBots#16fcc2cb hash:long = AttachMenuBots;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | long | Hash for pagination, for more info click here |
+| hash | long | Hash used for caching, for more info click here. |
 
 
 ## Result

@@ -18,4 +18,5 @@ Vector<StickerSetCovered>
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | MEDIA_EMPTY | The provided media object is invalid. |
 

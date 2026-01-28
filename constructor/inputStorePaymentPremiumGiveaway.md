@@ -11,7 +11,7 @@ inputStorePaymentPremiumGiveaway#160544ca flags:# only_new_subscribers:flags.0?t
 | flags | # | Flags, see TL conditional fields |
 | only_new_subscribers | flags.0?true | If set, only new subscribers starting from the giveaway creation date will be able to participate to the giveaway. |
 | winners_are_visible | flags.3?true | If set, giveaway winners are public and will be listed in a messageMediaGiveawayResults message that will be automatically sent to the channel once the giveaway ends. |
-| boost_peer | InputPeer | The channel starting the giveaway, that the user must join to participate, that will receive the giveaway boosts; see here » for more info on giveaways. |
+| boost_peer | InputPeer | The channel/supergroup starting the giveaway, that the user must join to participate, that will receive the giveaway boosts; see here » for more info on giveaways. |
 | additional_peers | flags.1?Vector<InputPeer> | Additional channels that the user must join to participate to the giveaway can be specified here. |
 | countries_iso2 | flags.2?Vector<string> | The set of users that can participate to the giveaway can be restricted by passing here an explicit whitelist of up to giveaway_countries_max countries, specified as two-letter ISO 3166-1 alpha-2 country codes. |
 | prize_description | flags.4?string | Can contain a textual description of additional giveaway prizes. |

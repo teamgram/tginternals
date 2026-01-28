@@ -14,7 +14,7 @@ invokeWithTakeout#aca9fd2e {X:Type} takeout_id:long query:!X = X;
 
 
 ## Result
-The type returned by the invoked method.
+Returns the type returned by the invoked method.
 
 ## Possible errors
 | Code | Type | Description |

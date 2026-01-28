@@ -9,7 +9,7 @@ help.countriesList#87d0759e countries:Vector<help.Country> hash:int = help.Count
 | Name | Type | Description |
 | ---- | :----: | ----------- |
 | countries | Vector<help.Country> | Name, ISO code, localized name and phone codes/patterns of all available countries |
-| hash | int | Hash for pagination, for more info click here |
+| hash | int | Hash used for caching, for more info click here |
 
 
 ## Type

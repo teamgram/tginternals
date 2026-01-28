@@ -27,5 +27,7 @@ Updates
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | CHANNEL_INVALID | The provided channel is invalid. |
+| 400 | PINNED_TOO_MUCH | There are too many pinned topics, unpin some first. |
 | 400 | TOPIC_ID_INVALID | The specified topic ID is invalid. |
 

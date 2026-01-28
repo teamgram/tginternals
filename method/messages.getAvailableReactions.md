@@ -11,7 +11,7 @@ messages.getAvailableReactions#18dea0ac hash:int = messages.AvailableReactions;
 ## Parameters
 | Name | Type | Description |
 | ---- | :----: | ----------- |
-| hash | int | Hash for pagination, for more info click here |
+| hash | int | Hash used for caching, for more info click here. |
 
 
 ## Result

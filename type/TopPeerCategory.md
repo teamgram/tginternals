@@ -10,6 +10,7 @@ topPeerCategoryChannels#161d9628 = TopPeerCategory;
 topPeerCategoryPhoneCalls#1e76a78c = TopPeerCategory;
 topPeerCategoryForwardUsers#a8406ca9 = TopPeerCategory;
 topPeerCategoryForwardChats#fbeec0f0 = TopPeerCategory;
+topPeerCategoryBotsApp#fd9e7bec = TopPeerCategory;
 ```
 
 ## Constructors
@@ -23,6 +24,7 @@ topPeerCategoryForwardChats#fbeec0f0 = TopPeerCategory;
 | topPeerCategoryPhoneCalls | Most frequently called users |
 | topPeerCategoryForwardUsers | Users to which the users often forwards messages to |
 | topPeerCategoryForwardChats | Chats to which the users often forwards messages to |
+| topPeerCategoryBotsApp | Most frequently used Main Mini Bot Apps. |
 
 
 ## Methods

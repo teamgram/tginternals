@@ -23,4 +23,5 @@ phone.GroupParticipants
 ## Possible errors
 | Code | Type | Description |
 | ---- | :----: | ----------- |
+| 400 | GROUPCALL_INVALID | The specified group call is invalid. |
 

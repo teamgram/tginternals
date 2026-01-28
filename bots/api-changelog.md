@@ -1,13 +1,702 @@
 # Bot API changelog
 
-> The Bot API is an HTTP-based interface created for developers keen on building bots for Telegram.
-To learn how to create and set up a bot, please consult our Introduction to Bots »
+> The Bot API is an HTTP-based interface created for developers keen on building bots for Telegram.To learn how to create and set up a bot, please consult our Introduction to Bots »
 
 You will find all changes to our Bot API on this page.
 
 ### Recent changes
 
 > Subscribe to @BotNews to be the first to know about the latest updates and join the discussion in @BotTalk
+
+### 2025
+
+#### December 31, 2025
+
+Bot API 9.3
+
+Topics in private chats
+
+- Added the field has_topics_enabled to the class User, which can be used to determine whether forum topic mode is enabled for the bot in private chats.
+
+- Added the method sendMessageDraft, allowing partial messages to be streamed to a user while being generated.
+
+- Supported the fields message_thread_id and is_topic_message in the class Message for messages in private chats with forum topic mode enabled.
+
+- Supported the parameter message_thread_id in private chats with topics in the methods sendMessage, sendPhoto, sendVideo, sendAnimation, sendAudio, sendDocument, sendPaidMedia, sendSticker, sendVideoNote, sendVoice, sendLocation, sendVenue, sendContact, sendPoll, sendDice, sendInvoice, sendGame, sendMediaGroup, copyMessage, copyMessages, forwardMessage, and forwardMessages, allowing bots to send a message to a specific topic.
+
+- Supported the parameter message_thread_id in private chats in the method sendChatAction, allowing bots to send chat actions to a specific topic in private chats.
+
+- Supported the parameter message_thread_id in private chats with topics in the method editForumTopic, deleteForumTopic, and unpinAllForumTopicMessages, allowing bots to manage topics in private chats.
+
+- Added the field is_name_implicit to the classes ForumTopic and ForumTopicCreated.
+
+Gifts
+
+- Added the methods getUserGifts and getChatGifts.
+
+- Replaced the field last_resale_star_count with the fields last_resale_currency and last_resale_amount in the class UniqueGiftInfo.
+
+- Replaced the parameter exclude_limited with the parameters exclude_limited_upgradable and exclude_limited_non_upgradable in the method getBusinessAccountGifts.
+
+- Added the value “gifted_upgrade” as a possible value of UniqueGiftInfo.origin for messages about the upgrade of a gift that was purchased after it was sent.
+
+- Added the value “offer” as a possible value of UniqueGiftInfo.origin for messages about the purchase of a gift through a purchase offer.
+
+- Added the field gift_upgrade_sent to the class Message.
+
+- Added the field gift_id to the class UniqueGift.
+
+- Added the field is_from_blockchain to the class UniqueGift.
+
+- Added the parameter exclude_from_blockchain in the method getBusinessAccountGifts, to filter out gifts that were assigned from the TON blockchain.
+
+- Added the fields personal_total_count and personal_remaining_count to the class Gift.
+
+- Added the field is_premium to the classes Gift and UniqueGift.
+
+- Added the field is_upgrade_separate to the classes GiftInfo and OwnedGiftRegular.
+
+- Added the class UniqueGiftColors that describes the color scheme for a user's name, replies to messages and link previews based on a unique gift.
+
+- Added the field has_colors to the class Gift.
+
+- Added the field colors to the class UniqueGift.
+
+- Added the class GiftBackground and the field background to the class Gift.
+
+- Added the field unique_gift_variant_count to the class Gift.
+
+- Added the field unique_gift_number to the classes GiftInfo and OwnedGiftRegular.
+
+- Added the field gifts_from_channels to the class AcceptedGiftTypes.
+
+Miscellaneous
+
+- Allowed bots to disable their main username if they have additional active usernames purchased on Fragment.
+
+- Allowed bots to disable the right can_restrict_members in channel chats.
+
+- Added the method repostStory, allowing bots to repost stories across different business accounts they manage.
+
+- Added the class UserRating and the field rating to the class ChatFullInfo.
+
+- Increased the maximum price for paid media to 25000 Telegram Stars.
+
+- Added the field paid_message_star_count to the class ChatFullInfo.
+
+- Added the parameter message_effect_id to the methods forwardMessage and copyMessage.
+
+- Added the field unique_gift_colors to the class ChatFullInfo.
+
+- Added the field completed_by_chat to the class ChecklistTask.
+
+#### August 15, 2025
+
+Bot API 9.2
+
+Checklists
+
+- Added the field checklist_task_id to the class ReplyParameters, allowing bots to reply to a specific checklist task.
+
+- Added the field reply_to_checklist_task_id to the class Message.
+
+Gifts
+
+- Added the field publisher_chat to the classes Gift and UniqueGift which can be used to get information about the chat that published a gift.
+
+Direct Messages in Channels
+
+- Added the field is_direct_messages to the classes Chat and ChatFullInfo which can be used to identify supergroups that are used as channel direct messages chats.
+
+- Added the field parent_chat to the class ChatFullInfo which indicates the parent channel chat for a channel direct messages chat.
+
+- Added the class DirectMessagesTopic and the field direct_messages_topic to the class Message, describing a topic of a direct messages chat.
+
+- Added the parameter direct_messages_topic_id to the methods sendMessage, sendPhoto, sendVideo, sendAnimation, sendAudio, sendDocument, sendPaidMedia, sendSticker, sendVideoNote, sendVoice, sendLocation, sendVenue, sendContact, sendDice, sendInvoice, sendMediaGroup, copyMessage, copyMessages, forwardMessage and forwardMessages. This parameter can be used to send a message to a direct messages chat topic.
+
+Suggested Posts
+
+- Added the class SuggestedPostParameters and the parameter suggested_post_parameters to the methods sendMessage, sendPhoto, sendVideo, sendAnimation, sendAudio, sendDocument, sendPaidMedia, sendSticker, sendVideoNote, sendVoice, sendLocation, sendVenue, sendContact, sendDice, sendInvoice, copyMessage, forwardMessage. This parameter can be used to send a suggested post to a direct messages chat topic.
+
+- Added the method approveSuggestedPost, allowing bots to approve incoming suggested posts.
+
+- Added the method declineSuggestedPost, allowing bots to decline incoming suggested posts.
+
+- Added the field can_manage_direct_messages to the classes ChatMemberAdministrator and ChatAdministratorRights.
+
+- Added the parameter can_manage_direct_messages to the method promoteChatMember.
+
+- Added the field is_paid_post to the class Message, which can be used to identify paid posts. Such posts must not be deleted for 24 hours to receive the payment.
+
+- Added the class SuggestedPostPrice, describing the price of a suggested post.
+
+- Added the class SuggestedPostInfo and the field suggested_post_info to the class Message, describing a suggested post.
+
+- Added the class SuggestedPostApproved and the field suggested_post_approved to the class Message, describing a service message about the approval of a suggested post.
+
+- Added the class SuggestedPostApprovalFailed and the field suggested_post_approval_failed to the class Message, describing a service message about the failed approval of a suggested post.
+
+- Added the class SuggestedPostDeclined and the field suggested_post_declined to the class Message, describing a service message about the rejection of a suggested post.
+
+- Added the class SuggestedPostPaid and the field suggested_post_paid to the class Message, describing a service message about a successful payment for a suggested post.
+
+- Added the class SuggestedPostRefunded and the field suggested_post_refunded to the class Message, describing a service message about a payment refund for a suggested post.
+
+#### July 3, 2025
+
+Bot API 9.1
+
+Checklists
+
+- Added the class ChecklistTask representing a task in a checklist.
+
+- Added the class Checklist representing a checklist.
+
+- Added the class InputChecklistTask representing a task to add to a checklist.
+
+- Added the class InputChecklist representing a checklist to create.
+
+- Added the field checklist to the classes Message and ExternalReplyInfo, describing a checklist in a message.
+
+- Added the class ChecklistTasksDone and the field checklist_tasks_done to the class Message, describing a service message about status changes for tasks in a checklist (i.e., marked as done/not done).
+
+- Added the class ChecklistTasksAdded and the field checklist_tasks_added to the class Message, describing a service message about the addition of new tasks to a checklist.
+
+- Added the method sendChecklist, allowing bots to send a checklist on behalf of a business account.
+
+- Added the method editMessageChecklist, allowing bots to edit a checklist on behalf of a business account.
+
+Gifts
+
+- Added the field next_transfer_date to the classes OwnedGiftUnique and UniqueGiftInfo.
+
+- Added the field last_resale_star_count to the class UniqueGiftInfo.
+
+- Added “resale” as the possible value of the field origin in the class UniqueGiftInfo.
+
+General
+
+- Increased the maximum number of options in a poll to 12.
+
+- Added the method getMyStarBalance, allowing bots to get their current balance of Telegram Stars.
+
+- Added the class DirectMessagePriceChanged and the field direct_message_price_changed to the class Message, describing a service message about a price change for direct messages sent to the channel chat.
+
+- Added the method hideKeyboard to the class WebApp.
+
+#### April 11, 2025
+
+Bot API 9.0
+
+Business Accounts
+
+- Added the class BusinessBotRights and replaced the field can_reply with the field rights of the type BusinessBotRights in the class BusinessConnection.
+
+- Added the method readBusinessMessage, allowing bots to mark incoming messages as read on behalf of a business account.
+
+- Added the method deleteBusinessMessages, allowing bots to delete messages on behalf of a business account.
+
+- Added the method setBusinessAccountName, allowing bots to change the first and last name of a managed business account.
+
+- Added the method setBusinessAccountUsername, allowing bots to change the username of a managed business account.
+
+- Added the method setBusinessAccountBio, allowing bots to change the bio of a managed business account.
+
+- Added the class InputProfilePhoto, describing a profile photo to be set.
+
+- Added the methods setBusinessAccountProfilePhoto and removeBusinessAccountProfilePhoto, allowing bots to change the profile photo of a managed business account.
+
+- Added the method setBusinessAccountGiftSettings, allowing bots to change the privacy settings pertaining to incoming gifts in a managed business account.
+
+- Added the class StarAmount and the method getBusinessAccountStarBalance, allowing bots to check the current Telegram Star balance of a managed business account.
+
+- Added the method transferBusinessAccountStars, allowing bots to transfer Telegram Stars from the balance of a managed business account to their own balance for withdrawal.
+
+- Added the classes OwnedGiftRegular, OwnedGiftUnique, OwnedGifts and the method getBusinessAccountGifts, allowing bots to fetch the list of gifts owned by a managed business account.
+
+- Added the method convertGiftToStars, allowing bots to convert gifts received by a managed business account to Telegram Stars.
+
+- Added the method upgradeGift, allowing bots to upgrade regular gifts received by a managed business account to unique gifts.
+
+- Added the method transferGift, allowing bots to transfer unique gifts owned by a managed business account.
+
+- Added the classes InputStoryContentPhoto and InputStoryContentVideo representing the content of a story to post.
+
+- Added the classes StoryArea, StoryAreaPosition, LocationAddress, StoryAreaTypeLocation, StoryAreaTypeSuggestedReaction, StoryAreaTypeLink, StoryAreaTypeWeather and StoryAreaTypeUniqueGift, describing clickable active areas on stories.
+
+- Added the method postStory, allowing bots to post a story on behalf of a managed business account.
+
+- Added the method editStory, allowing bots to edit stories they had previously posted on behalf of a managed business account.
+
+- Added the method deleteStory, allowing bots to delete stories they had previously posted on behalf of a managed business account.
+
+Mini Apps
+
+- Added the field DeviceStorage, allowing Mini Apps to use persistent local storage on the user's device.
+
+- Added the field SecureStorage, allowing Mini Apps to use a secure local storage on the user's device for sensitive data.
+
+Gifts
+
+- Added the classes UniqueGiftModel, UniqueGiftSymbol, UniqueGiftBackdropColors, and UniqueGiftBackdrop to describe the properties of a unique gift.
+
+- Added the class UniqueGift describing a gift that was upgraded to a unique one.
+
+- Added the class AcceptedGiftTypes describing the types of gifts that are accepted by a user or a chat.
+
+- Replaced the field can_send_gift with the field accepted_gift_types of the type AcceptedGiftTypes in the class ChatFullInfo.
+
+- Added the class GiftInfo and the field gift to the class Message, describing a service message about a regular gift that was sent or received.
+
+- Added the class UniqueGiftInfo and the field unique_gift to the class Message, describing a service message about a unique gift that was sent or received.
+
+Telegram Premium
+
+- Added the method giftPremiumSubscription, allowing bots to gift a user a Telegram Premium subscription paid in Telegram Stars.
+
+- Added the field premium_subscription_duration to the class TransactionPartnerUser for transactions involving a Telegram Premium subscription purchased by the bot.
+
+- Added the field transaction_type to the class TransactionPartnerUser, simplifying the differentiation and processing of all transaction types.
+
+General
+
+- Increased the maximum price for paid media to 10000 Telegram Stars.
+
+- Increased the maximum price for a subscription period to 10000 Telegram Stars.
+
+- Added the class PaidMessagePriceChanged and the field paid_message_price_changed to the class Message, describing a service message about a price change for paid messages sent to the chat.
+
+- Added the field paid_star_count to the class Message, containing the number of Telegram Stars that were paid to send the message.
+
+#### February 12, 2025
+
+Bot API 8.3
+
+- Added the parameter chat_id to the method sendGift, allowing bots to send gifts to channel chats.
+
+- Added the field can_send_gift to the class ChatFullInfo.
+
+- Added the class TransactionPartnerChat describing transactions with chats.
+
+- Added the fields cover and start_timestamp to the class Video, containing a message-specific cover and a start timestamp for the video.
+
+- Added the parameters cover and start_timestamp to the method sendVideo, allowing bots to specify a cover and a start timestamp for the videos they send.
+
+- Added the fields cover and start_timestamp to the classes InputMediaVideo and InputPaidMediaVideo, allowing bots to edit video cover and start timestamp and specify them for videos in albums and paid media.
+
+- Added the parameter video_start_timestamp to the methods forwardMessage and  copyMessage, allowing bots to change the start timestamp for forwarded and copied videos.
+
+- Allowed to add reactions to most types of service messages.
+
+#### January 1, 2025
+
+Bot API 8.2
+
+- Added the methods verifyUser, verifyChat, removeUserVerification and removeChatVerification, allowing bots to manage verifications on behalf of an organization.
+
+- Added the field upgrade_star_count to the class Gift.
+
+- Added the parameter pay_for_upgrade to the method sendGift.
+
+- Removed the field hide_url from the class InlineQueryResultArticle. Pass an empty string as url instead.
+
+### 2024
+
+#### December 4, 2024
+
+Bot API 8.1
+
+- Added the field nanostar_amount to the class StarTransaction.
+
+- Added the class TransactionPartnerAffiliateProgram for transactions pertaining to incoming affiliate commissions.
+
+- Added the class AffiliateInfo and the field affiliate to the class TransactionPartnerUser, allowing bots to identify the relevant affiliate in transactions with an affiliate commission.
+
+#### November 17, 2024
+
+Bot API 8.0
+
+> Bot API 8.0 introduces 10 powerful new features for Mini Apps - including the ability to enter full-screen mode, launch from home screen shortcuts, offer subscription plans and more. Check out all the details in our dedicated blog and Mini App documentation.
+
+Star Subscriptions
+
+- Bots now support paid subscriptions powered by Telegram Stars - monetizing their efforts with multiple tiers of content and features.
+
+- Added the parameter subscription_period to the method createInvoiceLink to support the creation of links that are billed periodically.
+
+- Added the parameter business_connection_id to the method createInvoiceLink to support the creation of invoice links on behalf of business accounts.
+
+- Added the fields subscription_expiration_date, is_recurring and is_first_recurring to the class SuccessfulPayment.
+
+- Added the method editUserStarSubscription.
+
+- Added the field subscription_period to the class TransactionPartnerUser.
+
+Full-screen Mode
+
+- Mini Apps are now able to become full-screen in both portrait and landscape mode - allowing them to host more games, play widescreen media and support immersive user experiences.
+
+- Added the methods requestFullscreen and exitFullscreen to the class WebApp to toggle full-screen mode.
+
+- Added the fields safeAreaInset and contentSafeAreaInset to the class WebApp, allowing Mini Apps to ensure that their content properly respects the device's safe area margins.
+
+- Further added the fields isActive and isFullscreen to the class WebApp.
+
+- Added the events activated, deactivated, safeAreaChanged, contentSafeAreaChanged, fullscreenChanged and fullscreenFailed for Mini Apps.
+
+Homescreen Shortcuts
+
+- Mini Apps can now be accessed via direct shortcuts added to the home screen of mobile devices.
+
+- Added the method addToHomeScreen to the class WebApp to create a shortcut for users to add to their home screens.
+
+- Added the method checkHomeScreenStatus to the class WebApp to determine the status and support of the home screen shortcut for the Mini App on the current device.
+
+- Added the events homeScreenAdded and homeScreenChecked for Mini Apps.
+
+Emoji Status
+
+- Mini Apps can now prompt users to set their emoji status - or request access to later sync it automatically with in-game badges, third-party APIs and more.
+
+- Added the method setUserEmojiStatus. The user must allow the bot to manage their emoji status.
+
+- Added the method setEmojiStatus to the class WebApp to let users manually confirm a custom emoji as their new status via a native dialog.
+
+- Added the method requestEmojiStatusAccess to the class WebApp for obtaining permission to later update a user's emoji status via the Bot API method setUserEmojiStatus.
+
+- Added the events emojiStatusSet, emojiStatusFailed and emojiStatusAccessRequested for Mini Apps.
+
+Media Sharing and File Downloads
+
+- Users can now share media directly from Mini Apps - sending referral codes, custom memes, artwork and more to any chat or posting them as a story.
+
+- Added the class PreparedInlineMessage and the method savePreparedInlineMessage, allowing bots to suggest users to send a specific message from a Mini App via the method shareMessage.
+
+- Added the method shareMessage to the class WebApp to share media from Mini Apps to Telegram chats.
+
+- Added the method downloadFile to the class WebApp, introducing support for a native popup that prompts users to download files from the Mini App.
+
+- Added the events shareMessageSent, shareMessageFailed and fileDownloadRequested for Mini Apps.
+
+Geolocation Access
+
+- Mini Apps can now request geolocation access to users, allowing them to build virtually any location-based service, from games with dynamic points of interest to interactive maps for events.
+
+- Added the field LocationManager to the class WebApp.
+
+- Added the events locationManagerUpdated and locationRequested for Mini Apps.
+
+Device Motion Tracking
+
+- Mini Apps can now track detailed device motion data, allowing them to implement better productivity tools, immersive VR experiences and more.
+
+- Added the fields isOrientationLocked, Accelerometer, DeviceOrientation and Gyroscope to the class WebApp.
+
+- Added the methods lockOrientation and unlockOrientation to the class WebApp to control the screen orientation.
+
+- Added the events accelerometerStarted, accelerometerStopped, accelerometerChanged, accelerometerFailed, deviceOrientationStarted, deviceOrientationStopped, deviceOrientationChanged, deviceOrientationFailed, gyroscopeStarted, gyroscopeStopped, gyroscopeChanged, gyroscopeFailed for Mini Apps.
+
+Gifts
+
+- Bots can now send Paid Gifts to users in exchange for Telegram Stars.
+
+- Added the classes Gift and Gifts and the method getAvailableGifts, allowing bots to get all gifts available for sending.
+
+- Added the method sendGift, allowing bots to send gifts to users.
+
+- Added the field gift to the class TransactionPartnerUser.
+
+Loading Screen Customization
+
+- Mini Apps can customize their loading screen, adding their own icon and specific colors for light and dark themes.
+
+- You can access these customization settings in @BotFather via /mybots > Select Bot > Bot Settings > Configure Mini App > Enable Mini App
+
+Hardware-specific Optimizations
+
+- Mini Apps running on Android can now receive basic information about a device's processing hardware, allowing them to optimize user experience based on the device's capabilities.
+
+- This information includes the OS, App and SDK's respective versions as well as the device's model and performance class.
+
+General
+
+- Added the field photo_url to the class WebAppUser for all bots, allowing Mini Apps to access a user's profile photo if their privacy settings allow for it.
+
+- Third parties (e.g., Mini App builders) that receive or process data on behalf of Mini Apps are now able to validate it without knowing the App's bot token.
+
+- Debugging options have been expanded to include full support for iOS devices. You can use these tools to find app-specific issues in your Mini App.
+
+---
+
+> WARNING! Starting December 1, 2024 messages with video that are sent, copied or forwarded to groups and channels with a sufficiently large audience can be automatically scheduled by the server until the respective video is reencoded. Such messages will have 0 as their message identifier and can't be used before they are actually sent.
+
+#### October 31, 2024
+
+Bot API 7.11
+
+- Added the class CopyTextButton and the field copy_text in the class InlineKeyboardButton allowing bots to send and receive inline buttons that copy arbitrary text.
+
+- Added the parameter allow_paid_broadcast to the methods sendMessage, sendPhoto, sendVideo, sendAnimation, sendAudio, sendDocument, sendPaidMedia, sendSticker, sendVideoNote, sendVoice, sendLocation, sendVenue, sendContact, sendPoll, sendDice, sendInvoice, sendGame, sendMediaGroup and copyMessage.
+
+- Added the class TransactionPartnerTelegramApi for transactions related to paid broadcasted messages.
+
+- Introduced the ability to add media to existing text messages using the method editMessageMedia.
+
+- Added support for hashtag and cashtag entities with a specified chat username that opens a search for the relevant tag within the specified chat.
+
+---
+
+> WARNING! Starting December 1, 2024 messages with video that are sent, copied or forwarded to groups and channels with a sufficiently large audience can be automatically scheduled by the server until the respective video is reencoded. Such messages will have 0 as their message identifier and can't be used before they are actually sent.
+
+#### September 6, 2024
+
+Bot API 7.10
+
+- Added updates about purchased paid media, represented by the class PaidMediaPurchased and the field purchased_paid_media in the class Update.
+
+- Added the ability to specify a payload in sendPaidMedia that is received back by the bot in TransactionPartnerUser and purchased_paid_media updates.
+
+- Added the field prize_star_count to the classes GiveawayCreated, Giveaway, GiveawayWinners and ChatBoostSourceGiveaway.
+
+- Added the field is_star_giveaway to the class GiveawayCompleted.
+
+- Added the field SecondaryButton to the class WebApp.
+
+- Added the event secondaryButtonClicked for Mini Apps.
+
+- Added the field bottomBarColor and the method setBottomBarColor to the class WebApp.
+
+- Added the field bottom_bar_bg_color to the class ThemeParams.
+
+#### August 14, 2024
+
+Bot API 7.9
+
+- Added support for Super Channels, allowing received channel messages to have users or other channels as their senders.
+
+- Added the ability to send paid media to any chat.
+
+- Added the parameter business_connection_id to the method sendPaidMedia, allowing bots to send paid media on behalf of a business account.
+
+- Added the field paid_media to the class TransactionPartnerUser for transactions involving paid media.
+
+- Added the fields subscription_period and subscription_price to the class ChatInviteLink.
+
+- Added the method createChatSubscriptionInviteLink, allowing bots to create subscription invite links.
+
+- Added the method editChatSubscriptionInviteLink, allowing bots to edit the name of subscription invite links.
+
+- Added the field until_date to the class ChatMemberMember for members with an active subscription.
+
+- Added support for paid reactions and the class ReactionTypePaid.
+
+#### July 31, 2024
+
+Bot API 7.8
+
+- Added the option for bots to set a Main Mini App, which can be previewed and launched directly from a button in the bot's profile or a link.
+
+- Added the method shareToStory to the class WebApp.
+
+- Added the field has_main_web_app to the class User, which is returned in the response to getMe.
+
+- Added the parameter business_connection_id to the methods pinChatMessage and unpinChatMessage, allowing bots to manage pinned messages on behalf of a business account.
+
+#### July 7, 2024
+
+Bot API 7.7
+
+- Added the class RefundedPayment, containing information about a refunded payment.
+
+- Added the field refunded_payment to the class Message, describing a service message about a refunded payment.
+
+- Added the field isVerticalSwipesEnabled and the methods enableVerticalSwipes, disableVerticalSwipes to the class WebApp.
+
+- Added the event scanQrPopupClosed for Mini Apps.
+
+#### July 1, 2024
+
+Bot API 7.6
+
+- Added the classes PaidMedia, PaidMediaInfo, PaidMediaPreview, PaidMediaPhoto and PaidMediaVideo, containing information about paid media.
+
+- Added the method sendPaidMedia and the classes InputPaidMedia, InputPaidMediaPhoto and InputPaidMediaVideo, to support sending paid media.
+
+- Documented that the methods copyMessage and copyMessages cannot be used to copy paid media.
+
+- Added the field can_send_paid_media to the class ChatFullInfo.
+
+- Added the field paid_media to the classes Message and ExternalReplyInfo.
+
+- Added the class TransactionPartnerTelegramAds, containing information about Telegram Star transactions involving the Telegram Ads Platform.
+
+- Added the field invoice_payload to the class TransactionPartnerUser, containing the bot-specified invoice payload.
+
+- Changed the default opening mode for Direct Link Mini Apps.
+
+- Added support for launching Web Apps via t.me link in the class MenuButtonWebApp.
+
+- Added the field section_separator_color to the class ThemeParams.
+
+#### June 18, 2024
+
+Bot API 7.5
+
+- Added the classes StarTransactions, StarTransaction, TransactionPartner and RevenueWithdrawalState, containing information about Telegram Star transactions involving the bot.
+
+- Added the method getStarTransactions that can be used to get the list of all Telegram Star transactions for the bot.
+
+- Added support for callback buttons in InlineKeyboardMarkup for messages sent on behalf of a business account.
+
+- Added support for callback queries originating from a message sent on behalf of a business account.
+
+- Added the parameter business_connection_id to the methods editMessageText, editMessageMedia, editMessageCaption, editMessageLiveLocation, stopMessageLiveLocation and editMessageReplyMarkup, allowing the bot to edit business messages.
+
+- Added the parameter business_connection_id to the method stopPoll, allowing the bot to stop polls it sent on behalf of a business account.
+
+#### May 28, 2024
+
+Bot API 7.4
+
+- Added support for payments in Telegram Stars by introducing the new currency “XTR”.
+
+- The parameter provider_token of the methods sendInvoice and createInvoiceLink must be omitted for payments in Telegram Stars.
+
+- The field provider_token in the class InputInvoiceMessageContent must be omitted for payments in Telegram Stars.
+
+- Added the method refundStarPayment.
+
+- Added the field effect_id to the class Message.
+
+- Added the parameter message_effect_id to the methods sendMessage, sendPhoto, sendVideo, sendAnimation, sendAudio, sendDocument, sendSticker, sendVideoNote, sendVoice, sendLocation, sendVenue, sendContact, sendPoll, sendDice, sendInvoice, sendGame, and sendMediaGroup.
+
+- Added the field show_caption_above_media to the classes Message, InputMediaAnimation, InputMediaPhoto, InputMediaVideo, InlineQueryResultGif, InlineQueryResultMpeg4Gif, InlineQueryResultPhoto, InlineQueryResultVideo, InlineQueryResultCachedGif, InlineQueryResultCachedMpeg4Gif, InlineQueryResultCachedPhoto, and InlineQueryResultCachedVideo.
+
+- Added the parameter show_caption_above_media to the methods sendAnimation, sendPhoto, sendVideo, copyMessage, and editMessageCaption.
+
+- Added support for “expandable_blockquote” entities in received messages.
+
+- Added support for “expandable_blockquote” entity parsing in “MarkdownV2” and “HTML” parse modes.
+
+- Allowed to explicitly specify “expandable_blockquote” entities in formatted texts.
+
+#### May 6, 2024
+
+Bot API 7.3
+
+- Added support for InlineKeyboardMarkup with url, login_url, and callback_game buttons for messages sent on behalf of a business account.
+
+- Added the field via_join_request to the class ChatMemberUpdated.
+
+- Added support for live locations that can be edited indefinitely, allowing 0x7FFFFFFF to be used as live_period.
+
+- Added the parameter live_period to the method editMessageLiveLocation.
+
+- Added the field question_entities to the class Poll.
+
+- Added the field text_entities to the class PollOption.
+
+- Added the parameters question_parse_mode and question_entities to the method sendPoll.
+
+- Added the class InputPollOption and changed the type of the parameter options in the method sendPoll to Array of InputPollOption.
+
+- Added the classes ChatBackground, BackgroundType, BackgroundFill and the field chat_background_set of type ChatBackground to the class Message, describing service messages about background changes.
+
+- Split out the class ChatFullInfo from the class Chat and changed the return type of the method getChat to ChatFullInfo.
+
+- Added the field max_reaction_count to the class ChatFullInfo.
+
+- Documented that .MP3 and .M4A files can be used as voice messages.
+
+#### March 31, 2024
+
+Bot API 7.2
+
+Integration with Business Accounts
+
+- Added the class BusinessConnection and updates about the connection or disconnection of the bot to a business account, represented by the field business_connection in the class Update.
+
+- Added updates about new messages in a business account connected to the bot, represented by the field business_message in the class Update.
+
+- Added updates about message edits in a business account connected to the bot, represented by the field edited_business_message in the class Update.
+
+- Added updates about message deletion in a business account connected to the bot, represented by the class BusinessMessagesDeleted and the field deleted_business_messages in the class Update.
+
+- Added the method getBusinessConnection.
+
+Working on Behalf of Business Accounts
+
+- Added the parameter business_connection_id to the methods sendMessage, sendPhoto, sendVideo, sendAnimation, sendAudio, sendDocument, sendSticker, sendVideoNote, sendVoice, sendLocation, sendVenue, sendContact, sendPoll, sendDice, sendGame, and sendMediaGroup.
+
+- Added the parameter business_connection_id to the method sendChatAction.
+
+- Added the field business_connection_id to the class Message.
+
+- Added the field sender_business_bot to the class Message.
+
+Information about Business Accounts
+
+- Added the class BusinessIntro and the field business_intro to the class Chat.
+
+- Added the class BusinessLocation and the field business_location to the class Chat.
+
+- Added the classes BusinessOpeningHours and BusinessOpeningHoursInterval and the field business_opening_hours to the class Chat.
+
+Mixed-Format Sticker Packs
+
+- Removed the fields is_animated and is_video from the class StickerSet.
+
+- Added the field format to the class InputSticker.
+
+- Removed the parameter sticker_format from the method createNewStickerSet.
+
+- Added the parameter format to the method setStickerSetThumbnail.
+
+- Increased the maximum number of stickers in any regular and mask sticker set to 120.
+
+- Allowed to upload WEBM stickers using SendSticker.
+
+Request Chat Improvements
+
+- Added the fields request_name, request_username, and request_photo to the class KeyboardButtonRequestUsers.
+
+- Added the fields request_title, request_username, and request_photo to the class KeyboardButtonRequestChat.
+
+- Added the class SharedUser and replaced the field user_ids in the class UsersShared with the field users.
+
+- Added the fields title, username, and photo to the class ChatShared.
+
+Other Changes
+
+- Added the field is_from_offline to the class Message.
+
+- Added the field can_connect_to_business to the class User.
+
+- Added the field personal_chat to the class Chat.
+
+- Added the method replaceStickerInSet,
+
+- Added the class Birthdate and the field birthdate to the class Chat.
+
+- Added the field BiometricManager to the class WebApp.
+
+#### February 16, 2024
+
+Bot API 7.1
+
+- Added support for the administrator rights can_post_stories, can_edit_stories, can_delete_stories in supergroups.
+
+- Added the class ChatBoostAdded and the field boost_added to the class Message for service messages about a user boosting a chat.
+
+- Added the field sender_boost_count to the class Message.
+
+- Added the field reply_to_story to the class Message.
+
+- Added the fields chat and id to the class Story.
+
+- Added the field unrestrict_boost_count to the class Chat.
+
+- Added the field custom_emoji_sticker_set_name to the class Chat.
 
 ### 2023
 
@@ -55,11 +744,11 @@ Link Preview Customization
 
 Block Quotation
 
-- Added support for "blockquote" entities in received messages.
+- Added support for “blockquote” entities in received messages.
 
-- Added support for "blockquote" entity parsing in "MarkdownV2" and "HTML" parse modes.
+- Added support for “blockquote” entity parsing in “MarkdownV2” and “HTML” parse modes.
 
-- Allowed to explicitly specify "blockquote" entities in formatted texts.
+- Allowed to explicitly specify “blockquote” entities in formatted texts.
 
 Multiple Message Actions
 
@@ -307,9 +996,9 @@ Bot API 6.2
 
 Custom Emoji Support
 
-- Added the MessageEntity type "custom_emoji".
+- Added the MessageEntity type “custom_emoji”.
 
-- Added the field custom_emoji_id to the class MessageEntity for "custom_emoji" entities.
+- Added the field custom_emoji_id to the class MessageEntity for “custom_emoji” entities.
 
 - Added the method getCustomEmojiStickers.
 
@@ -359,7 +1048,7 @@ Join Requests & Payments
 
 - Added the fields join_to_send_messages and join_by_request to the class Chat.
 
-- Added the ability to process join requests which were created without an invite link. Bots will receive a "chat_join_request" update as usual.
+- Added the ability to process join requests which were created without an invite link. Bots will receive a “chat_join_request” update as usual.
 
 - Added the method createInvoiceLink to generate an HTTP link for an invoice.
 
@@ -413,8 +1102,7 @@ Bot API 6.0
 
 ---
 
-> WARNING! 
-After the next update, only HTTPS links will be allowed in login_url inline keyboard buttons.
+> WARNING! After the next update, only HTTPS links will be allowed in login_url inline keyboard buttons.
 
 ---
 
@@ -440,7 +1128,7 @@ Bot API 5.6
 
 - Added support for spoiler entities, which will work in Telegram versions released after December 30, 2021. Older clients will display unsupported message.
 
-- Added new MessageEntity type "spoiler".
+- Added new MessageEntity type “spoiler”.
 
 - Added the ability to specify spoiler entities using HTML and MarkdownV2 formatting options.
 
@@ -448,7 +1136,7 @@ Bot API 5.6
 
 Bot API 5.5
 
-- Bots are now allowed to contact users who sent a join request to a chat where the bot is an administrator with the can_invite_users administrator right – even if the user never interacted with the bot before.
+- Bots are now allowed to contact users who sent a join request to a chat where the bot is an administrator with the can_invite_users administrator right – even if the user never interacted with the bot before.
 
 - Added support for mentioning users by their ID in inline keyboards. This will only work in Telegram versions released after December 7, 2021. Older clients will display unsupported message.
 
@@ -484,8 +1172,7 @@ Bot API 5.4
 
 ---
 
-> WARNING! 
-User identifiers will become bigger than 2^31 - 1 before the end of this year and it will be no longer possible to store them in a signed 32-bit integer type. User identifiers will have up to 52 significant bits, so a 64-bit integer or double-precision float type would still be safe for storing them. Please make sure that your code can correctly handle such user identifiers.
+> WARNING! User identifiers will become bigger than 2^31 - 1 before the end of this year and it will be no longer possible to store them in a signed 32-bit integer type. User identifiers will have up to 52 significant bits, so a 64-bit integer or double-precision float type would still be safe for storing them. Please make sure that your code can correctly handle such user identifiers.
 
 ---
 
@@ -523,8 +1210,7 @@ And More
 
 ---
 
-> WARNING! 
-After one of the upcoming Bot API updates, user identifiers will become bigger than 2^31 - 1 and it will be no longer possible to store them in a signed 32-bit integer type. User identifiers will have up to 52 significant bits, so a 64-bit integer or double-precision float type would still be safe for storing them. Please make sure that your code can correctly handle such user identifiers.
+> WARNING! After one of the upcoming Bot API updates, user identifiers will become bigger than 2^31 - 1 and it will be no longer possible to store them in a signed 32-bit integer type. User identifiers will have up to 52 significant bits, so a 64-bit integer or double-precision float type would still be safe for storing them. Please make sure that your code can correctly handle such user identifiers.
 
 ---
 
@@ -546,22 +1232,19 @@ Bot API 5.2
 
 - Added the type VoiceChatScheduled and the field voice_chat_scheduled to the class Message.
 
-- Fixed an error in sendChatAction documentation to correctly mention "record_voice" and "upload_voice" instead of "record_audio" and "upload_audio" for related to voice note actions. Old action names will still work for backward compatibility.
+- Fixed an error in sendChatAction documentation to correctly mention “record_voice” and “upload_voice” instead of “record_audio” and “upload_audio” for related to voice note actions. Old action names will still work for backward compatibility.
 
 ---
 
-> WARNING! 
-After the next Bot API update (Bot API 5.3) there will be a one-time change of the value of the field file_unique_id in objects of the type PhotoSize and of the fields small_file_unique_id and big_file_unique_id in objects of the type ChatPhoto.
+> WARNING! After the next Bot API update (Bot API 5.3) there will be a one-time change of the value of the field file_unique_id in objects of the type PhotoSize and of the fields small_file_unique_id and big_file_unique_id in objects of the type ChatPhoto.
 
 ---
 
-> WARNING! 
-Service messages about non-bot users joining the chat will be soon removed from large groups. We recommend using the "chat_member" update as a replacement.
+> WARNING! Service messages about non-bot users joining the chat will be soon removed from large groups. We recommend using the “chat_member” update as a replacement.
 
 ---
 
-> WARNING! 
-After one of the upcoming Bot API updates, user identifiers will become bigger than 2^31 - 1 and it will be no longer possible to store them in a signed 32-bit integer type. User identifiers will have up to 52 significant bits, so a 64-bit integer or double-precision float type would still be safe for storing them. Please make sure that your code can correctly handle such user identifiers.
+> WARNING! After one of the upcoming Bot API updates, user identifiers will become bigger than 2^31 - 1 and it will be no longer possible to store them in a signed 32-bit integer type. User identifiers will have up to 52 significant bits, so a 64-bit integer or double-precision float type would still be safe for storing them. Please make sure that your code can correctly handle such user identifiers.
 
 ---
 
@@ -605,8 +1288,7 @@ And More
 
 ---
 
-> WARNING! 
-After one of the upcoming Bot API updates, some user identifiers will become bigger than 2^31 - 1 and it will be no longer possible to store them in a signed 32-bit integer type. User identifiers will have up to 52 significant bits, so a 64-bit integer or double-precision float type would still be safe for storing them. Please make sure that your code can correctly handle such user identifiers.
+> WARNING! After one of the upcoming Bot API updates, some user identifiers will become bigger than 2^31 - 1 and it will be no longer possible to store them in a signed 32-bit integer type. User identifiers will have up to 52 significant bits, so a 64-bit integer or double-precision float type would still be safe for storing them. Please make sure that your code can correctly handle such user identifiers.
 
 ---
 
@@ -668,7 +1350,7 @@ Live Locations
 
 - Added the field live_period to the class Location, representing a maximum period for which the live location can be updated.
 
-- Added support for live location [heading](https://en.wikipedia.org/wiki/Heading_(navigation&#41;): added the field heading to the classes Location, InlineQueryResultLocation, InputLocationMessageContent and the parameter heading to the methods sendLocation and editMessageLiveLocation.
+- Added support for live location heading: added the field heading to the classes Location, InlineQueryResultLocation, InputLocationMessageContent and the parameter heading to the methods sendLocation and editMessageLiveLocation.
 
 - Added support for proximity alerts in live locations: added the field proximity_alert_radius to the classes Location, InlineQueryResultLocation, InputLocationMessageContent and the parameter proximity_alert_radius to the methods sendLocation and editMessageLiveLocation.
 
@@ -732,7 +1414,7 @@ Bot API 4.8
 
 Bot API 4.7
 
-- Added the method sendDice for sending a dice message, which will have a random value from 1 to 6. (Yes, we're aware of the "proper" singular of die. But it's awkward, and we decided to help it change. One dice at a time!)
+- Added the method sendDice for sending a dice message, which will have a random value from 1 to 6. (Yes, we're aware of the “proper” singular of die. But it's awkward, and we decided to help it change. One dice at a time!)
 
 - Added the field dice to the Message object.
 
@@ -1038,8 +1720,7 @@ Bot API 2.3
 
 #### October 3, 2016
 
-Bot API 2.2. Introducing a new Gaming Platform! See this introduction for a brief overview.
-If you're not a developer, you may like this user-friendly blog post better.
+Bot API 2.2. Introducing a new Gaming Platform! See this introduction for a brief overview.If you're not a developer, you may like this user-friendly blog post better.
 
 - New tools for building HTML5 games.
 
